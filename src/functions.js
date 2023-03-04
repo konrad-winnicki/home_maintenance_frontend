@@ -24,7 +24,7 @@
 export function askQuantity(string = "") {
   //let string = string
   let quantity = prompt("Quantity" + string, "");
-  if (quantity === null){return null}
+  if (quantity === null || quantity === ""){return null}
   if (isNaN(quantity)) {
     quantity = askQuantity(string = " must be a number!")
     return Math.abs(quantity)
@@ -99,7 +99,8 @@ export function add_product_manually() {
 
 
 
-export function send_to_server(url, product_to_send, method) {
+export function send_to_server(url, product_to_send, method, component) {
+  
   let server_address = url
   if (method == 'POST') { server_address = server_address }
   else if (method == 'PUT' || method == "DELETE" || method == "PATCH") {
@@ -109,7 +110,7 @@ export function send_to_server(url, product_to_send, method) {
   if (product_to_send != null) {
     let promise = fetch(server_address,
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', "Active_component": component },
         method: method,
         body: JSON.stringify(product_to_send)
       })
@@ -176,3 +177,13 @@ export function change_name(product_id, session_code) {
     return product_data
   }
 
+  export function custom_quantity() {
+    let new_value_from_user = askQuantity('')
+    if (new_value_from_user == '' || new_value_from_user == null) {
+      return null
+    }
+    
+    return new_value_from_user
+  }
+
+  

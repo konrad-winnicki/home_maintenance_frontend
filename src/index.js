@@ -36,8 +36,9 @@ async function window2(url2) {
 class App2 extends React.Component {
   constructor(props) {
     super(props);
+    console.log("App2 constructor")
     this.state = {
-      login_status: "unloged",
+      login_status: "unlogged",
       session_code: null
     };
   }
@@ -46,22 +47,22 @@ class App2 extends React.Component {
     let params = new URLSearchParams(window.location.search)
     let session_code = params.get("session_code")
     console.log(params.get("session_code"))
+
     if (session_code != null) {
       this.setState((ignores) => {
         return {
-          login_status: "loged", session_code: session_code
-
+          login_status: "logged", session_code: session_code
         }
       });
     }
     if (session_code === "unlogged") {
       this.setState((ignores) => {
         return {
-          login_status: "unloged", session_code: null
+          login_status: "unlogged", session_code: null
         }
       })
     }
-    console.log("did mount")
+    console.log("did mount App2")
   }
 
   componentDidUpdate() {
@@ -71,10 +72,10 @@ class App2 extends React.Component {
   render() {
     return (
       <div className='container vh-100 vw-100 d-flex  align-items-center'>
-        {this.state.login_status === "loged" ?
+        {this.state.login_status === "logged" ?
           <NadApp session_code={this.state.session_code} /> :
           null}
-        {this.state.login_status === "unloged" ?
+        {this.state.login_status === "unlogged" ?
           <Button style={{
             backgroundColor: 'white', color: "black",
             borderColor: 'black', fontSize: '24px', borderWidth:
@@ -91,11 +92,9 @@ const container = document.getElementById('root');
 const productsComponent = createRoot(container);
 productsComponent.render(
   <div>
-    <GoogleOAuthProvider clientId="70482292417-ki5kct2g23kaloksimsjtf1figlvt3ao.apps.googleusercontent.com">
-      <React.StrictMode>
-        <App2 />
-      </React.StrictMode>
-    </GoogleOAuthProvider>
+      
+        <App2/>
+     
   </div >
 )
 
