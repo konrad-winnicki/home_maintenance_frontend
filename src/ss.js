@@ -147,7 +147,7 @@ function Checkbox(props) {
 
   return (
     <div>
-      <input class="form-check-input" style={{ width: '25px', height: '25px' }}
+      <input className="form-check-input" style={{ width: '25px', height: '25px' }}
       disabled={props.app_state !== "default" ? true : false}
         type="checkbox" defaultChecked={checked} value="" id="flexCheckIndeterminate"
         onChange={handleChange}>
@@ -184,12 +184,12 @@ export default class NadApp extends React.PureComponent {
 
   render() {
     return (
-      <div class='container vh-100 vw-100 d-flex flex-column'>
-        <nav class="navbar sticky-top bg-warning vw-100" style={{ position: 'fixed' }}  >
+      <div className='container vh-100 vw-100 d-flex flex-column'>
+        <nav className="navbar sticky-top bg-warning vw-100" style={{ position: 'fixed' }}  >
           <div className='col text-end'>
-            <button class="btn btn-outline-success" onClick={() => { this.setState({ showComponent: "Application", app_state: "refreshing products" }); }} ><ImListNumbered /></button> </div>
+            <button className="btn btn-outline-success" onClick={() => { this.setState({ showComponent: "Application", app_state: "refreshing products" }); }} ><ImListNumbered /></button> </div>
           <div className='col text-center '>
-            <button class="btn btn-outline-success" onClick={() => { this.setState({ showComponent: "Form", app_state: "refreshing products" }); }
+            <button className="btn btn-outline-success" onClick={() => { this.setState({ showComponent: "Form", app_state: "refreshing products" }); }
             }><AiOutlineShoppingCart /> Shoping list</button></div>
         </nav>
         <div>
@@ -663,7 +663,7 @@ finishedProductsExport() {
     return (
       <div  >
         <ToastContainer ></ToastContainer>
-        <div class='container vh-100 vw-100 d-flex flex-column'>
+        <div className='container vh-100 vw-100 d-flex flex-column'>
           <div className='row'>
           </div>
           <div className='row position-realtive'>

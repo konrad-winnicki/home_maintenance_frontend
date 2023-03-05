@@ -1,145 +1,117 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom/client';
-import { createRoot } from 'react-dom/client'
-import './index.css';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import reportWebVitals from './reportWebVitals';
-import NadApp from './ss';
-import { GoogleLogin } from '@react-oauth/google'
-import { googleLogout, useGoogleLogin } from '@react-oauth/google';
-import { Button } from 'react-bootstrap';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import NadApp from "./ss";
+import { Button } from "react-bootstrap";
+import { FcGoogle } from "react-icons/fc";
 
-import { FcGoogle } from 'react-icons/fc';
+const backendUrl = "https://localhost:5000";
+const redirectUri = "http%3A%2F%2Flocalhost%3A3000%2Fcode"; // TODO: try without it, without code
 
-import createReactClass from 'create-react-class';
-import { Google } from 'react-oauth2';
-
-
-function fetching() {
-  let promise = fetch("https://localhost:5000/code/", {
-    headers: { 'Content-Type': 'text/html' },
-    method: "GET"
-  }).then(response => {
-    return response.json();
-  }).then((json => {
-    window2(json.url);
-    console.log(json.url)
-  })).catch(Error => { console.log(Promise.reject(Error)) })
-  return promise
+function fetchSessionId(oauthCode) {
+  // TODO: POST
+  return fetch(
+    backendUrl +
+      "/code/callback?code=" +
+      oauthCode +
+      "&redirect_uri=" +
+      redirectUri,
+    {
+      headers: { "Content-Type": "application/json" },
+      method: "GET",
+    }
+  )
+    .then((response) => response.json())
+    .then((json) => json.session_code);
 }
 
-async function window2(url2) {
-  window.open(url2, "_self");
+/*
+  Redirect points to frontend which obtains the code.
+  Then the frontend calls /token endpoint to make the backend exchange the code for the token and reply with sessionId/sessionToken
+*/
+function obtain_oauth_code() {
+  // TODO: remove scopes if not needed
+  // TODO: add CSRF protection using state, can be persisted to localstorage to verify later
+  const mafaClientId =
+    "70482292417-ki5kct2g23kaloksimsjtf1figlvt3ao.apps.googleusercontent.com";
+  const clientId =
+    "1005726387321-isia3js27sbejl9q91le4hot0knosdge.apps.googleusercontent.com";
+  const url =
+    "https://accounts.google.com/o/oauth2/v2/auth" +
+    "?response_type=code" +
+    "&client_id=" +
+    clientId +
+    "&redirect_uri=" +
+    redirectUri +
+    "&scope=openid+email+profile";
+  console.log("Redirecting to: ", url);
+  window.open(url, "_self");
 }
-
 
 class App2 extends React.Component {
   constructor(props) {
     super(props);
-    console.log("App2 constructor")
+    console.log("App2 constructor");
     this.state = {
       login_status: "unlogged",
-      session_code: null
+      session_code: null,
     };
   }
 
   componentDidMount() {
-    let params = new URLSearchParams(window.location.search)
-    let session_code = params.get("session_code")
-    console.log(params.get("session_code"))
+    let params = new URLSearchParams(window.location.search);
+    let oauth_code = params.get("code");
+    console.log("oauth_code:", oauth_code);
 
-    if (session_code != null) {
-      this.setState((ignores) => {
-        return {
-          login_status: "logged", session_code: session_code
-        }
-      });
+    if (oauth_code) {
+      fetchSessionId(oauth_code).then((session_code) =>
+        this.setState((ignores) => {
+          return {
+            login_status: "logged",
+            session_code: session_code,
+          };
+        })
+      );
     }
-    if (session_code === "unlogged") {
-      this.setState((ignores) => {
-        return {
-          login_status: "unlogged", session_code: null
-        }
-      })
-    }
-    console.log("did mount App2")
+
+    console.log("did mount App2");
   }
 
   componentDidUpdate() {
-    console.log("updated")
+    console.log("updated");
   }
 
   render() {
     return (
-      <div className='container vh-100 vw-100 d-flex  align-items-center'>
-        {this.state.login_status === "logged" ?
-          <NadApp session_code={this.state.session_code} /> :
-          null}
-        {this.state.login_status === "unlogged" ?
-          <Button style={{
-            backgroundColor: 'white', color: "black",
-            borderColor: 'black', fontSize: '24px', borderWidth:
-              'medium'
-          }} onClick={() => { fetching() }}><FcGoogle />  LOGIN WITH GOOGLE</Button> :
-          null
-        }
+      <div className="container vh-100 vw-100 d-flex  align-items-center">
+        {this.state.login_status === "logged" ? (
+          <NadApp session_code={this.state.session_code} />
+        ) : null}
+        {this.state.login_status === "unlogged" ? (
+          <Button
+            style={{
+              backgroundColor: "white",
+              color: "black",
+              borderColor: "black",
+              fontSize: "24px",
+              borderWidth: "medium",
+            }}
+            onClick={() => {
+              obtain_oauth_code();
+            }}
+          >
+            <FcGoogle /> Login with Google
+          </Button>
+        ) : null}
       </div>
-    )
+    );
   }
 }
 
-const container = document.getElementById('root');
+const container = document.getElementById("root");
 const productsComponent = createRoot(container);
 productsComponent.render(
   <div>
-      
-        <App2/>
-     
-  </div >
-)
-
-
-
-/*
-function App() {
-  
-
-  const login = useGoogleLogin({
-    clientId: "70482292417-ki5kct2g23kaloksimsjtf1figlvt3ao.apps.googleusercontent.com",
-    onSuccess: codeResponse => {console.log(codeResponse);
-      send_code(codeResponse)
-    },
-    flow: 'auth-code',
-    redirect_uri: "https://localhost:5000/login/callback",
-    ux_mode: "popup",
-    
-  
-  });
-
-
-  return (
-    <div>
-
-      <Button onClick={() => { fetching() }}>LOGIN WITH GOOGLE</Button>
-    </div>
-  )
-}
-
-*/
-
-/*
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Application/>
-  </React.StrictMode>
+    <App2 />
+  </div>
 );
-*/
-
-
-
-//<NadApp />
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
