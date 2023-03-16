@@ -70,32 +70,25 @@ class ProductList extends React.Component {
 
       <div>
         <Table id="my_table" className=' table table-fixed'   >
-          <thead className="fs-5 fw-bold text-white">
+          <thead className={"fs-5 fw-bold text-white"}>
             {this.props.active_component === "Application" ?
               <tr>
-                <th className={styles.buton_space_width}></th>
-                <th className={styles.product_space_width}>Product</th>
-                <th className={styles.quantity_space_width} >Quantity</th>
-                <th className={styles.buton_space_width}></th>
-                <th className={styles.buton_space_width}></th>
+                <th className={styles.product_space_width}>Products at home</th>
               </tr> : null
             }
             {this.props.active_component === "Form" ?
               <tr>
-                <th className={styles.buton_space_width}></th>
-                <th className={styles.product_space_width}>Shopping list</th>
-                <th className={styles.quantity_space_width} ></th>
-                <th className={styles.buton_space_width}></th>
-                <th className={styles.buton_space_width}></th>
+                <th >Shopping list</th>
+      
               </tr> : null
             }
           </thead>
-          <tbody >
+          <tbody className={styles.table__body}>
 
 
             {this.props.product_list.map((product) => (
 
-              <tr key={product.product_id} id={product.product_id} className={styles.horizontal_divider} >
+              <tr key={product.product_id} id={product.product_id} className={styles.table__row} >
                 <td>
                   {this.props.active_component === "Application" ?
                     <button className="btn btn-primary btn-sm"
@@ -103,13 +96,13 @@ class ProductList extends React.Component {
                       onClick={() => { this.props.onclick({ app_state: "decrease", product_id: product.product_id }) }}
                     ><BsFillArrowDownSquareFill /></button> : null}
                 </td>
-                <td className=" data-editable fs-6 fw-bold ff"
+                <td className={styles.table__product}
                   onClick={() => { this.props.onclick({ app_state: "changing name", product_id: product.product_id }) }}>{product.name}</td>
 
-                <td className="fs-6 fw-bold text-center"
+                <td className={styles.table__quantity}
                 onClick={() => { this.props.onclick({ app_state: "custom_quantity", product_id: product.product_id }) }}>{product.quantity}</td>
                 {this.props.active_component === "Application" ?
-                  <td><button className="btn btn-primary btn-sm"
+                  <td><button className={"btn btn-primary btn-sm"}
                     disabled={this.props.app_state !== "default" ? true : false}
                     onClick={() => { this.props.onclick({ app_state: "increase", product_id: product.product_id }) }}
                   ><BsFillArrowUpSquareFill /></button></td> : null}

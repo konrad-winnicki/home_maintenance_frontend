@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import NadApp from "./ss";
+import NadApp from "./ss_zmiany";
 import { Button } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
 
@@ -34,13 +34,13 @@ function obtain_oauth_code() {
   // TODO: add CSRF protection using state, can be persisted to localstorage to verify later
   const mafaClientId =
     "70482292417-ki5kct2g23kaloksimsjtf1figlvt3ao.apps.googleusercontent.com";
-  const clientId =
-    "1005726387321-isia3js27sbejl9q91le4hot0knosdge.apps.googleusercontent.com";
+  //const clientId =
+    //"1005726387321-isia3js27sbejl9q91le4hot0knosdge.apps.googleusercontent.com";
   const url =
     "https://accounts.google.com/o/oauth2/v2/auth" +
     "?response_type=code" +
     "&client_id=" +
-    clientId +
+    mafaClientId +
     "&redirect_uri=" +
     redirectUri +
     "&scope=openid+email+profile";
