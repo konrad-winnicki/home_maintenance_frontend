@@ -1,8 +1,8 @@
 import React from "react";
 import {BsFillArrowUpSquareFill} from "react-icons/bs";
 import { change_product_properties_in_store} from "../services/store";
-import { change_state_with_resolved_promise } from "../functions";
-
+import {inner_server_response_to_state} from "../functions";
+import { state_changer_to_server_response } from "../functions";
 class IncreaseButton extends React.Component {
     increase_quantity() {
         let product_data = {
@@ -20,7 +20,9 @@ class IncreaseButton extends React.Component {
         onClick={() => {
           this.props.state_changer({ app_state: "button_clicked" });
           let result = this.increase_quantity()
-          change_state_with_resolved_promise(result, this.props.state_changer)
+          //inner_server_response_to_state(result, this.props.state_changer)
+          this.props.server_response_service(this.props.state_changer, result);
+
         }}
       >
         <BsFillArrowUpSquareFill /> 

@@ -2,7 +2,7 @@ import React from "react";
 import { SiAddthis } from "react-icons/si";
 import { ask_product_name } from "../functions";
 import { add_product_to_store } from "../services/store";
-import { change_state_with_resolved_promise } from "../functions";
+import { inner_server_response_to_state} from "../functions";
 
 class AddProductButton extends React.Component {
   addProduct() {
@@ -26,7 +26,7 @@ class AddProductButton extends React.Component {
         onClick={() => {
           this.props.state_changer({ app_state: "Add_product" });
           let result = this.addProduct();
-          change_state_with_resolved_promise(result, this.props.state_changer)
+          this.props.server_response_service(this.props.state_changer, result);
         }}
       >
         <SiAddthis /> product

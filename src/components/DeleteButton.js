@@ -1,7 +1,7 @@
 import React from "react";
 import { FaTrashRestoreAlt } from "react-icons/fa";
-import { change_state_with_resolved_promise } from "../functions";
-
+import { inner_server_response_to_state } from "../functions";
+import { state_changer_to_server_response } from "../functions";
 class DeleteButton extends React.Component {
   delete_product() {
     let product_id = this.props.product.product_id;
@@ -26,7 +26,8 @@ class DeleteButton extends React.Component {
           console.log("deleting");
           this.props.state_changer({ app_state: "button_clicked" });
           let result = this.delete_product();
-          change_state_with_resolved_promise(result, this.props.state_changer)
+          //inner_server_response_to_state(result, this.props.state_changer);
+          this.props.server_response_service(this.props.state_changer, result);
         }}
       >
         <FaTrashRestoreAlt />

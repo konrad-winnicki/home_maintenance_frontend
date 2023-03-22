@@ -7,8 +7,6 @@ import ProductDescription from "./ProductDescription.js";
 import styles from "../my-style.module.css";
 
 function ProductComponent(props) {
-
-
     return (
       <div id={props.product.product_id} className={styles.product__component}>
         <ProductDescription
@@ -18,6 +16,7 @@ function ProductComponent(props) {
           state_changer={props.state_changer}
           product={props.product}
           session_code={props.session_code}
+          server_response_service = {props.server_response_service}
         ></ProductDescription>
         {props.active_component === "Store_component" ? (
           <React.Fragment>
@@ -27,6 +26,8 @@ function ProductComponent(props) {
                 app_state={props.app_state}
                 session_code={props.session_code}
                 state_changer={props.state_changer}
+                server_response_service = {props.server_response_service}
+
               ></DecreaseButton>
             </div>
             <div className={styles.button_surrounding}>
@@ -35,6 +36,8 @@ function ProductComponent(props) {
                 app_state={props.app_state}
                 session_code={props.session_code}
                 state_changer={props.state_changer}
+                server_response_service = {props.server_response_service}
+
               ></IncreaseButton>
             </div>
           </React.Fragment>
@@ -48,6 +51,8 @@ function ProductComponent(props) {
               session_code={props.session_code}
               state_changer={props.state_changer}
               checkbox_status={props.product.checkout}
+              server_response_service = {props.server_response_service}
+
             />
           ) : null}
         </div>
@@ -58,6 +63,7 @@ function ProductComponent(props) {
             app_state={props.app_state}
             session_code={props.session_code}
             state_changer={props.state_changer}
+            server_response_service = {props.server_response_service}
           ></DeleteButton>
         </div>
       </div>

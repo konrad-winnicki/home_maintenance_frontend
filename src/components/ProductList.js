@@ -3,12 +3,6 @@ import ProductComponent from "./ProductComponent";
 import styles from "../my-style.module.css";
 
 class ProductList extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { check_status: false };
-      this.checked_list = [];
-    }
-  
     render() {
       let header_name;
       if (this.props.active_component === "Store_component") {
@@ -30,6 +24,7 @@ class ProductList extends React.Component {
                 delete_function={this.props.delete_function}
                 state_changer={this.props.state_changer}
                 session_code={this.props.session_code}
+                server_response_service={this.props.server_response_service}
               ></ProductComponent>
             </div>
           ))}

@@ -3,7 +3,8 @@ import Quagga from "@ericblade/quagga2";
 import { BsUpcScan } from "react-icons/bs";
 import * as myFunction from "../functions.js";
 
-export const url = "https://localhost:5000/products/";
+// export const url = "https://localhost:5000/products/";
+export const url = "https://backend.home-maintenance.click/"
 
 
 class Scaner extends React.PureComponent {

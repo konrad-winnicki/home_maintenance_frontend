@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { change_product_properties_in_cart } from "../services/cart";
-import { change_state_with_resolved_promise } from "../functions";
+import { inner_server_response_to_state } from "../functions";
 export default function CheckBox(props) {
   const [checkbox_status, setChecked] = useState(props.checkbox_status);
   const initialRender = useRef(true)
@@ -26,7 +26,7 @@ export default function CheckBox(props) {
       product_data,
       props.session_code
     );
-    change_state_with_resolved_promise(result, props.state_changer)
+    props.server_response_service(props.state_changer, result);
 
    
   }, [checkbox_status]);

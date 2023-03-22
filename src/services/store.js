@@ -1,118 +1,48 @@
-const url = "https://localhost:5000/";
-
-export function add_product_to_store(product_data, authorization_code) {
-  let promise = fetch(url + "store/products/", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authorization_code,
-    },
-    method: "POST",
-    body: JSON.stringify(product_data),
-  })
-  .then((response) => {
-    if (response.status === 401) {
-      this.props.state_changer({ login_status: "unlogged" });
-    } 
-    if (response.status === 500) {
-      return null;
-    }
-    else {
-      return response.json().then((json) => {
-        return [response.status, json.response];
-      });
-    }
-  })
-  .catch(() => {
-    return null;
-  });
-return promise;
-}
-
+import { fetch_function } from "../functions";
+//const url = "https://localhost:5000/";
+const url = "https://backend.home-maintenance.click/"
+const add_product_endpoint = "store/products/";
+const add_shoppings_to_store_endpoint = "store/products/delivery/";
+const delete_from_store_endpoint = "store/products/";
+const change_product_prop_in_store_endpoint = "store/products/";
 
 export function add_shoppings_to_store(product_data, authorization_code) {
-  let promise = fetch(url + "store/products/delivery/", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authorization_code,
-    },
-    method: "POST",
-    body: JSON.stringify(product_data),
-  })
-  .then((response) => {
-    if (response.status === 401) {
-      this.props.state_changer({ login_status: "unlogged" });
-    } 
-    if (response.status === 500) {
-      return null;
-    }
-    else {
-      return response.json().then((json) => {
-        return [response.status, json.response];
-      });
-    }
-  })
-  .catch(() => {
-    return null;
-  });
-return promise;
+  return fetch_function(
+    add_shoppings_to_store_endpoint,
+    "POST",
+    product_data,
+    authorization_code
+  );
+}
+export function add_product_to_store(product_data, authorization_code) {
+  return fetch_function(
+    add_product_endpoint,
+    "POST",
+    product_data,
+    authorization_code
+  );
 }
 
 export function delete_product_from_store(product_data, authorization_code) {
-  let promise = fetch(url + "store/products/" + product_data.id, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authorization_code,
-    },
-    method: "DELETE",
-    body: JSON.stringify(product_data),
-  })
-    .then((response) => {
-      if (response.status === 401) {
-        this.props.state_changer({ login_status: "unlogged" });
-      } 
-      if (response.status === 500) {
-        return null;
-      }
-      else {
-        return response.json().then((json) => {
-          return [response.status, json.response];
-        });
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-  return promise;
+  return fetch_function(
+    delete_from_store_endpoint,
+    "DELETE",
+    product_data,
+    authorization_code
+  );
 }
 
-export function change_product_properties_in_store(product_data, authorization_code) {
-  let promise = fetch(url + "store/products/" + product_data.id, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authorization_code,
-    },
-    method: "PUT",
-    body: JSON.stringify(product_data),
-  })
-    .then((response) => {
-      if (response.status === 401) {
-        this.props.state_changer({ login_status: "unlogged" });
-      } 
-      if (response.status === 500) {
-        return null;
-      }
-      else {
-        return response.json().then((json) => {
-          return [response.status, json.response];
-        });
-      }
-    })
-    .catch(() => {
-      return null;
-    });
-  return promise;
+export function change_product_properties_in_store(
+  product_data,
+  authorization_code
+) {
+  return fetch_function(
+    change_product_prop_in_store_endpoint,
+    "PUT",
+    product_data,
+    authorization_code
+  );
 }
-
 
 export function get_products_from_store(authorization_code) {
   let promise = fetch(url + "store/products/", {
@@ -124,26 +54,18 @@ export function get_products_from_store(authorization_code) {
   })
     .then((response) => {
       if (response.status === 401) {
-        this.props.state_changer({ login_status: "unlogged" });
+        return 401;
       } else {
         console.log("res from function", response);
         return response;
       }
-      if (response.status === 500) {
-        return null;
-      }
     })
     .catch(() => {
-      return null;
+      return "Error";
     });
   return promise;
 }
 
-
-
-
-
-  
 export function prepareListOfFinishedProducts(product_list) {
   let finished_products = [];
   for (let i = 0; i < product_list.length; i++) {
@@ -153,4 +75,3 @@ export function prepareListOfFinishedProducts(product_list) {
   }
   return finished_products;
 }
-
