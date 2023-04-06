@@ -1,0 +1,8 @@
+{
+  "appId": "mafalda.kitchen",
+  "appName": "Mafalda kitchen",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "cordova": {}
+}

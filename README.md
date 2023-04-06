@@ -1,3 +1,28 @@
+# Kitchen maintenance frontend
+
+## Ionic
+This component uses Ionic framework to provide build artifacts for both: web and mobile (android) runtimes.
+
+### Develoment with Ionic
+
+When a preview on mobile is needed:
+1. Build production version:
+```shell
+npm build
+```
+2. Sync code to Android application:
+```shell
+npx cap sync
+```
+If it's the first time the mobile app is created:
+```shell
+ionic capacitor add android
+```
+3. Running in Android Studio:
+```shell
+npx cap run android
+```
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -1,0 +1,7 @@
+{
+  "name": "mafalda-kitchen",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
