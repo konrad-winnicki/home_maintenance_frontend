@@ -1,7 +1,7 @@
 import React from "react";
 import { FaTrashRestoreAlt } from "react-icons/fa";
-import { inner_server_response_to_state } from "../functions";
-import { state_changer_to_server_response } from "../functions";
+import "./ProductComponent.css";
+
 class DeleteButton extends React.Component {
   delete_product() {
     let product_id = this.props.product.product_id;
@@ -20,7 +20,7 @@ class DeleteButton extends React.Component {
   render() {
     return (
       <button
-        className="btn btn-danger btn-sm"
+        className="btn btn-danger btn-sm "
         disabled={this.props.app_state !== "default" ? true : false}
         onClick={() => {
           console.log("deleting");

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { change_product_properties_in_cart } from "../services/cart";
-import { inner_server_response_to_state } from "../functions";
 export default function CheckBox(props) {
   const [checkbox_status, setChecked] = useState(props.checkbox_status);
   const initialRender = useRef(true)
@@ -34,7 +33,7 @@ export default function CheckBox(props) {
   return (
     <div>
       <input
-        class="form-check-input"
+        className="form-check-input"
         style={{ width: "25px", height: "25px" }}
         disabled={props.app_state !== "default" ? true : false}
         type="checkbox"

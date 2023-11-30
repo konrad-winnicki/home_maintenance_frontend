@@ -1,7 +1,7 @@
 import { fetch_function } from "../functions";
 
-//const url = "https://localhost:5000/";
-const url = "https://backend.home-maintenance.click/"
+const url = "http://localhost:5000/";
+//const url = "https://backend.home-maintenance.click/"
 const add_item_to_shoppings_endpoint = "cart/items/";
 const add_finished_product_to_shoppings_endpoint = "cart/items/shoppinglist";
 const delete_from_cart_endpoint = "cart/items/";

@@ -2,7 +2,6 @@ import React from "react";
 import { SiAddthis } from "react-icons/si";
 import { ask_product_name } from "../functions";
 import { add_product_to_store } from "../services/store";
-import { inner_server_response_to_state} from "../functions";
 
 class AddProductButton extends React.Component {
   addProduct() {

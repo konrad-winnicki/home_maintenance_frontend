@@ -1,0 +1,12 @@
+.product__quantity {
+    width: 15%;
+    font-weight: bold;
+    display: inline-flex;
+    }
+    
+  .product__name {
+    margin-left: 2%;
+    font-weight: bold;
+    display: inline-flex;
+    width: 65%;
+      }

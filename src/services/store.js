@@ -1,6 +1,6 @@
 import { fetch_function } from "../functions";
-//const url = "https://localhost:5000/";
-const url = "https://backend.home-maintenance.click/"
+const url = "http://localhost:5000/";
+//const url = "https://backend.home-maintenance.click/"
 const add_product_endpoint = "store/products/";
 const add_shoppings_to_store_endpoint = "store/products/delivery/";
 const delete_from_store_endpoint = "store/products/";
@@ -60,7 +60,8 @@ export function get_products_from_store(authorization_code) {
         return response;
       }
     })
-    .catch(() => {
+    .catch((error) => {
+      console.log(error)
       return "Error";
     });
   return promise;

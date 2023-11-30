@@ -1,6 +1,5 @@
 import React from "react";
 import { add_shoppings_to_store } from "../services/store";
-import { inner_server_response_to_state } from "../functions";
 import { list_of_checked_out_items } from "../services/cart";
 class AddItemsFromShopings extends React.Component {
   add_shoppings() {

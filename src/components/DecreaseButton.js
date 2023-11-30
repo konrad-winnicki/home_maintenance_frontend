@@ -2,8 +2,6 @@ import React from "react";
 import {BsFillArrowDownSquareFill} from "react-icons/bs";
 import { change_product_properties_in_store} from "../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {inner_server_response_to_state} from "../functions";
-import { state_changer_to_server_response } from "../functions";
 class DecreaseButton extends React.Component {
     increase_quantity() {
         let product_data = {

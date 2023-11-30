@@ -1,0 +1,23 @@
+.product__properties {
+  display: inline-flex;
+  width: 98%;
+  height: 10%;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 2px 2px 2px rgb(109, 109, 109);
+  margin: 4px;
+  border-radius: 5px;
+  border: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
+}
+
+
+
+/*
+       .button_set{
+        width: 20%;
+        display: inline-flex;
+        justify-content: right;
+        align-items: center
+      }
+      */

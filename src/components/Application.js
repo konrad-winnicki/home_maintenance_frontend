@@ -36,7 +36,7 @@ export default class Application extends React.PureComponent {
 
   render() {
     return (
-      <div className="container vh-100 vw-100 d-flex flex-column">
+      <React.Fragment>
         <nav className="navbar fixed-top bg-warning">
           <div className="col text-end">
             <button
@@ -81,7 +81,7 @@ export default class Application extends React.PureComponent {
             app_state={this.state.app_state}
           />
         ) : null}
-      </div>
+      </React.Fragment>
     );
   }
 }

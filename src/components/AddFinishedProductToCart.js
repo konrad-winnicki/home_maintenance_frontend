@@ -1,6 +1,5 @@
 import React from "react";
 import { add_finished_products_to_shopping_list } from "../services/cart";
-import { inner_server_response_to_state } from "../functions";
 import { prepareListOfFinishedProducts } from "../services/store";
 class AddFinishedProductsToCart extends React.Component {
   add_finished_products() {

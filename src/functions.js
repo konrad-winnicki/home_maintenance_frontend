@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
-const url = "https://backend.home-maintenance.click/";
-
+//const url = "https://backend.home-maintenance.click/";
+const url = "http://localhost:5000/"
 export function askQuantity(string = "") {
   //let string = string
   let quantity = prompt("Quantity" + string, "");

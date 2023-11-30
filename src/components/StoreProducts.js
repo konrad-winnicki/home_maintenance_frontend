@@ -11,6 +11,8 @@ import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
 import Scaner from "./Scaner.js";
 import styles from "../my-style.module.css";
+import Card from "./ProductComponent";
+import "./Header.css";
 
 class StoreProducts extends React.PureComponent {
   constructor(props) {
@@ -40,19 +42,19 @@ class StoreProducts extends React.PureComponent {
 
   ProductListChanger() {
     let result = get_products_from_store(this.props.session_code);
-          result.then((response) => {
-            console.log(response)
-            if (response ===401){
-              this.props.state_changer({ login_status: "unlogged" })
-          }else{
+    result.then((response) => {
+      console.log(response);
+      if (response === 401) {
+        this.props.state_changer({ login_status: "unlogged" });
+      } else {
         response.json().then((json) => {
           this.store_state_changer({
             app_state: "default",
             product_list: json,
           });
-        });}
-      });
-    
+        });
+      }
+    });
   }
 
   render() {
@@ -63,7 +65,9 @@ class StoreProducts extends React.PureComponent {
           <div className="row position-realtive">
             <VideoAcceptor />
           </div>
-          <div className="row flex-grow-1 mt-5" style={{ overflow: "auto" }}>
+
+          <div className="flex-grow-1 mt-5 mb-8" style={{ overflow: "auto", paddingBottom: '1%', marginBottom: '14%'}}>
+            <div className="header">Products at home</div>
             <ProductList
               product_list={this.state.product_list}
               app_state={this.state.app_state}

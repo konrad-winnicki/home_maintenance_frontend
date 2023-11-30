@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../my-style.module.css";
+import './ProductDescription.css'
 import { ask_new_name } from "../functions";
 import { custom_quantity } from "../functions";
 
@@ -46,7 +46,7 @@ function ProductDescription(props) {
   return (
     <React.Fragment>
       <div
-        className={styles.table__product}
+        className='product__name'
         onClick={() => {
           change_name_in_database();
         }}
@@ -55,7 +55,7 @@ function ProductDescription(props) {
       </div>
 
       <div
-        className={styles.table__quantity}
+        className='product__quantity'
         onClick={() => {
           change_quantity_in_database();
         }}

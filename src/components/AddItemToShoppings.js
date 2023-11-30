@@ -1,7 +1,6 @@
 import React from "react";
 import { MdAddBox } from "react-icons/md";
 import { add_item_to_shopping_list } from "../services/cart";
-import { inner_server_response_to_state } from "../functions";
 
 class AddItemToShoppings extends React.PureComponent {
   constructor(props) {
