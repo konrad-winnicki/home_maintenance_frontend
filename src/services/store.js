@@ -6,42 +6,41 @@ const add_shoppings_to_store_endpoint = "store/products/delivery/";
 const delete_from_store_endpoint = "store/products/";
 const change_product_prop_in_store_endpoint = "store/products/";
 
-export function add_shoppings_to_store(product_data, authorization_code) {
-  return fetch_function(
-    add_shoppings_to_store_endpoint,
-    "POST",
-    product_data,
-    authorization_code
-  );
+export function add_shoppings_to_store(authorization_code) {
+  return fetch_function({
+    endpoint: add_shoppings_to_store_endpoint,
+    method: "POST",
+    authorization_code,
+  });
 }
 export function add_product_to_store(product_data, authorization_code) {
-  return fetch_function(
-    add_product_endpoint,
-    "POST",
+  return fetch_function({
+    endpoint: add_product_endpoint,
+    method: "POST",
     product_data,
-    authorization_code
-  );
+    authorization_code,
+  });
 }
 
 export function delete_product_from_store(product_data, authorization_code) {
-  return fetch_function(
-    delete_from_store_endpoint,
-    "DELETE",
+  return fetch_function({
+    endpoint: delete_from_store_endpoint,
+    method: "DELETE",
     product_data,
-    authorization_code
-  );
+    authorization_code,
+  });
 }
 
 export function change_product_properties_in_store(
   product_data,
   authorization_code
 ) {
-  return fetch_function(
-    change_product_prop_in_store_endpoint,
-    "PUT",
+  return fetch_function({
+    endpoint: change_product_prop_in_store_endpoint,
+    method: "PUT",
     product_data,
-    authorization_code
-  );
+    authorization_code,
+  });
 }
 
 export function get_products_from_store(authorization_code) {
@@ -61,18 +60,8 @@ export function get_products_from_store(authorization_code) {
       }
     })
     .catch((error) => {
-      console.log(error)
+      console.log(error);
       return "Error";
     });
   return promise;
-}
-
-export function prepareListOfFinishedProducts(product_list) {
-  let finished_products = [];
-  for (let i = 0; i < product_list.length; i++) {
-    if (product_list[i].quantity === 0) {
-      finished_products.push(product_list[i]);
-    }
-  }
-  return finished_products;
 }

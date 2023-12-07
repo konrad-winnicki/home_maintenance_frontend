@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 //const url = "https://backend.home-maintenance.click/";
-const url = "http://localhost:5000/"
+const url = "http://localhost:5000/";
 export function askQuantity(string = "") {
   //let string = string
   let quantity = prompt("Quantity" + string, "");
@@ -75,54 +75,56 @@ function notifications(message, type) {
 
 export function state_changer_to_server_response(
   state_changer_function,
- response_from_server
+  response_from_server
 ) {
-  response_from_server.then((response) =>{
-    let status_code = response[0]
-    let server_message = response[1]
+  response_from_server.then((response) => {
+    let status_code = response[0];
+    let server_message = response[1];
     if (status_code === 401) {
-      state_changer_function({ app_state: "unlogged" })}
-  else if (status_code > 199 && status_code < 300) {
-    notifications(server_message, "success");
-    state_changer_function({ app_state: "refreshing" });
-  } else if (status_code === 409) {
-    notifications(server_message, "warning");
-    state_changer_function({ app_state: "default" });
-  } else{
-    notifications(server_message, "error");
-    state_changer_function({ app_state: "default" });
-  }
-  })
+      state_changer_function({ app_state: "unlogged" });
+    } else if (status_code > 199 && status_code < 300) {
+      notifications(server_message, "success");
+      state_changer_function({ app_state: "refreshing" });
+    } else if (status_code === 409) {
+      notifications(server_message, "warning");
+      state_changer_function({ app_state: "default" });
+    } else {
+      notifications(server_message, "error");
+      state_changer_function({ app_state: "default" });
+    }
+  });
 }
-
 
 export function state_changer_to_server_response_for_shoppings(
   state_changer_function,
- response_from_server
+  response_from_server
 ) {
-  response_from_server.then((response) =>{
-    let status_code = response[0]
-    let server_message = response[1]
+  response_from_server.then((response) => {
+    let status_code = response[0];
+    let server_message = response[1];
     if (status_code === 401) {
-      state_changer_function({ app_state: "unlogged" })}
-  else if (status_code > 199 && status_code < 300) {
-    state_changer_function({ app_state: "refreshing" });
-  } else if (status_code === 409) {
-    notifications(server_message, "warning");
-    state_changer_function({ app_state: "default" });
-  } else {
-    notifications(server_message, "error");
-    state_changer_function({ app_state: "default" });
-  }})
+      state_changer_function({ app_state: "unlogged" });
+    } else if (status_code > 199 && status_code < 300) {
+      state_changer_function({ app_state: "refreshing" });
+    } else if (status_code === 409) {
+      notifications(server_message, "warning");
+      state_changer_function({ app_state: "default" });
+    } else {
+      notifications(server_message, "error");
+      state_changer_function({ app_state: "default" });
+    }
+  });
 }
 
-
-export function fetch_function(
+export function fetch_function({
   endpoint,
   method,
   product_data,
-  authorization_code
-) {
+  authorization_code,
+}) {
+  console.log("----");
+  console.log(authorization_code);
+  console.log("----");
   let endpoint_url;
   if (method === "POST") {
     endpoint_url = url + endpoint;
@@ -151,8 +153,6 @@ export function fetch_function(
     });
   return promise;
 }
-
-
 
 /*FUNKCJA TYLKO DLA SKANERA*/
 
