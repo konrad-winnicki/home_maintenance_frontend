@@ -78,8 +78,9 @@ export function state_changer_to_server_response(
   response_from_server
 ) {
   response_from_server.then((response) => {
-    let status_code = response[0];
-    let server_message = response[1];
+    let status_code = response.status
+    console.log('zmiana', response.json)
+    let server_message = 'zmiana';
     if (status_code === 401) {
       state_changer_function({ app_state: "unlogged" });
     } else if (status_code > 199 && status_code < 300) {
@@ -100,8 +101,9 @@ export function state_changer_to_server_response_for_shoppings(
   response_from_server
 ) {
   response_from_server.then((response) => {
-    let status_code = response[0];
-    let server_message = response[1];
+    let status_code = response.status
+    console.log(response.json())
+    let server_message = 'zmoiana';
     if (status_code === 401) {
       state_changer_function({ app_state: "unlogged" });
     } else if (status_code > 199 && status_code < 300) {
@@ -115,6 +117,8 @@ export function state_changer_to_server_response_for_shoppings(
     }
   });
 }
+
+
 
 export function fetch_function({
   endpoint,

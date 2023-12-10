@@ -1,17 +1,21 @@
 import React from "react";
 import { SiAddthis } from "react-icons/si";
 import { ask_product_name } from "../functions";
-import { add_product_to_store } from "../services/store";
+import { add_product } from "../services/store";
 
 class AddProductButton extends React.Component {
-  addProduct() {
+  async addProduct() {
     let product_name = ask_product_name();
     let product_data = {
       name: product_name,
       quantity: 1,
     };
     if (product_name != null) {
-      return add_product_to_store(product_data, this.props.session_code);
+      return add_product(product_data, this.props.session_code)
+        .then((response) => {
+          return response;
+        })
+        .catch((error) => console.log(error));
     } else {
       return null;
     }
@@ -24,8 +28,13 @@ class AddProductButton extends React.Component {
         disabled={this.props.app_state !== "default" ? true : false}
         onClick={() => {
           this.props.state_changer({ app_state: "Add_product" });
-          let result = this.addProduct();
-          this.props.server_response_service(this.props.state_changer, result);
+          let response = this.addProduct()
+          
+            this.props.server_response_service(
+              this.props.state_changer,
+              response
+            )
+        
         }}
       >
         <SiAddthis /> product

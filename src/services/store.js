@@ -1,7 +1,7 @@
 import { fetch_function } from "../functions";
 const url = "http://localhost:5000/";
 //const url = "https://backend.home-maintenance.click/"
-const add_product_endpoint = "store/products/";
+const add_product_endpoint = url + "store/products/";
 const add_shoppings_to_store_endpoint = "store/products/delivery/";
 const delete_from_store_endpoint = "store/products/";
 const change_product_prop_in_store_endpoint = "store/products/";
@@ -13,13 +13,26 @@ export function add_shoppings_to_store(authorization_code) {
     authorization_code,
   });
 }
-export function add_product_to_store(product_data, authorization_code) {
-  return fetch_function({
-    endpoint: add_product_endpoint,
+export async function add_product(product_data, authorization_code) {
+  return fetch(add_product_endpoint, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization_code,
+    },
     method: "POST",
-    product_data,
-    authorization_code,
-  });
+    body: JSON.stringify(product_data),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response;
+      } else {
+        return Promise.reject("Product not added");
+      }
+    })
+
+    .catch((error) => {
+      console.log("Catched unknown error:", error);
+    });
 }
 
 export function delete_product_from_store(product_data, authorization_code) {
