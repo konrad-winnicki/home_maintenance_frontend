@@ -1,8 +1,8 @@
 import React from "react";
 import {
-  delete_product_from_store,
+  deleteProduct,
   get_products_from_store,
-  change_product_properties_in_store,
+  updateProduct,
 } from "../services/store";
 import { state_changer_to_server_response } from "../functions";
 import { ToastContainer } from "react-toastify";
@@ -11,7 +11,6 @@ import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
 import Scaner from "./Scaner.js";
 import styles from "../my-style.module.css";
-import Card from "./ProductComponent";
 import "./Header.css";
 
 class StoreProducts extends React.PureComponent {
@@ -66,16 +65,23 @@ class StoreProducts extends React.PureComponent {
             <VideoAcceptor />
           </div>
 
-          <div className="flex-grow-1 mt-5 mb-8" style={{ overflow: "auto", paddingBottom: '1%', marginBottom: '14%'}}>
+          <div
+            className="flex-grow-1 mt-5 mb-8"
+            style={{
+              overflow: "auto",
+              paddingBottom: "1%",
+              marginBottom: "14%",
+            }}
+          >
             <div className="header">Products at home</div>
             <ProductList
               product_list={this.state.product_list}
               app_state={this.state.app_state}
-              change_properties_in_db={change_product_properties_in_store}
+              change_properties_in_db={updateProduct}
               state_changer={this.store_state_changer}
               active_component={this.props.active_component}
               session_code={this.props.session_code}
-              delete_function={delete_product_from_store}
+              delete_function={deleteProduct}
               server_response_service={state_changer_to_server_response}
             />
           </div>

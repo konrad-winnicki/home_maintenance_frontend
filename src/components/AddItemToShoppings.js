@@ -1,6 +1,7 @@
 import React from "react";
 import { MdAddBox } from "react-icons/md";
 import { add_item_to_shopping_list } from "../services/cart";
+import { AWAITING_API_RESPONSE } from "./Application";
 
 class AddItemToShoppings extends React.PureComponent {
   constructor(props) {
@@ -59,7 +60,7 @@ class AddItemToShoppings extends React.PureComponent {
             disabled={this.props.app_state !== "default" ? true : false}
             className="btn btn-primary"
             onClick={() => {
-              this.props.state_changer({ app_state: "Add_product" });
+              this.props.state_changer({ app_state: AWAITING_API_RESPONSE });
               this.add_product();
             }}
           >

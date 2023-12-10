@@ -3,14 +3,16 @@ import { FaTrashRestoreAlt } from "react-icons/fa";
 import "./ProductComponent.css";
 
 class DeleteButton extends React.Component {
-  delete_product() {
-    let product_id = this.props.product.product_id;
-    let confirmation = window.confirm("Are you sure?");
+  onClickHandler() {
+    const confirmation = window.confirm("Are you sure?");
     if (confirmation) {
-      let product_data = {
-        id: product_id,
-      };
-      return this.props.delete_function(product_data, this.props.session_code);
+      const productId = this.props.product.product_id;
+      this.props.state_changer({ app_state: "button_clicked" });
+      const response = this.props.delete_function(
+        productId,
+        this.props.session_code
+      );
+      this.props.server_response_service(this.props.state_changer, response);
     } else {
       this.props.state_changer({ app_state: "default" });
       return null;
@@ -23,11 +25,7 @@ class DeleteButton extends React.Component {
         className="btn btn-danger btn-sm "
         disabled={this.props.app_state !== "default" ? true : false}
         onClick={() => {
-          console.log("deleting");
-          this.props.state_changer({ app_state: "button_clicked" });
-          let result = this.delete_product();
-          //inner_server_response_to_state(result, this.props.state_changer);
-          this.props.server_response_service(this.props.state_changer, result);
+          this.onClickHandler();
         }}
       >
         <FaTrashRestoreAlt />

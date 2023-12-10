@@ -8,6 +8,11 @@ import StoreProducts from "./StoreProducts";
 export const url = "https://localhost:5000/products/";
 //export const url = "https://kitchen-backend.fly.dev/products/"
 
+export const PRODUCT_LIST = "PRODUCT_LIST";
+export const SHOPPING_ITEM_LIST = "SHOPPING_ITEM_LIST";
+
+export const AWAITING_API_RESPONSE = "AWAITING_API_RESPONSE";
+
 export default class Application extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -17,10 +22,6 @@ export default class Application extends React.PureComponent {
       showComponent: null,
     };
   }
-
-
-
-
 
   app_state_changer(new_state) {
     this.setState(new_state);
@@ -43,7 +44,7 @@ export default class Application extends React.PureComponent {
               className="btn btn-outline-success"
               onClick={() => {
                 this.setState({
-                  showComponent: "Store_component",
+                  showComponent: PRODUCT_LIST,
                   app_state: "default",
                 });
               }}
@@ -56,7 +57,7 @@ export default class Application extends React.PureComponent {
               className="btn btn-outline-success"
               onClick={() => {
                 this.setState({
-                  showComponent: "Cart_component",
+                  showComponent: SHOPPING_ITEM_LIST,
                   app_state: "default",
                 });
               }}
@@ -65,15 +66,15 @@ export default class Application extends React.PureComponent {
             </button>
           </div>
         </nav>
-        {this.state.showComponent === "Store_component" ? (
+        {this.state.showComponent === PRODUCT_LIST ? (
           <StoreProducts
             session_code={this.props.session_code}
             login_status={this.state.login_status}
             active_component={this.state.showComponent}
-            state_changer = {this.app_state_changer}
+            state_changer={this.app_state_changer}
           />
         ) : null}
-        {this.state.showComponent === "Cart_component" ? (
+        {this.state.showComponent === SHOPPING_ITEM_LIST ? (
           <ShoppingList
             session_code={this.props.session_code}
             state_changer={this.app_state_changer}
