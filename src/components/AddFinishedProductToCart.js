@@ -1,9 +1,11 @@
 import React from "react";
 import { add_finished_products_to_shopping_list } from "../services/cart";
 class AddFinishedProductsToCart extends React.Component {
+  session_code = localStorage.getItem("session_code");
+
   add_finished_products() {
     let result = add_finished_products_to_shopping_list(
-      this.props.session_code
+      this.session_code
     );
     this.props.server_response_service(this.props.state_changer, result);
   }

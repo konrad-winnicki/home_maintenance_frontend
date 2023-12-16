@@ -20,6 +20,8 @@ class ShoppingList extends React.PureComponent {
       app_state: "default",
       product_list: [],
     };
+    this.session_code = localStorage.getItem("session_code");
+
     this.shopping_list_state_changer =
       this.shopping_list_state_changer.bind(this);
   }
@@ -40,7 +42,7 @@ class ShoppingList extends React.PureComponent {
   }
 
   ProductListChanger() {
-    let result = get_items_from_shoping_list(this.props.session_code);
+    let result = get_items_from_shoping_list(this.session_code);
     result.then((response) => {
       console.log(response);
       if (response === 401) {

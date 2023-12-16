@@ -2,6 +2,8 @@ import React from "react";
 import ProductComponent from "./ProductComponent";
 
 class ProductList extends React.Component {
+ 
+
   render() {
     return (
       <div>
@@ -14,7 +16,6 @@ class ProductList extends React.Component {
             app_state={this.props.app_state}
             delete_function={this.props.delete_function}
             state_changer={this.props.state_changer}
-            session_code={this.props.session_code}
             server_response_service={this.props.server_response_service}
           ></ProductComponent>
         ))}

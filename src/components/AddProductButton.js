@@ -5,6 +5,8 @@ import { addProduct } from "../services/store";
 import { APP_STATES, AWAITING_API_RESPONSE } from "./Dashboard";
 
 class AddProductButton extends React.Component {
+  session_code = localStorage.getItem("session_code");
+
   async onClickHandler() {
     let product_name = ask_product_name();
     let product_data = {
@@ -15,7 +17,7 @@ class AddProductButton extends React.Component {
       return;
     }
     this.props.state_changer({ app_state: AWAITING_API_RESPONSE });
-    const response = addProduct(product_data, this.props.session_code).catch(
+    const response = addProduct(product_data, this.session_code).catch(
       (error) => console.log(error)
     );
     this.props.state_changer({ app_state: "refreshing" });

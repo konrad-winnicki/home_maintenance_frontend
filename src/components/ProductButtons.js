@@ -15,7 +15,6 @@ export default function ProductButtons(props) {
             <DecreaseButton
               product={props.product}
               app_state={props.app_state}
-              session_code={props.session_code}
               state_changer={props.state_changer}
               server_response_service={props.server_response_service}
             ></DecreaseButton>
@@ -24,7 +23,6 @@ export default function ProductButtons(props) {
             <IncreaseButton
               product={props.product}
               app_state={props.app_state}
-              session_code={props.session_code}
               state_changer={props.state_changer}
               server_response_service={props.server_response_service}
             ></IncreaseButton>
@@ -37,7 +35,6 @@ export default function ProductButtons(props) {
             product={props.product}
             app_state={props.app_state}
             id={props.product.product_id}
-            session_code={props.session_code}
             state_changer={props.state_changer}
             checkbox_status={props.product.checkout}
             server_response_service={props.server_response_service}
@@ -49,7 +46,6 @@ export default function ProductButtons(props) {
           product={props.product}
           delete_function={props.delete_function}
           app_state={props.app_state}
-          session_code={props.session_code}
           state_changer={props.state_changer}
           server_response_service={props.server_response_service}
         ></DeleteButton>

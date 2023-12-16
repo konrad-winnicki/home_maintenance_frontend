@@ -18,6 +18,8 @@ class StoreProducts extends React.PureComponent {
       product_list: [],
       app_state: APP_STATES.DEFAULT,
     };
+    this.session_code = localStorage.getItem("session_code");
+
   }
   store_state_changer(new_state) {
     this.setState(new_state);
@@ -37,7 +39,7 @@ class StoreProducts extends React.PureComponent {
   }
 
   productListChanger() {
-    getProducts(this.props.session_code)
+    getProducts(this.session_code)
       .then((response) => {
         response.json().then((json) => {
           this.store_state_changer({
@@ -73,7 +75,6 @@ class StoreProducts extends React.PureComponent {
               updateProduct={updateProduct}
               state_changer={this.store_state_changer}
               active_component={this.props.active_component}
-              session_code={this.props.session_code}
               delete_function={deleteProduct}
               server_response_service={state_changer_to_server_response}
             />
@@ -86,7 +87,6 @@ class StoreProducts extends React.PureComponent {
             <div className="col text-center ">
               <AddProductButton
                 app_state={this.state.app_state}
-                session_code={this.props.session_code}
                 state_changer={this.store_state_changer}
                 server_response_service={state_changer_to_server_response}
               ></AddProductButton>
@@ -96,7 +96,6 @@ class StoreProducts extends React.PureComponent {
                 app_state={this.state.app_state}
                 product_list={this.state.product_list}
                 state_changer={this.store_state_changer}
-                session_code={this.props.session_code}
                 server_response_service={state_changer_to_server_response}
               ></AddFinishedProductsToCart>
             </div>

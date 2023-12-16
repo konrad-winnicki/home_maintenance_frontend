@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { ImListNumbered } from "react-icons/im";
 import ShoppingList from "./ShoppingList";
 import StoreProducts from "./StoreProducts";
+
+import { AuthorizationContext } from "../contexts/authorizationContext";
+import { useNavigate } from "react-router-dom";
+
 export const url = "https://localhost:5000/products/";
 //export const url = "https://kitchen-backend.fly.dev/products/"
 
@@ -75,7 +79,6 @@ export default class Dashboard extends React.PureComponent {
         </nav>
         {this.state.showComponent === PRODUCT_LIST ? (
           <StoreProducts
-            session_code={this.session_code}
             login_status={this.state.login_status}
             active_component={this.state.showComponent}
             state_changer={this.app_state_changer}
@@ -83,7 +86,6 @@ export default class Dashboard extends React.PureComponent {
         ) : null}
         {this.state.showComponent === SHOPPING_ITEM_LIST ? (
           <ShoppingList
-            session_code={this.session_code}
             state_changer={this.app_state_changer}
             active_component={this.state.showComponent}
             app_state={this.state.app_state}
@@ -92,4 +94,17 @@ export default class Dashboard extends React.PureComponent {
       </React.Fragment>
     );
   }
+}
+
+
+export function WrappedDashboardComponent() {
+  const navigate = useNavigate();
+  const authorizationContext = useContext(AuthorizationContext);
+
+  return (
+    <Dashboard
+      navigate={navigate}
+      authorizationContext={authorizationContext}
+    ></Dashboard>
+  );
 }

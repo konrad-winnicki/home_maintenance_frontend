@@ -4,6 +4,8 @@ import { updateProduct } from "../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AWAITING_API_RESPONSE } from "./Dashboard";
 class DecreaseButton extends React.Component {
+  session_code = localStorage.getItem("session_code");
+
   onClickHandler() {
     const product_data = {
       id: this.props.product.product_id,
@@ -13,7 +15,7 @@ class DecreaseButton extends React.Component {
       },
     };
     this.props.state_changer({ app_state: AWAITING_API_RESPONSE });
-    const result = updateProduct(product_data, this.props.session_code);
+    const result = updateProduct(product_data, this.session_code);
     this.props.server_response_service(this.props.state_changer, result);
   }
 

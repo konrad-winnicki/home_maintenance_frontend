@@ -3,6 +3,8 @@ import { change_product_properties_in_cart } from "../services/cart";
 export default function CheckBox(props) {
   const [checkbox_status, setChecked] = useState(props.checkbox_status);
   const initialRender = useRef(true)
+  const session_code = localStorage.getItem("session_code");
+
   const handleChange = () => {
     console.log("HANDLE CHANGE CALLED");
     setChecked(!checkbox_status);
@@ -23,12 +25,12 @@ export default function CheckBox(props) {
     };
     let result = change_product_properties_in_cart(
       product_data,
-      props.session_code
+      session_code
     );
     props.server_response_service(props.state_changer, result);
 
    
-  }, [checkbox_status]);
+  }, [checkbox_status, props, session_code]);
 
   return (
     <div>

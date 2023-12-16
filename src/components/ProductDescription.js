@@ -4,7 +4,8 @@ import { ask_new_name } from "../functions";
 import { custom_quantity } from "../functions";
 
 function ProductDescription(props) {
-  
+  const session_code = localStorage.getItem("session_code");
+
   const onClickNameHandler = () => {
     props.state_changer({ app_state: "changing_name" });
     const new_name = ask_new_name();
@@ -17,7 +18,7 @@ function ProductDescription(props) {
       };
       let result = props.updateProduct(
         product_data,
-        props.session_code
+        session_code
       );
       props.server_response_service(props.state_changer, result);
     } else {
@@ -37,7 +38,7 @@ function ProductDescription(props) {
       };
       const result = props.updateProduct(
         product_data,
-        props.session_code
+        session_code
       );
       props.server_response_service(props.state_changer, result);
     } else {
