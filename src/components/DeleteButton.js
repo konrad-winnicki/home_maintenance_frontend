@@ -1,39 +1,55 @@
-import React from "react";
+import React, {useContext} from "react";
 import { FaTrashRestoreAlt } from "react-icons/fa";
 import "./ProductComponent.css";
+import { deleteProduct } from "../services/store";
+import { server_response_service } from "../functions";
+import { ProductContext } from "../contexts/productContext";
+import { AppContext } from "../contexts/appContext";
+import { APP_STATES } from "./Dashboard";
 
-class DeleteButton extends React.Component {
-  session_code = localStorage.getItem("session_code");
-
-  onClickHandler() {
+const DeleteButton = ()=> {
+  const session_code = localStorage.getItem("session_code");
+  const productContext = useContext(ProductContext)
+  const appContext = useContext(AppContext)
+  const onClickHandler = () => {
     const confirmation = window.confirm("Are you sure?");
     if (confirmation) {
-      const productId = this.props.product.product_id;
-      this.props.state_changer({ app_state: "button_clicked" });
-      const response = this.props.delete_function(
+      const productId = productContext.product.product_id;
+      productContext.stateChanger({ app_state: "button_clicked" });
+      const response = deleteProduct(
         productId,
-        this.session_code
-      );
-      this.props.server_response_service(this.props.state_changer, response);
+        session_code
+      ).catch((error)=>console.log(error))
+      const messages = {
+        unlogged: "Not logged",
+        success: "Product deleted",
+        duplicated: "Product already exists",
+        unknown: "Unknown error",
+      };
+      server_response_service(messages, response).then(()=>{
+        appContext.stateChanger({appState:APP_STATES.REFRESHING});
+  
+      })
+
     } else {
-      this.props.state_changer({ app_state: "default" });
+      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
       return null;
     }
   }
 
-  render() {
+ 
     return (
       <button
         className="btn btn-danger btn-sm "
-        disabled={this.props.app_state !== "default" ? true : false}
+        disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         onClick={() => {
-          this.onClickHandler();
+          onClickHandler();
         }}
       >
         <FaTrashRestoreAlt />
       </button>
     );
-  }
+ 
 }
 
 export default DeleteButton;

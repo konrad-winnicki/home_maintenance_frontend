@@ -1,6 +1,6 @@
-import React from "react";
-import { deleteProduct, getProducts, updateProduct } from "../services/store";
-import { state_changer_to_server_response } from "../functions";
+import React, {useContext} from "react";
+import {getProducts} from "../services/store";
+import { server_response_service } from "../functions";
 import { ToastContainer } from "react-toastify";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
@@ -9,17 +9,16 @@ import Scaner from "./Scaner.js";
 import styles from "../my-style.module.css";
 import "./Header.css";
 import { APP_STATES } from "./Dashboard";
+import { AppContext } from "../contexts/appContext";
 
 class StoreProducts extends React.PureComponent {
   constructor(props) {
     super(props);
     this.store_state_changer = this.store_state_changer.bind(this);
     this.state = {
-      product_list: [],
-      app_state: APP_STATES.DEFAULT,
+      productList: [],
     };
     this.session_code = localStorage.getItem("session_code");
-
   }
   store_state_changer(new_state) {
     this.setState(new_state);
@@ -30,10 +29,9 @@ class StoreProducts extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    console.log(this.state);
-    if (this.state.app_state === "unlogged") {
-      this.props.state_changer({ login_status: "unlogged" });
-    } else if (this.state.app_state === "refreshing") {
+    if (this.props.appContext.appState === "unlogged") {
+      this.props.appContext.stateChanger({ appState: "unlogged" });
+    } else if (this.props.appContext.appState === APP_STATES.REFRESHING) {
       this.productListChanger();
     }
   }
@@ -43,9 +41,9 @@ class StoreProducts extends React.PureComponent {
       .then((response) => {
         response.json().then((json) => {
           this.store_state_changer({
-            app_state: "default",
-            product_list: json,
+            productList: json,
           });
+          this.props.appContext.stateChanger({ appState: APP_STATES.DEFAULT })
         });
       })
       .catch((error) => console.log(error));
@@ -70,14 +68,9 @@ class StoreProducts extends React.PureComponent {
           >
             <div className="header">Products at home</div>
             <ProductList
-              product_list={this.state.product_list}
-              app_state={this.state.app_state}
-              updateProduct={updateProduct}
-              state_changer={this.store_state_changer}
-              active_component={this.props.active_component}
-              delete_function={deleteProduct}
-              server_response_service={state_changer_to_server_response}
+              productList={this.state.productList}
             />
+            
           </div>
 
           <div
@@ -85,18 +78,10 @@ class StoreProducts extends React.PureComponent {
           d-flex justify-content-between fixed-bottom"
           >
             <div className="col text-center ">
-              <AddProductButton
-                app_state={this.state.app_state}
-                state_changer={this.store_state_changer}
-                server_response_service={state_changer_to_server_response}
-              ></AddProductButton>
+              <AddProductButton></AddProductButton>
             </div>
             <div className="col text-center ">
               <AddFinishedProductsToCart
-                app_state={this.state.app_state}
-                product_list={this.state.product_list}
-                state_changer={this.store_state_changer}
-                server_response_service={state_changer_to_server_response}
               ></AddFinishedProductsToCart>
             </div>
             <div className="col text-center">
@@ -104,7 +89,7 @@ class StoreProducts extends React.PureComponent {
                 notifications={this.notifications}
                 app_state={this.state.app_state}
                 state_changer={this.store_state_changer}
-                server_response_service={state_changer_to_server_response}
+                server_response_service={server_response_service}
               ></Scaner>
             </div>
           </div>
@@ -112,6 +97,20 @@ class StoreProducts extends React.PureComponent {
       </div>
     );
   }
+
+  /**/
+}
+
+
+
+
+export function WrappedStoreProducts() {
+  const appContext = useContext(AppContext);
+  return (
+    <StoreProducts
+      appContext={appContext}
+    ></StoreProducts>
+  );
 }
 
 class VideoAcceptor extends React.Component {

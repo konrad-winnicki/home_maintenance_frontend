@@ -21,7 +21,7 @@ export async function addProduct(product_data, authorization_code) {
     body: JSON.stringify(product_data),
   })
     .then((response) => {
-      if (response.ok) {
+      if (response) {
         return response;
       } else {
         return Promise.reject("Product not added");

@@ -9,46 +9,15 @@ import { PRODUCT_LIST, SHOPPING_ITEM_LIST } from "./Dashboard";
 export default function ProductButtons(props) {
   return (
     <React.Fragment>
-      {props.active_component === PRODUCT_LIST ? (
-        <React.Fragment>
-          <div className="button_surrounding">
-            <DecreaseButton
-              product={props.product}
-              app_state={props.app_state}
-              state_changer={props.state_changer}
-              server_response_service={props.server_response_service}
-            ></DecreaseButton>
-          </div>
-          <div className="button_surrounding">
-            <IncreaseButton
-              product={props.product}
-              app_state={props.app_state}
-              state_changer={props.state_changer}
-              server_response_service={props.server_response_service}
-            ></IncreaseButton>
-          </div>
-        </React.Fragment>
-      ) : null}
       <div className="button_surrounding">
-        {props.active_component === SHOPPING_ITEM_LIST ? (
-          <CheckBox
-            product={props.product}
-            app_state={props.app_state}
-            id={props.product.product_id}
-            state_changer={props.state_changer}
-            checkbox_status={props.product.checkout}
-            server_response_service={props.server_response_service}
-          />
-        ) : null}
+        <DecreaseButton></DecreaseButton>
       </div>
       <div className="button_surrounding">
-        <DeleteButton
-          product={props.product}
-          delete_function={props.delete_function}
-          app_state={props.app_state}
-          state_changer={props.state_changer}
-          server_response_service={props.server_response_service}
-        ></DeleteButton>
+        <IncreaseButton></IncreaseButton>
+      </div>
+
+      <div className="button_surrounding">
+        <DeleteButton></DeleteButton>
       </div>
     </React.Fragment>
   );

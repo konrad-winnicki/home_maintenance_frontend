@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { ToastContainer } from "react-toastify";
 
 import {
@@ -12,6 +12,7 @@ import ProductList from "./ProductList.js";
 import Scaner from "./Scaner.js";
 import { state_changer_to_server_response_for_shoppings } from "../functions";
 import "./Header.css";
+import { AppContext } from "../contexts/appContext";
 
 class ShoppingList extends React.PureComponent {
   constructor(props) {
@@ -121,6 +122,16 @@ class ShoppingList extends React.PureComponent {
       </div>
     );
   }
+}
+
+
+export function WrappedShoppingList() {
+  const appContext = useContext(AppContext);
+  return (
+    <StoreProducts
+      appContext={appContext}
+    ></StoreProducts>
+  );
 }
 
 export default ShoppingList;

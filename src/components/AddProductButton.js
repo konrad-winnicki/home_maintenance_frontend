@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useContext} from "react";
 import { SiAddthis } from "react-icons/si";
-import { ask_product_name } from "../functions";
+import {
+  ask_product_name,
+  notifications,
+  statusCodeTranslator,
+} from "../functions";
 import { addProduct } from "../services/store";
-import { APP_STATES, AWAITING_API_RESPONSE } from "./Dashboard";
+import { APP_STATES} from "./Dashboard";
+import { server_response_service } from "../functions";
+import { AppContext } from "../contexts/appContext";
 
-class AddProductButton extends React.Component {
-  session_code = localStorage.getItem("session_code");
+const AddProductButton = ()=> {
+  const session_code = localStorage.getItem("session_code");
+ const appContext = useContext(AppContext)
 
-  async onClickHandler() {
+  const onClickHandler = async ()=>{
     let product_name = ask_product_name();
     let product_data = {
       name: product_name,
@@ -16,26 +23,49 @@ class AddProductButton extends React.Component {
     if (!product_name) {
       return;
     }
-    this.props.state_changer({ app_state: AWAITING_API_RESPONSE });
-    const response = addProduct(product_data, this.session_code).catch(
-      (error) => console.log(error)
-    );
-    this.props.state_changer({ app_state: "refreshing" });
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+   const response =  addProduct(product_data, session_code)
+     /*
+   .then((response) => {
+        const messages = {
+          unlogged: "Not logged",
+          success: "Product addded",
+          duplicated: "Product already exists",
+          unknown: "Unknown error",
+        };
+        console.log('gggggggggggggggggggggg')
+        statusCodeTranslator(response, messages).then(()=>{
+          this.props.state_changer({ app_state: 'refreshing'});
+    
+        })
+        //this.props.state_changer({ app_state: 'refreshing'});
+      // this.props.server_response_service(this.props.state_changer, response)
 
-    //this.props.server_response_service(this.props.state_changer, response);
+      })
+      */
+      .catch((error) => console.log(error));
+     const messages = {
+      unlogged: "Not logged",
+      success: "Product addded",
+      duplicated: "Product already exists",
+      unknown: "Unknown error",
+    };
+    server_response_service(messages, response).then(()=>{
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING});
+    })
+
   }
 
-  render() {
     return (
       <button
         className="btn btn-warning btn-sm"
-        disabled={this.props.app_state !== "default" ? true : false}
-        onClick={() => this.onClickHandler()}
+        disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+        onClick={() => onClickHandler()}
       >
         <SiAddthis /> product
       </button>
     );
-  }
+ 
 }
 
 export default AddProductButton;

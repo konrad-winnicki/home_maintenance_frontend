@@ -1,9 +1,11 @@
 import { fetch_function } from "../functions";
 
 const url = "http://localhost:5000/";
+const backendUrl = "http://localhost:5000/";
+
 //const url = "https://backend.home-maintenance.click/"
 const add_item_to_shoppings_endpoint = "cart/items/";
-const add_finished_product_to_shoppings_endpoint = "cart/items/shoppinglist";
+const addFinishedProductsEndpoint = "cart/items/shoppinglist";
 const delete_from_cart_endpoint = "cart/items/";
 const change_item_prop_in_cart_endpoint = "cart/items/";
 
@@ -59,10 +61,24 @@ export function delete_item_from_cart(product_data, authorization_code) {
   });
 }
 
-export function add_finished_products_to_shopping_list(authorization_code) {
-  return fetch_function({
-    endpoint: add_finished_product_to_shoppings_endpoint,
+export function addFinishedProductsToShoppingList(authorization_code) {
+  let promise = fetch(backendUrl + addFinishedProductsEndpoint, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization_code,
+    },
     method: "POST",
-    authorization_code,
-  });
+
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      return "Error";
+    });
+  return promise;
 }
+

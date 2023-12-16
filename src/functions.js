@@ -52,7 +52,7 @@ export function inner_server_response_to_state(result, state_changer_function) {
   });
 }
 */
-function notifications(message, type) {
+export function notifications(message, type) {
   console.log("dodalem notification o typie " + type);
   if (type === "success") {
     toast.success(message, {
@@ -61,7 +61,6 @@ function notifications(message, type) {
     });
   }
   if (type === "warning") {
-    console.log("show notification warning");
     toast.warning(message, {
       position: toast.POSITION.TOP_RIGHT,
     });
@@ -73,27 +72,32 @@ function notifications(message, type) {
   }
 }
 
-export function state_changer_to_server_response(
-  state_changer_function,
-  response_from_server
-) {
+export async function server_response_service(messages, response_from_server) {
   response_from_server.then((response) => {
-    let status_code = response.status
-    console.log('zmiana', response.json)
-    let server_message = 'zmiana';
+    let status_code = response.status;
     if (status_code === 401) {
-      state_changer_function({ app_state: "unlogged" });
     } else if (status_code > 199 && status_code < 300) {
-      notifications(server_message, "success");
-      state_changer_function({ app_state: "refreshing" });
+      notifications(messages.success, "success");
     } else if (status_code === 409) {
-      notifications(server_message, "warning");
-      state_changer_function({ app_state: "default" });
+      notifications(messages.duplication, "warning");
     } else {
-      notifications(server_message, "error");
-      state_changer_function({ app_state: "default" });
+      notifications(messages.unknown, "error");
     }
   });
+}
+
+export async function statusCodeTranslator(response, message) {
+  const statusCode = response.status;
+  if (statusCode === 401) {
+    notifications(message.unlogged, "warning");
+  } else if (statusCode > 199 && statusCode < 300) {
+    console.log("weszlo");
+   notifications(message.succces, "success");
+  } else if (statusCode === 409) {
+    notifications(message.duplicated, "warning");
+  } else {
+    notifications(message.unknown, "error");
+  }
 }
 
 export function state_changer_to_server_response_for_shoppings(
@@ -101,13 +105,13 @@ export function state_changer_to_server_response_for_shoppings(
   response_from_server
 ) {
   response_from_server.then((response) => {
-    let status_code = response.status
-    console.log(response.json())
-    let server_message = 'zmoiana';
+    let status_code = response.status;
+    console.log(response.json());
+    let server_message = "zmoiana";
     if (status_code === 401) {
       state_changer_function({ app_state: "unlogged" });
     } else if (status_code > 199 && status_code < 300) {
-      console.log('refreshing')
+      console.log("refreshing");
       state_changer_function({ app_state: "refreshing" });
     } else if (status_code === 409) {
       notifications(server_message, "warning");
@@ -118,8 +122,6 @@ export function state_changer_to_server_response_for_shoppings(
     }
   });
 }
-
-
 
 export function fetch_function({
   endpoint,

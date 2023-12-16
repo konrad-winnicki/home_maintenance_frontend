@@ -1,35 +1,42 @@
-import React from "react";
+import React, {useContext} from "react";
 import { BsFillArrowUpSquareFill } from "react-icons/bs";
 import { updateProduct } from "../services/store";
-import { AWAITING_API_RESPONSE } from "./Dashboard";
-class IncreaseButton extends React.Component {
-  session_code = localStorage.getItem("session_code");
+import { APP_STATES} from "./Dashboard";
+import { ProductContext } from "../contexts/productContext";
+import { AppContext } from "../contexts/appContext";
+const IncreaseButton = ()=> {
+  const session_code = localStorage.getItem("session_code");
+  const productContext = useContext(ProductContext)
+  const appContext = useContext(AppContext)
 
-  onClickHandler() {
+
+  const onClickHandler = () => {
     const product_data = {
-      id: this.props.product.product_id,
+      id: productContext.product.product_id,
       updatedValues:{
-      quantity: this.props.product.quantity + 1,
-      name: this.props.product.name}
+      quantity: productContext.product.quantity + 1,
+      name: productContext.product.name}
     };
-    this.props.state_changer({ app_state: AWAITING_API_RESPONSE });
-    const result = updateProduct(product_data, this.session_code);
-    this.props.server_response_service(this.props.state_changer, result);
+    console.log(product_data.updatedValues)
+    //appContext.stateChanger({appState:'APP_STATES.AWAITING_API_RESPONSE'});
+    const result = updateProduct(product_data, session_code);
+    appContext.stateChanger({appState:APP_STATES.REFRESHING});
+
+    //this.props.server_response_service(this.props.state_changer, result);
   }
 
-  render() {
+
     return (
       <button
         className="btn btn-primary btn-sm"
-        disabled={this.props.app_state !== "default" ? true : false}
+        disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         onClick={() => {
-          this.onClickHandler();
+          onClickHandler();
         }}
       >
         <BsFillArrowUpSquareFill />
       </button>
-    );
-  }
+    )
 }
 
 export default IncreaseButton;
