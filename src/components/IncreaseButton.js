@@ -1,7 +1,7 @@
 import React from "react";
 import { BsFillArrowUpSquareFill } from "react-icons/bs";
 import { updateProduct } from "../services/store";
-import { AWAITING_API_RESPONSE } from "./Application";
+import { AWAITING_API_RESPONSE } from "./Dashboard";
 class IncreaseButton extends React.Component {
   onClickHandler() {
     const product_data = {
@@ -12,7 +12,6 @@ class IncreaseButton extends React.Component {
     this.props.state_changer({ app_state: AWAITING_API_RESPONSE });
     const result = updateProduct(product_data, this.props.session_code);
     this.props.server_response_service(this.props.state_changer, result);
-
   }
 
   render() {

@@ -2,7 +2,7 @@ import React from "react";
 import { SiAddthis } from "react-icons/si";
 import { ask_product_name } from "../functions";
 import { addProduct } from "../services/store";
-import { AWAITING_API_RESPONSE } from "./Application";
+import { APP_STATES, AWAITING_API_RESPONSE } from "./Dashboard";
 
 class AddProductButton extends React.Component {
   async onClickHandler() {
@@ -18,7 +18,9 @@ class AddProductButton extends React.Component {
     const response = addProduct(product_data, this.props.session_code).catch(
       (error) => console.log(error)
     );
-    this.props.server_response_service(this.props.state_changer, response);
+    this.props.state_changer({ app_state: "refreshing" });
+
+    //this.props.server_response_service(this.props.state_changer, response);
   }
 
   render() {

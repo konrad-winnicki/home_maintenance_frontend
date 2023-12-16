@@ -5,16 +5,17 @@ import { custom_quantity } from "../functions";
 
 function ProductDescription(props) {
   
-  const change_name_in_database = () => {
+  const onClickNameHandler = () => {
     props.state_changer({ app_state: "changing_name" });
-    let new_name = ask_new_name();
+    const new_name = ask_new_name();
     if (new_name != null) {
-      let product_data = {
+      const product_data = {
         id: props.product.product_id,
+        updatedValues:{
         quantity: props.product.quantity,
-        name: new_name,
+        name: new_name}
       };
-      let result = props.change_properties_in_db(
+      let result = props.updateProduct(
         product_data,
         props.session_code
       );
@@ -24,16 +25,17 @@ function ProductDescription(props) {
     }
   };
 
-  const change_quantity_in_database = () => {
+  const onClickQuantityHandler = () => {
     props.state_changer({ app_state: "changing_product_quantity" });
-    let quantity = custom_quantity();
+    const quantity = custom_quantity();
     if (quantity != null) {
-      let product_data = {
+      const product_data = {
         id: props.product.product_id,
+        updatedValues:{
         quantity: quantity,
-        name: props.product.name,
+        name: props.product.name}
       };
-      let result = props.change_properties_in_db(
+      const result = props.updateProduct(
         product_data,
         props.session_code
       );
@@ -48,7 +50,7 @@ function ProductDescription(props) {
       <div
         className='product__name'
         onClick={() => {
-          change_name_in_database();
+          onClickNameHandler();
         }}
       >
         {props.product.name}
@@ -57,7 +59,7 @@ function ProductDescription(props) {
       <div
         className='product__quantity'
         onClick={() => {
-          change_quantity_in_database();
+          onClickQuantityHandler();
         }}
       >
         {props.product.quantity}

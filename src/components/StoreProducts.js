@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  deleteProduct,
-  get_products_from_store,
-  updateProduct,
-} from "../services/store";
+import { deleteProduct, getProducts, updateProduct } from "../services/store";
 import { state_changer_to_server_response } from "../functions";
 import { ToastContainer } from "react-toastify";
 import AddProductButton from "./AddProductButton";
@@ -12,6 +8,7 @@ import ProductList from "./ProductList.js";
 import Scaner from "./Scaner.js";
 import styles from "../my-style.module.css";
 import "./Header.css";
+import { APP_STATES } from "./Dashboard";
 
 class StoreProducts extends React.PureComponent {
   constructor(props) {
@@ -19,14 +16,14 @@ class StoreProducts extends React.PureComponent {
     this.store_state_changer = this.store_state_changer.bind(this);
     this.state = {
       product_list: [],
-      app_state: "default",
+      app_state: APP_STATES.DEFAULT,
     };
   }
   store_state_changer(new_state) {
     this.setState(new_state);
   }
   componentDidMount() {
-    this.ProductListChanger();
+    this.productListChanger();
     console.log("store state:", this.state);
   }
 
@@ -35,25 +32,21 @@ class StoreProducts extends React.PureComponent {
     if (this.state.app_state === "unlogged") {
       this.props.state_changer({ login_status: "unlogged" });
     } else if (this.state.app_state === "refreshing") {
-      this.ProductListChanger();
+      this.productListChanger();
     }
   }
 
-  ProductListChanger() {
-    let result = get_products_from_store(this.props.session_code);
-    result.then((response) => {
-      console.log(response);
-      if (response === 401) {
-        this.props.state_changer({ login_status: "unlogged" });
-      } else {
+  productListChanger() {
+    getProducts(this.props.session_code)
+      .then((response) => {
         response.json().then((json) => {
           this.store_state_changer({
             app_state: "default",
             product_list: json,
           });
         });
-      }
-    });
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -77,7 +70,7 @@ class StoreProducts extends React.PureComponent {
             <ProductList
               product_list={this.state.product_list}
               app_state={this.state.app_state}
-              change_properties_in_db={updateProduct}
+              updateProduct={updateProduct}
               state_changer={this.store_state_changer}
               active_component={this.props.active_component}
               session_code={this.props.session_code}

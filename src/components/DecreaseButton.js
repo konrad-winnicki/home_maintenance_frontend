@@ -2,14 +2,15 @@ import React from "react";
 import { BsFillArrowDownSquareFill } from "react-icons/bs";
 import { updateProduct } from "../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { AWAITING_API_RESPONSE } from "./Application";
+import { AWAITING_API_RESPONSE } from "./Dashboard";
 class DecreaseButton extends React.Component {
   onClickHandler() {
     const product_data = {
       id: this.props.product.product_id,
       updatedValues: {
-      quantity: this.props.product.quantity - 1,
-      name: this.props.product.name}
+        quantity: this.props.product.quantity - 1,
+        name: this.props.product.name,
+      },
     };
     this.props.state_changer({ app_state: AWAITING_API_RESPONSE });
     const result = updateProduct(product_data, this.props.session_code);

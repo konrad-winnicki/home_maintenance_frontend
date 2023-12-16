@@ -107,6 +107,7 @@ export function state_changer_to_server_response_for_shoppings(
     if (status_code === 401) {
       state_changer_function({ app_state: "unlogged" });
     } else if (status_code > 199 && status_code < 300) {
+      console.log('refreshing')
       state_changer_function({ app_state: "refreshing" });
     } else if (status_code === 409) {
       notifications(server_message, "warning");

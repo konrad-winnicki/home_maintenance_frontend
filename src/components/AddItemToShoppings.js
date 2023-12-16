@@ -1,7 +1,7 @@
 import React from "react";
 import { MdAddBox } from "react-icons/md";
 import { add_item_to_shopping_list } from "../services/cart";
-import { AWAITING_API_RESPONSE } from "./Application";
+import { AWAITING_API_RESPONSE } from "./Dashboard";
 
 class AddItemToShoppings extends React.PureComponent {
   constructor(props) {

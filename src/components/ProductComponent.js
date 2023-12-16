@@ -8,7 +8,7 @@ function ProductComponent(props) {
   return (
     <div id={props.product.product_id} className="product__properties">
       <ProductDescription
-        change_properties_in_db={props.change_properties_in_db}
+        updateProduct={props.updateProduct}
         app_state={props.app_state}
         state_changer={props.state_changer}
         product={props.product}

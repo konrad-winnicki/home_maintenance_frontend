@@ -56,10 +56,7 @@ export function updateProduct(product_data, authorization_code) {
   });
 }
 
-
-
-
-export function get_products_from_store(authorization_code) {
+export function getProducts(authorization_code) {
   let promise = fetch(backendUrl + "store/products/", {
     headers: {
       "Content-Type": "application/json",
@@ -68,10 +65,7 @@ export function get_products_from_store(authorization_code) {
     method: "GET",
   })
     .then((response) => {
-      if (response.status === 401) {
-        return 401;
-      } else {
-        console.log("res from function", response);
+      if (response.ok) {
         return response;
       }
     })

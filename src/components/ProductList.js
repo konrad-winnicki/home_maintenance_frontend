@@ -10,7 +10,7 @@ class ProductList extends React.Component {
             key={product.product_id}
             active_component={this.props.active_component}
             product={product}
-            change_properties_in_db={this.props.change_properties_in_db}
+            updateProduct={this.props.updateProduct}
             app_state={this.props.app_state}
             delete_function={this.props.delete_function}
             state_changer={this.props.state_changer}
