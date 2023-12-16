@@ -1,53 +1,54 @@
-import React, {useContext} from "react";
-import "./ProductDescription.css";
+import React, { useContext } from "react";
+import "./SourceDescription.css";
 import { ask_new_name } from "../functions";
 import { custom_quantity } from "../functions";
-import { updateProduct } from "../services/store";
 import { server_response_service } from "../functions";
-import { ProductContext } from "../contexts/productContext";
+import { SourceContext } from "../contexts/sourceContext";
 import { AppContext } from "../contexts/appContext";
 import { APP_STATES } from "./Dashboard";
-function ProductDescription() {
+
+function SourceDescription(props) {
   const session_code = localStorage.getItem("session_code");
-  const productContext = useContext(ProductContext)
-  const appContext = useContext(AppContext)
+  const sourceContext = useContext(SourceContext);
+  const appContext = useContext(AppContext);
   const onClickNameHandler = () => {
-    appContext.stateChanger({ app_state: APP_STATES.ONCLICK });
+    appContext.stateChanger({ appState: APP_STATES.ONCLICK });
     const new_name = ask_new_name();
     if (new_name != null) {
       const product_data = {
-        id: productContext.product.product_id,
+        id: sourceContext.source.product_id,
         updatedValues: {
-          quantity: productContext.product.quantity,
+          ...sourceContext.source,
           name: new_name,
         },
       };
-      let response = updateProduct(product_data, session_code);
+      let response = props.updateMethod(product_data, session_code);
       const messages = {
         unlogged: "Not logged",
         success: "Name changed",
         unknown: "Unknown error",
       };
       server_response_service(messages, response).then(() => {
-        appContext.stateChanger({appState:APP_STATES.REFRESHING});
+        appContext.stateChanger({ appState: APP_STATES.REFRESHING });
       });
     } else {
-      appContext.stateChanger({appState:APP_STATES.DEFAULT});
+      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
     }
   };
 
   const onClickQuantityHandler = () => {
-    appContext.stateChanger({appState:APP_STATES.ONCLICK});
+    appContext.stateChanger({ appState: APP_STATES.ONCLICK });
     const quantity = custom_quantity();
     if (quantity != null) {
       const product_data = {
-        id: productContext.product.product_id,
+        id: sourceContext.source.product_id,
         updatedValues: {
+          ...sourceContext.source,
           quantity: quantity,
-          name: productContext.product.name,
+          
         },
       };
-      const response = updateProduct(product_data, session_code);
+      const response = props.updateMethod(product_data, session_code);
 
       const messages = {
         unlogged: "Not logged",
@@ -55,10 +56,10 @@ function ProductDescription() {
         unknown: "Unknown error",
       };
       server_response_service(messages, response).then(() => {
-        appContext.stateChanger({appState:APP_STATES.REFRESHING});
+        appContext.stateChanger({ appState: APP_STATES.REFRESHING });
       });
     } else {
-      appContext.stateChanger({appState:APP_STATES.DEFAULT});
+      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
     }
   };
 
@@ -70,7 +71,7 @@ function ProductDescription() {
           onClickNameHandler();
         }}
       >
-        {productContext.product.name}
+        {sourceContext.source.name}
       </div>
 
       <div
@@ -79,10 +80,10 @@ function ProductDescription() {
           onClickQuantityHandler();
         }}
       >
-        {productContext.product.quantity}
+        {sourceContext.source.quantity}
       </div>
     </React.Fragment>
   );
 }
 
-export default ProductDescription;
+export default SourceDescription;

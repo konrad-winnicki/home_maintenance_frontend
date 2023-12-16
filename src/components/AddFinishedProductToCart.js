@@ -9,7 +9,7 @@ const AddFinishedProductsToCart = () => {
   const appContext = useContext(AppContext);
 
   const addFinishedProductToShoppingList = () => {
-    appContext.stateChanger({ app_state: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
 
     let response = addFinishedProductsToShoppingList(session_code);
     const messages = {
@@ -18,7 +18,7 @@ const AddFinishedProductsToCart = () => {
       unknown: "Unknown error",
     };
     server_response_service(messages, response);
-    appContext.stateChanger({ app_state: APP_STATES.DEFAULT });
+    appContext.stateChanger({ appState: APP_STATES.DEFAULT });
   };
 
   return (

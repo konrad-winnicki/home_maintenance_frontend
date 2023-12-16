@@ -1,0 +1,13 @@
+.buttons__container {
+    display: inline-flex;
+    width: 20%;
+    background-color: rgb(255, 255, 255);
+    }
+    
+.button_surrounding {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+    
+  }

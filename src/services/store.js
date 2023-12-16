@@ -2,15 +2,28 @@ import { fetch_function } from "../functions";
 const backendUrl = "http://localhost:5000/";
 //const url = "https://backend.home-maintenance.click/"
 const productEndpoint = backendUrl + "store/products/";
-const add_shoppings_to_store_endpoint = "store/products/delivery/";
+const addShoppingItemsToStoreEndpoint = backendUrl + "store/products/delivery/";
 
-export function add_shoppings_to_store(authorization_code) {
-  return fetch_function({
-    endpoint: add_shoppings_to_store_endpoint,
+export function addShoppingItemsToStore(authorization_code) {
+  let promise = fetch(addShoppingItemsToStoreEndpoint, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization_code,
+    },
     method: "POST",
-    authorization_code,
-  });
+  })
+    .then((response) => {
+      if (response) {
+        return response;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      return "Error";
+    });
+  return promise;
 }
+
 export async function addProduct(product_data, authorization_code) {
   return fetch(productEndpoint, {
     headers: {

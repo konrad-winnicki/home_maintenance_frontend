@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
+import { updateProduct } from "../services/store";
 
-import ProductDescription from "./ProductDescription.js";
+import SourceDescription from "./SourceDescription.js";
 import ProductButtons from "./ProductButtons";
 import "./ProductComponent.css";
-import { ProductContext } from "../contexts/productContext";
 
-function ProductComponent(props) {
+function ProductComponent() {
   return (
     <div className="product__properties">
-      <ProductDescription></ProductDescription>
+      <SourceDescription updateMethod={updateProduct}></SourceDescription>
       <ProductButtons></ProductButtons>
     </div>
   );

@@ -1,19 +1,19 @@
 import React from "react";
 import ProductComponent from "./ProductComponent";
-import { ProductContext } from "../contexts/productContext";
+import { SourceContext } from "../contexts/sourceContext";
 
 const ProductList = (props) => {
   return (
     <div>
       {props.productList.map((product) => (
-        <ProductContext.Provider
+        <SourceContext.Provider
           key={product.product_id}
           value={{
-            product: product,
+            source: product,
           }}
         >
           <ProductComponent></ProductComponent>
-        </ProductContext.Provider>
+        </SourceContext.Provider>
       ))}
     </div>
   );

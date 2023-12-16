@@ -7,16 +7,32 @@ const backendUrl = "http://localhost:5000/";
 const add_item_to_shoppings_endpoint = "cart/items/";
 const addFinishedProductsEndpoint = "cart/items/shoppinglist";
 const delete_from_cart_endpoint = "cart/items/";
+const shoppingItemEndpoint = backendUrl + "cart/items/";
 const change_item_prop_in_cart_endpoint = "cart/items/";
 
-export function add_item_to_shopping_list(product_data, authorization_code) {
-  return fetch_function({
-    endpoint: add_item_to_shoppings_endpoint,
+export function addShoppingItem(shoppingItem, authorization_code) {
+  return fetch(shoppingItemEndpoint, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization_code,
+    },
     method: "POST",
-    product_data,
-    authorization_code,
-  });
+    body: JSON.stringify(shoppingItem),
+  })
+    .then((response) => {
+      if (response) {
+        return response;
+      } else {
+        return Promise.reject("Product not added");
+      }
+    })
+
+    .catch((error) => {
+      console.log("Catched unknown error:", error);
+    });
 }
+
+
 
 export function get_items_from_shoping_list(authorization_code) {
   let promise = fetch(url + "cart/items/", {
@@ -40,24 +56,26 @@ export function get_items_from_shoping_list(authorization_code) {
   return promise;
 }
 
-export function change_product_properties_in_cart(
-  product_data,
-  authorization_code
-) {
-  return fetch_function({
-    endpoint: change_item_prop_in_cart_endpoint,
+export function updateShoppingItem(product_data, authorization_code) {
+  const endpointUrl = shoppingItemEndpoint + product_data.id;
+  return fetch(endpointUrl, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization_code,
+    },
     method: "PUT",
-    product_data,
-    authorization_code,
+    body: JSON.stringify(product_data.updatedValues),
   });
 }
 
-export function delete_item_from_cart(product_data, authorization_code) {
-  return fetch_function({
-    endpoint: delete_from_cart_endpoint,
+export function deleteShoppingItem(shoppingItemId, authorization_code) {
+  const endpointUrl = shoppingItemEndpoint + shoppingItemId;
+  return fetch(endpointUrl, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization_code,
+    },
     method: "DELETE",
-    product_data,
-    authorization_code,
   });
 }
 
@@ -68,7 +86,6 @@ export function addFinishedProductsToShoppingList(authorization_code) {
       Authorization: authorization_code,
     },
     method: "POST",
-
   })
     .then((response) => {
       if (response.ok) {
@@ -81,4 +98,3 @@ export function addFinishedProductsToShoppingList(authorization_code) {
     });
   return promise;
 }
-

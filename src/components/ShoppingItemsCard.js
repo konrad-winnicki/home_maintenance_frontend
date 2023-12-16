@@ -1,25 +1,25 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { ToastContainer } from "react-toastify";
 
 import {
-  delete_item_from_cart,
+  deleteShoppingItem,
   get_items_from_shoping_list,
-  change_product_properties_in_cart,
+  updateShoppingItem,
 } from "../services/cart";
 import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
 import AddItemToShoppings from "./AddItemToShoppings";
-import ProductList from "./ProductList.js";
 import Scaner from "./Scaner.js";
 import { state_changer_to_server_response_for_shoppings } from "../functions";
 import "./Header.css";
 import { AppContext } from "../contexts/appContext";
+import ShoppingItemsList from "./ShoppingItemsList";
+import { APP_STATES } from "./Dashboard";
 
-class ShoppingList extends React.PureComponent {
+class ShoppingItemsCard extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      app_state: "default",
-      product_list: [],
+      shoppingItemsList: [],
     };
     this.session_code = localStorage.getItem("session_code");
 
@@ -35,28 +35,26 @@ class ShoppingList extends React.PureComponent {
   }
 
   componentDidUpdate() {
+    console.log('card', this.props.appContext.appState)
     if (this.state.app_state === "unlogged") {
       this.props.state_changer({ login_status: "unlogged" });
-    } else if (this.state.app_state === "refreshing") {
+    } else if (this.props.appContext.appState === APP_STATES.REFRESHING) {
       this.ProductListChanger();
     }
   }
 
   ProductListChanger() {
     let result = get_items_from_shoping_list(this.session_code);
-    result.then((response) => {
-      console.log(response);
-      if (response === 401) {
-        this.props.state_changer({ login_status: "unlogged" });
-      } else {
+    result
+      .then((response) => {
         response.json().then((json) => {
           this.shopping_list_state_changer({
-            app_state: "default",
-            product_list: json,
+            shoppingItemsList: json,
           });
+          this.props.appContext.stateChanger({ appState: APP_STATES.DEFAULT });
         });
-      }
-    });
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -64,28 +62,21 @@ class ShoppingList extends React.PureComponent {
       <div>
         <ToastContainer></ToastContainer>
         <div className="container vh-100 vw-100 d-flex flex-column">
-          <div className="flex-grow-1 mt-5" style={{ overflow: "auto", paddingBottom: '1%', marginBottom: '14%' }}>
+          <div
+            className="flex-grow-1 mt-5"
+            style={{
+              overflow: "auto",
+              paddingBottom: "1%",
+              marginBottom: "14%",
+            }}
+          >
             <div className="header">Shopping list</div>
-            <ProductList
-              product_list={this.state.product_list}
-              app_state={this.state.app_state}
-              change_properties_in_db={change_product_properties_in_cart}
-              state_changer={this.shopping_list_state_changer}
-              session_code={this.props.session_code}
-              delete_function={delete_item_from_cart}
-              active_component={this.props.active_component}
-              server_response_service={
-                state_changer_to_server_response_for_shoppings
-              }
-            />
+            <ShoppingItemsList
+              shoppingItemsList={this.state.shoppingItemsList}
+            ></ShoppingItemsList>
+
             <div className="row mt-5 sticky-top">
               <AddItemToShoppings
-                app_state={this.state.app_state}
-                state_changer={this.shopping_list_state_changer}
-                session_code={this.props.session_code}
-                server_response_service={
-                  state_changer_to_server_response_for_shoppings
-                }
               ></AddItemToShoppings>
             </div>
           </div>
@@ -96,13 +87,8 @@ class ShoppingList extends React.PureComponent {
           >
             <div className="col text-center ">
               <AddItemsFromShoppings
-                app_state={this.state.app_state}
-                product_list={this.state.product_list}
-                state_changer={this.shopping_list_state_changer}
-                session_code={this.props.session_code}
-                server_response_service={
-                  state_changer_to_server_response_for_shoppings
-                }
+                shoppingItemsList={this.state.shoppingItemsList}
+                
               ></AddItemsFromShoppings>
             </div>
             <div className="col text-center">
@@ -124,14 +110,9 @@ class ShoppingList extends React.PureComponent {
   }
 }
 
-
-export function WrappedShoppingList() {
+export function WrappedShoppingItemsCard() {
   const appContext = useContext(AppContext);
-  return (
-    <StoreProducts
-      appContext={appContext}
-    ></StoreProducts>
-  );
+  return <ShoppingItemsCard appContext={appContext}></ShoppingItemsCard>;
 }
 
-export default ShoppingList;
+export default ShoppingItemsCard;

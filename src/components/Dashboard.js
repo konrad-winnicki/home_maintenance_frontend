@@ -3,8 +3,10 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { ImListNumbered } from "react-icons/im";
-import ShoppingList from "./ShoppingList";
-import StoreProducts, { WrappedStoreProducts } from "./StoreProducts";
+import {
+  WrappedShoppingItemsCard,
+} from "./ShoppingItemsCard";
+import { WrappedStoreProducts } from "./StoreProducts";
 
 import { AuthorizationContext } from "../contexts/authorizationContext";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +19,7 @@ export const APP_STATES = {
   DEFAULT: "DEFAULT",
   AWAITING_API_RESPONSE: "AWAITING_API_RESPONSE",
   REFRESHING: "REFRESHING",
-  ONCLICK: "ONCLICK"
+  ONCLICK: "ONCLICK",
 };
 
 export const COMPONENTS = {
@@ -44,12 +46,12 @@ export default class Dashboard extends React.PureComponent {
     this.setState(new_state);
   }
 
-  componentDidM(){
-    console.log('app state', this.state)
+  componentDidMount() {
+    console.log("app mount", this.state);
   }
 
-  componentDidUpdate(){
-    console.log('app state', this.state)
+  componentDidUpdate() {
+    console.log("app update", this.state);
   }
 
   /*
@@ -82,9 +84,11 @@ export default class Dashboard extends React.PureComponent {
             <button
               className="btn btn-outline-success"
               onClick={() => {
+                console.log("shopping list clicked");
+
                 this.setState({
                   showComponent: COMPONENTS.SHOPPING_ITEM_LIST,
-                  appState: 'DEFAULT',
+                  appState: APP_STATES.DEFAULT,
                 });
               }}
             >
@@ -92,7 +96,7 @@ export default class Dashboard extends React.PureComponent {
             </button>
           </div>
         </nav>
-        {this.state.showComponent === 'PRODUCT_LIST' ? (
+        {this.state.showComponent === "PRODUCT_LIST" ? (
           <AppContext.Provider
             value={{
               appState: this.state.appState,
@@ -100,15 +104,19 @@ export default class Dashboard extends React.PureComponent {
               stateChanger: this.app_state_changer,
             }}
           >
-            <WrappedStoreProducts/>
+            <WrappedStoreProducts />
           </AppContext.Provider>
         ) : null}
-        {this.state.showComponent === 'SHOPPING_ITEM_LIST' ? (
-          <ShoppingList
-            state_changer={this.app_state_changer}
-            active_component={this.state.showComponent}
-            app_state={this.state.app_state}
-          />
+        {this.state.showComponent === "SHOPPING_ITEM_LIST" ? (
+          <AppContext.Provider
+            value={{
+              appState: this.state.appState,
+              activeComponent: this.state.showComponent,
+              stateChanger: this.app_state_changer,
+            }}
+          >
+            <WrappedShoppingItemsCard></WrappedShoppingItemsCard>
+          </AppContext.Provider>
         ) : null}
       </React.Fragment>
     );

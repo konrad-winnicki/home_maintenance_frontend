@@ -1,75 +1,83 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { MdAddBox } from "react-icons/md";
-import { add_item_to_shopping_list } from "../services/cart";
-import { APP_STATES, AWAITING_API_RESPONSE } from "./Dashboard";
+import { addShoppingItem } from "../services/cart";
+import { APP_STATES } from "./Dashboard";
+import { AppContext } from "../contexts/appContext";
+import { server_response_service } from "../functions";
+const AddItemToShoppings = () => {
+  const [shoppingItem, setShoppingItem] = useState({ name: "", quantity: "" });
+  const session_code = localStorage.getItem("session_code");
+  const appContext = useContext(AppContext);
 
-class AddItemToShoppings extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      quantity: "",
+  const handleChangeName = (event) => {
+    setShoppingItem({
+      quantity: shoppingItem.quantity,
+      name: event.target.value,
+    });
+  };
+  const handleChangeQuantity = (event) => {
+    setShoppingItem({ name: shoppingItem.name, quantity: event.target.value });
+  };
+
+  const add_product = () => {
+    let product_data = {
+      name: shoppingItem.name,
+      quantity: shoppingItem.quantity,
     };
+    appContext.stateChanger({ appState: APP_STATES.ONCLICK});
 
-    this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangeQuantity = this.handleChangeQuantity.bind(this);
-  }
+    let response = addShoppingItem(product_data, session_code);
+    const messages = {
+      unlogged: "Not logged",
+      success: "Shopping item addded",
+      duplication: "Shopping item already exists",
+      unknown: "Unknown error",
+    };
+    server_response_service(messages, response).then(() => {
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      setShoppingItem({ name: "", quantity: "" });
 
-  handleChangeName(event) {
-    this.setState({ name: event.target.value });
-  }
-  handleChangeQuantity(event) {
-    this.setState({ quantity: event.target.value });
-  }
+    });
+  };
 
-  add_product() {
-    let product_data = { name: this.state.name, quantity: this.state.quantity };
-    let result = add_item_to_shopping_list(
-      product_data,
-      this.props.session_code
-    );
-    this.props.server_response_service(this.props.state_changer, result);
-    this.setState({ name: "", quantity: "" });
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <div className="col text-center">
-          <input
-            value={this.state.name}
-            disabled={this.props.app_state !== "default" ? true : false}
-            className="form-control input-lg"
-            type="text"
-            placeholder="Type product name"
-            onChange={this.handleChangeName}
-          ></input>
-        </div>
-        <div className="col text-center">
-          <input
-            value={this.state.quantity}
-            disabled={this.props.app_state !== "default" ? true : false}
-            className="form-control input-lg"
-            type="number"
-            placeholder="Quantity"
-            onChange={this.handleChangeQuantity}
-          ></input>
-        </div>
-        <div className="col text-left">
-          <button
-            disabled={this.props.app_state !== "default" ? true : false}
-            className="btn btn-primary"
-            onClick={() => {
-              this.props.state_changer({ app_state: APP_STATES.AWAITING_API_RESPONSE });
-              this.add_product();
-            }}
-          >
-            <MdAddBox />
-          </button>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <div className="col text-center">
+        <input
+          value={shoppingItem.name}
+          disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+          className="form-control input-lg"
+          type="text"
+          placeholder="Type product name"
+          onChange={handleChangeName}
+        ></input>
+      </div>
+      <div className="col text-center">
+        <input
+          value={shoppingItem.quantity}
+          disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+          className="form-control input-lg"
+          type="number"
+          placeholder="Quantity"
+          onChange={handleChangeQuantity}
+        ></input>
+      </div>
+      <div className="col text-left">
+        <button
+          disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+          className="btn btn-primary"
+          onClick={() => {
+            appContext.stateChanger({
+              appState: APP_STATES.AWAITING_API_RESPONSE,
+            });
+            add_product();
+          }}
+        >
+          <MdAddBox />
+        </button>
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default AddItemToShoppings;

@@ -2,9 +2,8 @@ import React from "react";
 import DeleteButton from "./DeleteButton";
 import IncreaseButton from "./IncreaseButton.js";
 import DecreaseButton from "./DecreaseButton.js";
-import CheckBox from "./Checkbox.js";
 import "./ProductButtons.css";
-import { PRODUCT_LIST, SHOPPING_ITEM_LIST } from "./Dashboard";
+import { deleteProduct } from "../services/store";
 
 export default function ProductButtons(props) {
   return (
@@ -17,7 +16,7 @@ export default function ProductButtons(props) {
       </div>
 
       <div className="button_surrounding">
-        <DeleteButton></DeleteButton>
+        <DeleteButton deleteMethod={deleteProduct}></DeleteButton>
       </div>
     </React.Fragment>
   );
