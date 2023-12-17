@@ -25,16 +25,16 @@ class ProductsCard extends React.PureComponent {
     this.setState(new_state);
   }
   componentDidMount() {
-    this.productListChanger();
+    this.getProducts();
   }
 
   componentDidUpdate() {
     if (this.state.appState === APP_STATES.REFRESHING) {
-      this.productListChanger();
+      this.getProducts();
     }
   }
 
-  productListChanger() {
+  getProducts() {
     getProducts(this.session_code)
       .then((response) => {
         response.json().then((json) => {
@@ -49,20 +49,19 @@ class ProductsCard extends React.PureComponent {
 
   render() {
     return (
-      <AppContext.Provider
-        value={{
-          appState: this.state.appState,
-          stateChanger: this.stateChanger,
-        }}
-      >
-        <div>
-          <NavigationBar />
-          <ToastContainer></ToastContainer>
-          <div className="container vh-100 vw-100 d-flex flex-column">
-            <div className="row position-realtive">
-              <VideoAcceptor />
-            </div>
-
+      <div>
+        <NavigationBar />
+        <ToastContainer></ToastContainer>
+        <div className="container vh-100 vw-100 d-flex flex-column">
+          <div className="row position-realtive">
+            <VideoAcceptor />
+          </div>
+          <AppContext.Provider
+            value={{
+              appState: this.state.appState,
+              stateChanger: this.stateChanger,
+            }}
+          >
             <div
               className="flex-grow-1 mt-5 mb-8"
               style={{
@@ -91,9 +90,9 @@ class ProductsCard extends React.PureComponent {
                 ></Scaner>
               </div>
             </div>
-          </div>
+          </AppContext.Provider>
         </div>
-      </AppContext.Provider>
+      </div>
     );
   }
 

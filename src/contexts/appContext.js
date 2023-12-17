@@ -1,7 +1,6 @@
 import { createContext } from "react";
 export const AppContext = createContext({
   appState: "DEFAULT",
-  showComponent: "PRODUCT_LIST",
   stateChanger: () => {},
 });
 
