@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { BsFillArrowDownSquareFill } from "react-icons/bs";
 import { updateProduct } from "../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { APP_STATES, AWAITING_API_RESPONSE } from "./Dashboard";
+import { APP_STATES} from "./NavigationBar";
 import { SourceContext } from "../contexts/sourceContext";
 import { AppContext } from "../contexts/appContext";
 const DecreaseButton = () => {
@@ -17,10 +17,12 @@ const DecreaseButton = () => {
         name: productContext.source.name,
       },
     };
-    //productContext.stateChanger({ app_state: APP_STATES.AWAITING_API_RESPONSE });
-    const result = updateProduct(product_data, session_code);
-    //this.props.server_response_service(this.props.state_changer, result);
-    appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    appContext.stateChanger({ app_state: APP_STATES.AWAITING_API_RESPONSE });
+    updateProduct(product_data, session_code).then(()=>{
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+
+    }).catch((error) => console.log(error));
+
   };
 
   return (

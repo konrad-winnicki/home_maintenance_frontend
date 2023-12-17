@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { addFinishedProductsToShoppingList } from "../services/cart";
-import { server_response_service } from "../functions";
+import { serverResponseTranslator } from "../functions";
 import { AppContext } from "../contexts/appContext";
-import { APP_STATES } from "./Dashboard";
+import { APP_STATES } from "./NavigationBar";
 
 const AddFinishedProductsToCart = () => {
   const session_code = localStorage.getItem("session_code");
@@ -17,7 +17,7 @@ const AddFinishedProductsToCart = () => {
       success: "Product added to cart",
       unknown: "Unknown error",
     };
-    server_response_service(messages, response);
+    serverResponseTranslator(messages, response);
     appContext.stateChanger({ appState: APP_STATES.DEFAULT });
   };
 

@@ -1,22 +1,19 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import  {
-  WrappedLoginComponent,
-} from "./components/LoginComponent";
+import { WrappedLoginComponent } from "./components/LoginComponent";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/authorizationContext";
-import { WrappedDashboardComponent } from "./components/Dashboard";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import StoreProducts from "./components/StoreProducts";
+import { WrappedProductsCard } from "./components/ProductsCard";
+import { WrappedShoppingItemsCard } from "./components/ShoppingItemsCard";
 export const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<WrappedLoginComponent />} />
     <Route path="/login" element={<WrappedLoginComponent />} />
     <Route element={<ProtectedRoute />}>
-      <Route path="/dashboard" element={<WrappedDashboardComponent />} />
-      <Route path="/products/" element={<StoreProducts />} />
-
+      <Route path="/products/" element={<WrappedProductsCard />} />
+      <Route path="/shoppingItems/" element={<WrappedShoppingItemsCard />} />
     </Route>
   </Routes>
 );

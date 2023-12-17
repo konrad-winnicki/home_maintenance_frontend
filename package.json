@@ -46,6 +46,7 @@
     "@capacitor/cli": "^4.6.2",
     "eslint": "^8.0.0",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-react": "^7.32.1"
+    "eslint-plugin-react": "^7.32.1",
+    "react-router-dom": "^6.20.1"
   }
 }

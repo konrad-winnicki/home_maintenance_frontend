@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { APP_STATES } from "./Dashboard";
+import { APP_STATES } from "./NavigationBar";
 import { AppContext } from "../contexts/appContext";
-import { server_response_service } from "../functions";
+import { serverResponseTranslator } from "../functions";
 import { addShoppingItemsToStore } from "../services/store";
 
 const AddItemsFromShopings = () => {
@@ -15,9 +15,8 @@ const AddItemsFromShopings = () => {
       success: "Shopping items transfered",
       unknown: "Unknown error",
     };
-    server_response_service(messages, result).then(() => {
+    serverResponseTranslator(messages, result).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-
     });
   };
 

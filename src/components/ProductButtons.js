@@ -5,7 +5,7 @@ import DecreaseButton from "./DecreaseButton.js";
 import "./ProductButtons.css";
 import { deleteProduct } from "../services/store";
 
-export default function ProductButtons(props) {
+export default function ProductButtons() {
   return (
     <React.Fragment>
       <div className="button_surrounding">

@@ -1,17 +1,11 @@
-import { fetch_function } from "../functions";
-
-const url = "http://localhost:5000/";
 const backendUrl = "http://localhost:5000/";
 
 //const url = "https://backend.home-maintenance.click/"
-const add_item_to_shoppings_endpoint = "cart/items/";
-const addFinishedProductsEndpoint = "cart/items/shoppinglist";
-const delete_from_cart_endpoint = "cart/items/";
-const shoppingItemEndpoint = backendUrl + "cart/items/";
-const change_item_prop_in_cart_endpoint = "cart/items/";
+const addFinishedProductsEndpoint = backendUrl + "cart/items/shoppinglist";
+const shoppingItemsEndpoint = backendUrl + "cart/items/";
 
 export function addShoppingItem(shoppingItem, authorization_code) {
-  return fetch(shoppingItemEndpoint, {
+  return fetch(shoppingItemsEndpoint, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -32,10 +26,8 @@ export function addShoppingItem(shoppingItem, authorization_code) {
     });
 }
 
-
-
-export function get_items_from_shoping_list(authorization_code) {
-  let promise = fetch(url + "cart/items/", {
+export function getShoppingItems(authorization_code) {
+  let promise = fetch(shoppingItemsEndpoint, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -57,7 +49,7 @@ export function get_items_from_shoping_list(authorization_code) {
 }
 
 export function updateShoppingItem(product_data, authorization_code) {
-  const endpointUrl = shoppingItemEndpoint + product_data.id;
+  const endpointUrl = shoppingItemsEndpoint + product_data.id;
   return fetch(endpointUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -69,7 +61,7 @@ export function updateShoppingItem(product_data, authorization_code) {
 }
 
 export function deleteShoppingItem(shoppingItemId, authorization_code) {
-  const endpointUrl = shoppingItemEndpoint + shoppingItemId;
+  const endpointUrl = shoppingItemsEndpoint + shoppingItemId;
   return fetch(endpointUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -80,7 +72,7 @@ export function deleteShoppingItem(shoppingItemId, authorization_code) {
 }
 
 export function addFinishedProductsToShoppingList(authorization_code) {
-  let promise = fetch(backendUrl + addFinishedProductsEndpoint, {
+  let promise = fetch(addFinishedProductsEndpoint, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,

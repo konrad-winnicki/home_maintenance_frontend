@@ -1,6 +1,4 @@
 import { toast } from "react-toastify";
-//const url = "https://backend.home-maintenance.click/";
-const url = "http://localhost:5000/";
 export function askQuantity(string = "") {
   //let string = string
   let quantity = prompt("Quantity" + string, "");
@@ -27,7 +25,7 @@ export function ask_product_name() {
 
 export function ask_new_name() {
   let new_name_from_user = prompt("Type NEW name?", "");
-  if (new_name_from_user == "" || new_name_from_user == null) {
+  if (new_name_from_user === "" || new_name_from_user == null) {
     return null;
   } else {
     return new_name_from_user;
@@ -72,7 +70,7 @@ export function notifications(message, type) {
   }
 }
 
-export async function server_response_service(messages, response_from_server) {
+export async function serverResponseTranslator(messages, response_from_server) {
   response_from_server.then((response) => {
     let status_code = response.status;
     if (status_code === 401) {
@@ -92,7 +90,7 @@ export async function statusCodeTranslator(response, message) {
     notifications(message.unlogged, "warning");
   } else if (statusCode > 199 && statusCode < 300) {
     console.log("weszlo");
-   notifications(message.succces, "success");
+    notifications(message.succces, "success");
   } else if (statusCode === 409) {
     notifications(message.duplicated, "warning");
   } else {
@@ -100,66 +98,7 @@ export async function statusCodeTranslator(response, message) {
   }
 }
 
-export function state_changer_to_server_response_for_shoppings(
-  state_changer_function,
-  response_from_server
-) {
-  response_from_server.then((response) => {
-    let status_code = response.status;
-    console.log(response.json());
-    let server_message = "zmoiana";
-    if (status_code === 401) {
-      state_changer_function({ app_state: "unlogged" });
-    } else if (status_code > 199 && status_code < 300) {
-      console.log("refreshing");
-      state_changer_function({ app_state: "refreshing" });
-    } else if (status_code === 409) {
-      notifications(server_message, "warning");
-      state_changer_function({ app_state: "default" });
-    } else {
-      notifications(server_message, "error");
-      state_changer_function({ app_state: "default" });
-    }
-  });
-}
 
-export function fetch_function({
-  endpoint,
-  method,
-  product_data,
-  authorization_code,
-}) {
-  console.log("----");
-  console.log(authorization_code);
-  console.log("----");
-  let endpoint_url;
-  if (method === "POST") {
-    endpoint_url = url + endpoint;
-  }
-  if (method === "DELETE" || method === "PUT") {
-    endpoint_url = url + endpoint + product_data.id;
-  }
-  let promise = fetch(endpoint_url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authorization_code,
-    },
-    method: method,
-    body: JSON.stringify(product_data),
-  })
-    .then((response) => {
-      //let result = status_code_translator(response.status);
-      return response.json().then((json) => {
-        console.log(response.status);
-        return [response.status, json.response];
-      });
-    })
-    .catch(() => {
-      console.log("Catched unknown error");
-      return ["Unknown_error", "Unknown error"];
-    });
-  return promise;
-}
 
 /*FUNKCJA TYLKO DLA SKANERA*/
 
@@ -171,9 +110,8 @@ export function send_to_server(
   component
 ) {
   let server_address = url;
-  if (method == "POST") {
-    server_address = server_address;
-  } else if (method == "PUT" || method == "DELETE" || method == "PATCH") {
+  if (method === "POST") {
+  } else if (method === "PUT" || method === "DELETE" || method === "PATCH") {
     let id_of_product = product_to_send.id;
     server_address = server_address + id_of_product;
   }

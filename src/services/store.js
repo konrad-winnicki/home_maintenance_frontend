@@ -1,4 +1,3 @@
-import { fetch_function } from "../functions";
 const backendUrl = "http://localhost:5000/";
 //const url = "https://backend.home-maintenance.click/"
 const productEndpoint = backendUrl + "store/products/";

@@ -79,7 +79,7 @@ class LoginComponent extends React.Component {
   componentDidUpdate() {
     const navigate = this.props.navigate;
 
-    navigate("/dashboard");
+    navigate("/products");
 
    
   }

@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { MdAddBox } from "react-icons/md";
 import { addShoppingItem } from "../services/cart";
-import { APP_STATES } from "./Dashboard";
+import { APP_STATES } from "./NavigationBar";
 import { AppContext } from "../contexts/appContext";
-import { server_response_service } from "../functions";
+import { serverResponseTranslator } from "../functions";
 const AddItemToShoppings = () => {
   const [shoppingItem, setShoppingItem] = useState({ name: "", quantity: "" });
   const session_code = localStorage.getItem("session_code");
@@ -24,7 +24,7 @@ const AddItemToShoppings = () => {
       name: shoppingItem.name,
       quantity: shoppingItem.quantity,
     };
-    appContext.stateChanger({ appState: APP_STATES.ONCLICK});
+    appContext.stateChanger({ appState: APP_STATES.ONCLICK });
 
     let response = addShoppingItem(product_data, session_code);
     const messages = {
@@ -33,10 +33,9 @@ const AddItemToShoppings = () => {
       duplication: "Shopping item already exists",
       unknown: "Unknown error",
     };
-    server_response_service(messages, response).then(() => {
+    serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
       setShoppingItem({ name: "", quantity: "" });
-
     });
   };
 

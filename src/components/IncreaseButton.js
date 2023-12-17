@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { BsFillArrowUpSquareFill } from "react-icons/bs";
 import { updateProduct } from "../services/store";
-import { APP_STATES } from "./Dashboard";
+import { APP_STATES } from "./NavigationBar";
 import { SourceContext } from "../contexts/sourceContext";
 import { AppContext } from "../contexts/appContext";
 const IncreaseButton = () => {
@@ -18,11 +18,11 @@ const IncreaseButton = () => {
       },
     };
     console.log(product_data.updatedValues);
-    //appContext.stateChanger({appState:'APP_STATES.AWAITING_API_RESPONSE'});
-    const result = updateProduct(product_data, session_code);
-    appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    appContext.stateChanger({appState:APP_STATES.AWAITING_API_RESPONSE});
+    updateProduct(product_data, session_code).then(()=>{
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    }).catch((error) => console.log(error));
 
-    //this.props.server_response_service(this.props.state_changer, result);
   };
 
   return (

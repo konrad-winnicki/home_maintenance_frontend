@@ -1,20 +1,16 @@
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 import { SiAddthis } from "react-icons/si";
-import {
-  ask_product_name,
-  notifications,
-  statusCodeTranslator,
-} from "../functions";
+import { ask_product_name } from "../functions";
 import { addProduct } from "../services/store";
-import { APP_STATES} from "./Dashboard";
-import { server_response_service } from "../functions";
+import { APP_STATES } from "./NavigationBar";
+import { serverResponseTranslator } from "../functions";
 import { AppContext } from "../contexts/appContext";
 
-const AddProductButton = ()=> {
+const AddProductButton = () => {
   const session_code = localStorage.getItem("session_code");
- const appContext = useContext(AppContext)
+  const appContext = useContext(AppContext);
 
-  const onClickHandler = async ()=>{
+  const onClickHandler = async () => {
     let product_name = ask_product_name();
     let product_data = {
       name: product_name,
@@ -24,8 +20,8 @@ const AddProductButton = ()=> {
       return;
     }
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-   const response =  addProduct(product_data, session_code)
-     /*
+    const response = addProduct(product_data, session_code)
+      /*
    .then((response) => {
         const messages = {
           unlogged: "Not logged",
@@ -44,28 +40,26 @@ const AddProductButton = ()=> {
       })
       */
       .catch((error) => console.log(error));
-     const messages = {
+    const messages = {
       unlogged: "Not logged",
       success: "Product addded",
       duplicated: "Product already exists",
       unknown: "Unknown error",
     };
-    server_response_service(messages, response).then(()=>{
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING});
-    })
+    serverResponseTranslator(messages, response).then(() => {
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    });
+  };
 
-  }
-
-    return (
-      <button
-        className="btn btn-warning btn-sm"
-        disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
-        onClick={() => onClickHandler()}
-      >
-        <SiAddthis /> product
-      </button>
-    );
- 
-}
+  return (
+    <button
+      className="btn btn-warning btn-sm"
+      disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+      onClick={() => onClickHandler()}
+    >
+      <SiAddthis /> product
+    </button>
+  );
+};
 
 export default AddProductButton;

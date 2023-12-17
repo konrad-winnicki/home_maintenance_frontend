@@ -2,17 +2,17 @@ import React, { useContext } from "react";
 import "./SourceDescription.css";
 import { ask_new_name } from "../functions";
 import { custom_quantity } from "../functions";
-import { server_response_service } from "../functions";
+import { serverResponseTranslator } from "../functions";
 import { SourceContext } from "../contexts/sourceContext";
 import { AppContext } from "../contexts/appContext";
-import { APP_STATES } from "./Dashboard";
+import { APP_STATES } from "./NavigationBar";
 
 function SourceDescription(props) {
   const session_code = localStorage.getItem("session_code");
   const sourceContext = useContext(SourceContext);
   const appContext = useContext(AppContext);
+
   const onClickNameHandler = () => {
-    appContext.stateChanger({ appState: APP_STATES.ONCLICK });
     const new_name = ask_new_name();
     if (new_name != null) {
       const product_data = {
@@ -22,22 +22,25 @@ function SourceDescription(props) {
           name: new_name,
         },
       };
+      appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+
       let response = props.updateMethod(product_data, session_code);
       const messages = {
         unlogged: "Not logged",
         success: "Name changed",
         unknown: "Unknown error",
       };
-      server_response_service(messages, response).then(() => {
-        appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-      });
+      serverResponseTranslator(messages, response)
+        .then(() => {
+          appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+        })
+        .catch((error) => console.log(error));
     } else {
       appContext.stateChanger({ appState: APP_STATES.DEFAULT });
     }
   };
 
   const onClickQuantityHandler = () => {
-    appContext.stateChanger({ appState: APP_STATES.ONCLICK });
     const quantity = custom_quantity();
     if (quantity != null) {
       const product_data = {
@@ -45,9 +48,10 @@ function SourceDescription(props) {
         updatedValues: {
           ...sourceContext.source,
           quantity: quantity,
-          
         },
       };
+      appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+
       const response = props.updateMethod(product_data, session_code);
 
       const messages = {
@@ -55,7 +59,7 @@ function SourceDescription(props) {
         success: "Quantity changed",
         unknown: "Unknown error",
       };
-      server_response_service(messages, response).then(() => {
+      serverResponseTranslator(messages, response).then(() => {
         appContext.stateChanger({ appState: APP_STATES.REFRESHING });
       });
     } else {
