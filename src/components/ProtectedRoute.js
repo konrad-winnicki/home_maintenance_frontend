@@ -7,6 +7,6 @@ export const ProtectedRoute = () => {
   if (!authContext.isLoggedIn) {
     return <Navigate to="/login" />;
   }
-
+  
   return <Outlet />;
 };

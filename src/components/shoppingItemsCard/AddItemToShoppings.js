@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { MdAddBox } from "react-icons/md";
 import { addShoppingItem } from "../../services/cart";
-import { APP_STATES } from "../commonComponents/NavigationBar";
+import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
-import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 const AddItemToShoppings = () => {
   const [shoppingItem, setShoppingItem] = useState({ name: "", quantity: "" });
   const session_code = localStorage.getItem("session_code");
@@ -27,7 +27,6 @@ const AddItemToShoppings = () => {
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
     const response = addShoppingItem(product_data, session_code);
     const messages = {
-      unlogged: "Not logged",
       success: "Shopping item addded",
       duplication: "Shopping item already exists",
       unknown: "Unknown error",

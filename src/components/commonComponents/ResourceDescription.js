@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
-import "./SourceDescription.css";
-import { ask_new_name } from "../../auxilaryFunctions";
-import { custom_quantity } from "../../auxilaryFunctions";
-import { serverResponseTranslator } from "../../auxilaryFunctions";
-import { SourceContext } from "../../contexts/sourceContext";
+import "./ResourceDescription.css";
+import { ask_new_name } from "../../services/auxilaryFunctions";
+import { custom_quantity } from "../../services/auxilaryFunctions";
+import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
-import { APP_STATES } from "./NavigationBar";
+import { APP_STATES } from "../../applicationStates";
 
-function SourceDescription(props) {
+function ResourceDescription(props) {
   const session_code = localStorage.getItem("session_code");
-  const sourceContext = useContext(SourceContext);
+  const resourceContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
 
   const onClickNameHandler = () => {
@@ -19,9 +19,9 @@ function SourceDescription(props) {
     }
 
     const product_data = {
-      id: sourceContext.source.product_id,
+      id: resourceContext.resource.product_id,
       updatedValues: {
-        ...sourceContext.source,
+        ...resourceContext.resource,
         name: new_name,
       },
     };
@@ -29,7 +29,6 @@ function SourceDescription(props) {
 
     let response = props.updateMethod(product_data, session_code);
     const messages = {
-      unlogged: "Not logged",
       success: "Name changed",
       unknown: "Unknown error",
     };
@@ -45,9 +44,9 @@ function SourceDescription(props) {
       return;
     }
     const product_data = {
-      id: sourceContext.source.product_id,
+      id: resourceContext.resource.product_id,
       updatedValues: {
-        ...sourceContext.source,
+        ...resourceContext.resource,
         quantity: quantity,
       },
     };
@@ -56,7 +55,6 @@ function SourceDescription(props) {
     const response = props.updateMethod(product_data, session_code);
 
     const messages = {
-      unlogged: "Not logged",
       success: "Quantity changed",
       unknown: "Unknown error",
     };
@@ -73,7 +71,7 @@ function SourceDescription(props) {
           onClickNameHandler();
         }}
       >
-        {sourceContext.source.name}
+        {resourceContext.resource.name}
       </div>
 
       <div
@@ -82,10 +80,10 @@ function SourceDescription(props) {
           onClickQuantityHandler();
         }}
       >
-        {sourceContext.source.quantity}
+        {resourceContext.resource.quantity}
       </div>
     </React.Fragment>
   );
 }
 
-export default SourceDescription;
+export default ResourceDescription;

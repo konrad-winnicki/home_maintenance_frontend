@@ -40,16 +40,7 @@ export function custom_quantity() {
   return new_value_from_user;
 }
 
-/*
-export function inner_server_response_to_state(result, state_changer_function) {
-  result.then((result) => {
-    state_changer_function({
-      status_code: result[0],
-      message_from_server: result[1],
-    });
-  });
-}
-*/
+
 export function notifications(message, type) {
   console.log("dodalem notification o typie " + type);
   if (type === "success") {
@@ -73,10 +64,7 @@ export function notifications(message, type) {
 export async function serverResponseTranslator(messages, response_from_server) {
   return response_from_server.then((response) => {
     let status_code = response.status;
-    if (status_code === 401) {
-      notifications(messages.unlogged, "error");
-
-    } else if (status_code > 199 && status_code < 300) {
+    if (status_code > 199 && status_code < 300) {
       notifications(messages.success, "success");
     } else if (status_code === 409) {
       notifications(messages.duplication, "warning");

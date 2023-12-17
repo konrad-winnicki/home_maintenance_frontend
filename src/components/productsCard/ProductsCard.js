@@ -1,14 +1,15 @@
 import React, { useContext } from "react";
 import { getProducts } from "../../services/store";
-import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ToastContainer } from "react-toastify";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
 import Scaner from "../Scaner.js";
 import styles from "../../my-style.module.css";
-import "../Header.css";
-import { APP_STATES, NavigationBar } from "../commonComponents/NavigationBar";
+import "../CardHeader.css";
+import NavigationBar from "../commonComponents/NavigationBar";
+import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 
 class ProductsCard extends React.PureComponent {
@@ -35,8 +36,9 @@ class ProductsCard extends React.PureComponent {
   }
 
   getProducts() {
-    const response = getProducts(this.session_code)
-      response.then((response) => {
+    const response = getProducts(this.session_code);
+    response
+      .then((response) => {
         response.json().then((json) => {
           this.stateChanger({
             productList: json,
@@ -46,13 +48,12 @@ class ProductsCard extends React.PureComponent {
       })
       .catch((error) => console.log(error));
 
-
-      const messages = {
-        unknown: "Unknown error",
-      };
-      serverResponseTranslator(messages, response).then(() => {
-        this.stateChanger({ appState: APP_STATES.DEFAULT });
-      });
+    const messages = {
+      unknown: "Unknown error",
+    };
+    serverResponseTranslator(messages, response).then(() => {
+      this.stateChanger({ appState: APP_STATES.DEFAULT });
+    });
   }
 
   render() {
@@ -71,32 +72,26 @@ class ProductsCard extends React.PureComponent {
             }}
           >
             <div
-              className="flex-grow-1 mt-5 mb-8"
-              style={{
-                overflow: "auto",
-                paddingBottom: "1%",
-                marginBottom: "14%",
-              }}
+             className="flex-grow-1 mt-5 mb-8"
+             style={{
+               overflow: "auto",
+               paddingBottom: "1%",
+               marginBottom: "14%",
+             }} 
             >
-              <div className="header">Products at home</div>
+              <div className="header mt-10">Products at home</div>
               <ProductList productList={this.state.productList} />
             </div>
 
             <div className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary d-flex justify-content-between fixed-bottom">
-              <div className="col text-center ">
                 <AddProductButton></AddProductButton>
-              </div>
-              <div className="col text-center ">
                 <AddFinishedProductsToCart></AddFinishedProductsToCart>
-              </div>
-              <div className="col text-center">
                 <Scaner
                   notifications={this.notifications}
                   app_state={this.state.app_state}
                   state_changer={this.stateChanger}
                   server_response_service={serverResponseTranslator}
                 ></Scaner>
-              </div>
             </div>
           </AppContext.Provider>
         </div>

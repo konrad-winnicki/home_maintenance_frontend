@@ -2,47 +2,25 @@ import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
 import { AuthorizationContext } from "../contexts/authorizationContext";
-import { useNavigate} from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
-
-const backendUrl = "http://localhost:5000";
-//const backendUrl = "https://backend.home-maintenance.click"
-const redirectUri = "http%3A%2F%2Flocalhost%3A3000%2Fcode"; // TODO: try without it, without code
+import { useNavigate } from "react-router-dom";
+import { backendUrl } from "../config";
+import {
+  getCookie,
+  autoLogOutTiming,
+} from "../loginAuxilaryFunctions";
 
 class LoginComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      login_status: "unlogged",
+      loginStatus: "unlogged",
     };
   }
-
-  fetchSessionId(oauthCode) {
-    // TODO: POST
-    return fetch(
-      backendUrl +
-        "/code/callback?code=" +
-        oauthCode +
-        "&redirect_uri=" +
-        redirectUri,
-      {
-        headers: { "Content-Type": "application/json" },
-        method: "GET",
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => json.session_code);
-  }
-
-  /*
-        Redirect points to frontend which obtains the code.
-        Then the frontend calls /token endpoint to make the backend exchange the code for the token and reply with sessionId/sessionToken
-      */
 
   getGoogleOauth() {
     const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth?";
     const options = {
-      redirect_uri: "http://localhost:5000/code/callback",
+      redirect_uri: backendUrl + "code/callback",
       client_id:
         "70482292417-ki5kct2g23kaloksimsjtf1figlvt3ao.apps.googleusercontent.com",
       access_type: "offline",
@@ -58,20 +36,17 @@ class LoginComponent extends React.Component {
   }
 
   googleLogin() {
-    console.log("login button");
     const uri = this.getGoogleOauth();
     window.location.href = uri;
-    //window.open(uri, "_self")
   }
 
   componentDidMount() {
     const oauth_code = getCookie("session_code");
-    console.log('oauth_code', oauth_code)
     if (oauth_code) {
       localStorage.setItem("session_code", oauth_code);
       document.cookie = `session_code=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
       this.props.authorizationContext.setLoggedIn(true);
-      autoLogOutTiming(oauth_code, this.props.authorizationContext)
+      autoLogOutTiming(oauth_code, this.props.authorizationContext);
     }
   }
 
@@ -83,7 +58,7 @@ class LoginComponent extends React.Component {
   render() {
     return (
       <div className="container vh-100 vw-100 d-flex  align-items-center">
-        {this.state.login_status === "unlogged" ? (
+        {this.state.loginStatus === "unlogged" ? (
           <Button
             style={{
               backgroundColor: "white",
@@ -104,21 +79,8 @@ class LoginComponent extends React.Component {
   }
 }
 
-const getCookie = (cookieName) => {
-  const cookies = document.cookie.split(";");
-
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i].trim();
-    if (cookie.startsWith(`${cookieName}=`)) {
-      return cookie.substring(cookieName.length + 1);
-    }
-  }
-  return null;
-};
-
-export function WrappedLoginComponent() {
+function WrappedLoginComponent() {
   const navigate = useNavigate();
-
   const authorizationContext = useContext(AuthorizationContext);
 
   return (
@@ -129,31 +91,4 @@ export function WrappedLoginComponent() {
   );
 }
 
-
-
-function calculateTimeToFinishToken(decodedToken) {
-  const milisecondsPerSecond = 1000;
-  const currentTimestampInSeconds = Math.round(
-    Date.now() / milisecondsPerSecond
-  );
-  const remainingSeconds = decodedToken.exp - currentTimestampInSeconds;
-  const bufferSecondsBeforeEnd = 60;
-  const timeoutInMiliseconds =
-    (remainingSeconds - bufferSecondsBeforeEnd) * milisecondsPerSecond;
-
-  return timeoutInMiliseconds;
-}
-
-
-
-function autoLogOutTiming(
-  currentToken,
-  authorizationContext
-) {
-  const decodedToken = jwtDecode(currentToken);
-  const timeToLogout = calculateTimeToFinishToken(decodedToken);
-  setTimeout(() => {
-    authorizationContext.setLoggedIn(false);
-  }, timeToLogout);
-}
-export default LoginComponent;
+export default WrappedLoginComponent;

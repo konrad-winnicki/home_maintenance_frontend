@@ -1,30 +1,28 @@
 import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import { updateShoppingItem } from "../../services/cart";
-import { SourceContext } from "../../contexts/sourceContext";
+import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
-import { APP_STATES } from "../commonComponents/NavigationBar";
-import { serverResponseTranslator } from "../../auxilaryFunctions";
-
+import { APP_STATES } from "../../applicationStates";
+import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 
 export default function CheckBox() {
   const session_code = localStorage.getItem("session_code");
-  const shoppingItemContext = useContext(SourceContext);
+  const shoppingItemContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
   const [isBought, setBought] = useState(
-    shoppingItemContext.source.is_bought
+    shoppingItemContext.resource.is_bought
   );
-  const initialRender = useRef(shoppingItemContext.source.is_bought);
+  const initialRender = useRef(shoppingItemContext.resource.is_bought);
 
   const handleChange = () => {
-    console.log("HANDLE CHANGE CALLED");
     setBought(!isBought);
   };
 
   const updateItem = useCallback(() => {
     const shoppingItem = {
-      id: shoppingItemContext.source.product_id,
+      id: shoppingItemContext.resource.product_id,
       updatedValues: {
-        ...shoppingItemContext.source,
+        ...shoppingItemContext.resource,
         is_bought: isBought,
       },
     };
@@ -37,7 +35,7 @@ export default function CheckBox() {
       initialRender.current = isBought;
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
     });
-  },[appContext,shoppingItemContext,isBought, session_code]);
+  }, [appContext, shoppingItemContext, isBought, session_code]);
 
   useEffect(() => {
     if (initialRender.current === isBought) {
@@ -49,7 +47,7 @@ export default function CheckBox() {
   return (
     <div>
       <input
-        className="form-check-input"
+        className="form-check-input, button_surrounding"
         style={{ width: "25px", height: "25px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"

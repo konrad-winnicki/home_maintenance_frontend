@@ -1,6 +1,4 @@
-const backendUrl = "http://localhost:5000/";
-
-//const url = "https://backend.home-maintenance.click/"
+import { backendUrl } from "../config";
 const addFinishedProductsEndpoint = backendUrl + "cart/items/shoppinglist";
 const shoppingItemsEndpoint = backendUrl + "cart/items/";
 
@@ -50,21 +48,12 @@ export function deleteShoppingItem(shoppingItemId, authorization_code) {
 }
 
 export function addFinishedProductsToShoppingList(authorization_code) {
-  let promise = fetch(addFinishedProductsEndpoint, {
+  return fetch(addFinishedProductsEndpoint, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
     },
     method: "POST",
   })
-    .then((response) => {
-      if (response.ok) {
-        return response;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      return "Error";
-    });
-  return promise;
+    
 }

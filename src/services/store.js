@@ -1,5 +1,4 @@
-const backendUrl = "http://localhost:5000/";
-//const url = "https://backend.home-maintenance.click/"
+import { backendUrl } from "../config";
 const productEndpoint = backendUrl + "store/products/";
 const addShoppingItemsToStoreEndpoint = backendUrl + "store/products/delivery/";
 
@@ -48,21 +47,12 @@ export function updateProduct(product_data, authorization_code) {
 }
 
 export function getProducts(authorization_code) {
-  let promise = fetch(backendUrl + "store/products/", {
+  return fetch(backendUrl + "store/products/", {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
     },
     method: "GET",
   })
-    .then((response) => {
-      if (response) {
-        return response;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      return "Error";
-    });
-  return promise;
+   
 }

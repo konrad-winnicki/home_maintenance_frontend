@@ -2,38 +2,37 @@ import React, { useContext } from "react";
 import { BsFillArrowDownSquareFill } from "react-icons/bs";
 import { updateProduct } from "../../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { APP_STATES } from "../commonComponents/NavigationBar";
-import { SourceContext } from "../../contexts/sourceContext";
+import { APP_STATES } from "../../applicationStates";
+import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
-import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 
 const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
-  const productContext = useContext(SourceContext);
+  const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
   const onClickHandler = () => {
     const product_data = {
-      id: productContext.source.product_id,
+      id: productContext.resource.product_id,
       updatedValues: {
-        quantity: productContext.source.quantity - 1,
-        name: productContext.source.name,
+        quantity: productContext.resource.quantity - 1,
+        name: productContext.resource.name,
       },
     };
     appContext.stateChanger({ app_state: APP_STATES.AWAITING_API_RESPONSE });
-    const response = updateProduct(product_data, session_code)
-    
+    const response = updateProduct(product_data, session_code);
+
     const messages = {
-      unlogged: "Not logged",
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-    })
+    });
   };
 
   return (
     <button
-      className="btn btn-primary btn-sm"
+      className="btn btn-primary btn-sm button_surrounding"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         onClickHandler();

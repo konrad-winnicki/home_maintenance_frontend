@@ -1,19 +1,19 @@
 import React from "react";
-import { SourceContext } from "../../contexts/sourceContext";
+import { ResourceContext } from "../../contexts/ResourceContext";
 import ShoppingItemComponent from "./ShoppingItemComponent";
 
 const ShoppingItemsList = (props) => {
   return (
     <div>
       {props.shoppingItemsList.map((shoppingItem) => (
-        <SourceContext.Provider
+        <ResourceContext.Provider
           key={shoppingItem.product_id}
           value={{
-            source: shoppingItem,
+            resource: shoppingItem,
           }}
         >
           <ShoppingItemComponent></ShoppingItemComponent>
-        </SourceContext.Provider>
+        </ResourceContext.Provider>
       ))}
     </div>
   );

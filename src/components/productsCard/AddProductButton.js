@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { SiAddthis } from "react-icons/si";
-import { ask_product_name } from "../../auxilaryFunctions";
+import { ask_product_name } from "../../services/auxilaryFunctions";
 import { addProduct } from "../../services/store";
-import { APP_STATES } from "../commonComponents/NavigationBar";
-import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { APP_STATES } from "../../applicationStates";
+import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 
 const AddProductButton = () => {
@@ -20,8 +20,8 @@ const AddProductButton = () => {
       return;
     }
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = addProduct(product_data, session_code)
-      /*
+    const response = addProduct(product_data, session_code);
+    /*
    .then((response) => {
         const messages = {
           unlogged: "Not logged",
@@ -40,24 +40,25 @@ const AddProductButton = () => {
       })
       */
     const messages = {
-      unlogged: "Not logged",
       success: "Product addded",
       duplicated: "Product already exists",
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-    })
+    });
   };
 
   return (
-    <button
-      className="btn btn-warning btn-sm"
-      disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
-      onClick={() => onClickHandler()}
-    >
-      <SiAddthis /> product
-    </button>
+    <div className="col text-center ">
+      <button
+        className="btn btn-warning btn-sm"
+        disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+        onClick={() => onClickHandler()}
+      >
+        <SiAddthis /> product
+      </button>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import Quagga from "@ericblade/quagga2";
 import { BsUpcScan } from "react-icons/bs";
-import * as myFunction from "../auxilaryFunctions.js";
+import * as myFunction from "../services/auxilaryFunctions.js";
 
 // export const url = "https://localhost:5000/products/";
 export const url = "https://backend.home-maintenance.click/";
@@ -248,6 +248,8 @@ class Scaner extends React.PureComponent {
     }
     //if (this.props.app_state == "Stop scaning" || this.props.app_state == "default") {button_name = "Scaning barcode"}
     return (
+      <div className="col text-center ">
+
       <button
         type="button"
         className="btn btn-warning btn-sm"
@@ -263,6 +265,7 @@ class Scaner extends React.PureComponent {
       >
         {button_name} <BsUpcScan />
       </button>
+      </div>
     );
   }
 }

@@ -1,14 +1,14 @@
 import React from "react";
 import { updateProduct } from "../../services/store";
 
-import SourceDescription from "../commonComponents/SourceDescription.js";
+import ResourceDescription from "../commonComponents/ResourceDescription.js";
 import ProductButtons from "./ProductButtons";
-import "../SourceComponent.css";
+import "../ResourceComponent.css";
 
 function ProductComponent() {
   return (
     <div className="product__properties">
-      <SourceDescription updateMethod={updateProduct}></SourceDescription>
+      <ResourceDescription updateMethod={updateProduct}></ResourceDescription>
       <ProductButtons></ProductButtons>
     </div>
   );
