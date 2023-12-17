@@ -7,6 +7,8 @@ import { AuthContextProvider } from "./contexts/authorizationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
 import { WrappedShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
+import Homes from "./components/homes/Homes";
+
 export const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<WrappedLoginComponent />} />
@@ -14,6 +16,7 @@ export const AppRoutes = () => (
     <Route element={<ProtectedRoute />}>
       <Route path="/products/" element={<WrappedProductsCard />} />
       <Route path="/shoppingItems/" element={<WrappedShoppingItemsCard />} />
+      <Route path="/homes" element={<Homes/>} />
     </Route>
   </Routes>
 );
