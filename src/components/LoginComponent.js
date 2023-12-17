@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
 import { AuthorizationContext } from "../contexts/authorizationContext";
 import { useNavigate} from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 const backendUrl = "http://localhost:5000";
 //const backendUrl = "https://backend.home-maintenance.click"
@@ -70,6 +71,7 @@ class LoginComponent extends React.Component {
       localStorage.setItem("session_code", oauth_code);
       document.cookie = `session_code=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
       this.props.authorizationContext.setLoggedIn(true);
+      autoLogOutTiming(oauth_code, this.props.authorizationContext)
     }
   }
 
@@ -127,4 +129,31 @@ export function WrappedLoginComponent() {
   );
 }
 
+
+
+function calculateTimeToFinishToken(decodedToken) {
+  const milisecondsPerSecond = 1000;
+  const currentTimestampInSeconds = Math.round(
+    Date.now() / milisecondsPerSecond
+  );
+  const remainingSeconds = decodedToken.exp - currentTimestampInSeconds;
+  const bufferSecondsBeforeEnd = 60;
+  const timeoutInMiliseconds =
+    (remainingSeconds - bufferSecondsBeforeEnd) * milisecondsPerSecond;
+
+  return timeoutInMiliseconds;
+}
+
+
+
+function autoLogOutTiming(
+  currentToken,
+  authorizationContext
+) {
+  const decodedToken = jwtDecode(currentToken);
+  const timeToLogout = calculateTimeToFinishToken(decodedToken);
+  setTimeout(() => {
+    authorizationContext.setLoggedIn(false);
+  }, timeToLogout);
+}
 export default LoginComponent;

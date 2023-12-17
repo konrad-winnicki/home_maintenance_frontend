@@ -74,6 +74,8 @@ export async function serverResponseTranslator(messages, response_from_server) {
   return response_from_server.then((response) => {
     let status_code = response.status;
     if (status_code === 401) {
+      notifications(messages.unlogged, "error");
+
     } else if (status_code > 199 && status_code < 300) {
       notifications(messages.success, "success");
     } else if (status_code === 409) {
