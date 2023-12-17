@@ -24,8 +24,6 @@ const DecreaseButton = () => {
     
     const messages = {
       unlogged: "Not logged",
-      success: "Product addded",
-      duplicated: "Product already exists",
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {

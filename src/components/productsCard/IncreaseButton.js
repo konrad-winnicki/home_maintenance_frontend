@@ -23,8 +23,6 @@ const IncreaseButton = () => {
     const response = updateProduct(product_data, session_code)
     const messages = {
       unlogged: "Not logged",
-      success: "Product addded",
-      duplicated: "Product already exists",
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {

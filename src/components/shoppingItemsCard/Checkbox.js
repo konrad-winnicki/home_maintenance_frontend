@@ -11,9 +11,9 @@ export default function CheckBox() {
   const shoppingItemContext = useContext(SourceContext);
   const appContext = useContext(AppContext);
   const [isBought, setBought] = useState(
-    shoppingItemContext.source.checkout
+    shoppingItemContext.source.is_bought
   );
-  const initialRender = useRef(shoppingItemContext.source.checkout);
+  const initialRender = useRef(shoppingItemContext.source.is_bought);
 
   const handleChange = () => {
     console.log("HANDLE CHANGE CALLED");
@@ -25,7 +25,7 @@ export default function CheckBox() {
       id: shoppingItemContext.source.product_id,
       updatedValues: {
         ...shoppingItemContext.source,
-        isBought: isBought,
+        is_bought: isBought,
       },
     };
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
