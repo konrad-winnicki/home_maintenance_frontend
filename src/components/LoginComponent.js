@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { FcGoogle } from "react-icons/fc";
 import { AuthorizationContext } from "../contexts/authorizationContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 const backendUrl = "http://localhost:5000";
 //const backendUrl = "https://backend.home-maintenance.click"
@@ -64,24 +64,18 @@ class LoginComponent extends React.Component {
   }
 
   componentDidMount() {
-    let params = new URLSearchParams(window.location.search);
-    let oauth_code = params.get("session_code");
-    console.log("oauth_code:", oauth_code);
-
+    const oauth_code = getCookie("session_code");
+    console.log('oauth_code', oauth_code)
     if (oauth_code) {
       localStorage.setItem("session_code", oauth_code);
+      document.cookie = `session_code=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
       this.props.authorizationContext.setLoggedIn(true);
     }
-  
- 
   }
 
   componentDidUpdate() {
     const navigate = this.props.navigate;
-
     navigate("/products");
-
-   
   }
 
   render() {
@@ -108,10 +102,21 @@ class LoginComponent extends React.Component {
   }
 }
 
-//LoginComponent.contextType = AuthorizationContext
+const getCookie = (cookieName) => {
+  const cookies = document.cookie.split(";");
+
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(`${cookieName}=`)) {
+      return cookie.substring(cookieName.length + 1);
+    }
+  }
+  return null;
+};
 
 export function WrappedLoginComponent() {
   const navigate = useNavigate();
+
   const authorizationContext = useContext(AuthorizationContext);
 
   return (
