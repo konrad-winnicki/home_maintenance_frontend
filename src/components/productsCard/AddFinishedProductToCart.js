@@ -8,17 +8,18 @@ const AddFinishedProductsToCart = () => {
   const session_code = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
 
-  const addFinishedProductToShoppingList = () => {
+  const addFinishedProductToShoppings = () => {
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-
-    let response = addFinishedProductsToShoppingList(session_code);
+    const response = addFinishedProductsToShoppingList(session_code)
     const messages = {
       unlogged: "Not logged",
       success: "Product added to cart",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response);
-    appContext.stateChanger({ appState: APP_STATES.DEFAULT });
+    serverResponseTranslator(messages, response).then(()=>{
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+
+    })
   };
 
   return (
@@ -26,7 +27,7 @@ const AddFinishedProductsToCart = () => {
       className="btn btn-warning btn-sm"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
-        addFinishedProductToShoppingList();
+        addFinishedProductToShoppings();
       }}
     >
       Add to shopping list

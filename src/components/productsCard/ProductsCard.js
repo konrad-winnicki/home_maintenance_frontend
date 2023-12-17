@@ -35,8 +35,8 @@ class ProductsCard extends React.PureComponent {
   }
 
   getProducts() {
-    getProducts(this.session_code)
-      .then((response) => {
+    const response = getProducts(this.session_code)
+      response.then((response) => {
         response.json().then((json) => {
           this.stateChanger({
             productList: json,
@@ -45,6 +45,14 @@ class ProductsCard extends React.PureComponent {
         });
       })
       .catch((error) => console.log(error));
+
+
+      const messages = {
+        unknown: "Unknown error",
+      };
+      serverResponseTranslator(messages, response).then(() => {
+        this.stateChanger({ appState: APP_STATES.DEFAULT });
+      });
   }
 
   render() {

@@ -4,23 +4,13 @@ const productEndpoint = backendUrl + "store/products/";
 const addShoppingItemsToStoreEndpoint = backendUrl + "store/products/delivery/";
 
 export function addShoppingItemsToStore(authorization_code) {
-  let promise = fetch(addShoppingItemsToStoreEndpoint, {
+  return fetch(addShoppingItemsToStoreEndpoint, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
     },
     method: "POST",
   })
-    .then((response) => {
-      if (response) {
-        return response;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      return "Error";
-    });
-  return promise;
 }
 
 export async function addProduct(product_data, authorization_code) {
@@ -32,17 +22,6 @@ export async function addProduct(product_data, authorization_code) {
     method: "POST",
     body: JSON.stringify(product_data),
   })
-    .then((response) => {
-      if (response) {
-        return response;
-      } else {
-        return Promise.reject("Product not added");
-      }
-    })
-
-    .catch((error) => {
-      console.log("Catched unknown error:", error);
-    });
 }
 
 export function deleteProduct(productId, authorization_code) {
@@ -77,7 +56,7 @@ export function getProducts(authorization_code) {
     method: "GET",
   })
     .then((response) => {
-      if (response.ok) {
+      if (response) {
         return response;
       }
     })

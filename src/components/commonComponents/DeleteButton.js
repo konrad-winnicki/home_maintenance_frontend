@@ -11,12 +11,13 @@ const DeleteButton = (props) => {
   const appContext = useContext(AppContext);
   const onClickHandler = () => {
     const confirmation = window.confirm("Are you sure?");
-    if (confirmation) {
+    if (!confirmation) {
+      return}
       const productId = productContext.source.product_id;
       appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
       const response = props
         .deleteMethod(productId, session_code)
-        .catch((error) => console.log(error));
+        
       const messages = {
         unlogged: "Not logged",
         success: "Product deleted",
@@ -27,11 +28,7 @@ const DeleteButton = (props) => {
         .then(() => {
           appContext.stateChanger({ appState: APP_STATES.REFRESHING });
         })
-        .catch((error) => console.log(error));
-    } else {
-      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
-      return null;
-    }
+    
   };
 
   return (

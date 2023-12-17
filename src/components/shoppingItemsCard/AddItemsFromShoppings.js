@@ -8,16 +8,17 @@ const AddItemsFromShopings = () => {
   const session_code = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
   const addShoppings = () => {
-    appContext.stateChanger({ appState: APP_STATES.ONCLICK });
-    let result = addShoppingItemsToStore(session_code);
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE});
+    const result = addShoppingItemsToStore(session_code);
     const messages = {
       unlogged: "Not logged",
       success: "Shopping items transfered",
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, result).then(() => {
+      console.log('refreshing')
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-    });
+    })
   };
 
   return (

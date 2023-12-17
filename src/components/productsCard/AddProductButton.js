@@ -39,7 +39,6 @@ const AddProductButton = () => {
 
       })
       */
-      .catch((error) => console.log(error));
     const messages = {
       unlogged: "Not logged",
       success: "Product addded",
@@ -48,7 +47,7 @@ const AddProductButton = () => {
     };
     serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-    });
+    })
   };
 
   return (

@@ -1,48 +1,50 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import { updateShoppingItem } from "../../services/cart";
 import { SourceContext } from "../../contexts/sourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../commonComponents/NavigationBar";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
+
+
 export default function CheckBox() {
   const session_code = localStorage.getItem("session_code");
   const shoppingItemContext = useContext(SourceContext);
   const appContext = useContext(AppContext);
-  const [checkbox_status, setChecked] = useState(
+  const [isBought, setBought] = useState(
     shoppingItemContext.source.checkout
   );
-  // const initialRender = useRef(true);
+  const initialRender = useRef(shoppingItemContext.source.checkout);
 
   const handleChange = () => {
     console.log("HANDLE CHANGE CALLED");
-    setChecked(!checkbox_status);
+    setBought(!isBought);
   };
-  /*
-  useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-      console.log('elo')
-    return    }
-    else if (!initialRender.current){
-      console.log('dupa')
 
-    }
-  },[]);
-*/
-
-  useEffect(() => {
-    console.log(checkbox_status, "render");
-    console.log("CHECBOX use effect - retrieving");
-    let shoppingItem = {
+  const updateItem = useCallback(() => {
+    const shoppingItem = {
       id: shoppingItemContext.source.product_id,
       updatedValues: {
         ...shoppingItemContext.source,
-        checkout: checkbox_status,
+        isBought: isBought,
       },
     };
-    updateShoppingItem(shoppingItem, session_code).catch((error) =>
-      console.log(error)
-    );
-  }, [checkbox_status]);
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    const response = updateShoppingItem(shoppingItem, session_code);
+    const messages = {
+      unknown: "Unknown error",
+    };
+    serverResponseTranslator(messages, response).then(() => {
+      initialRender.current = isBought;
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    });
+  },[appContext,shoppingItemContext,isBought, session_code]);
+
+  useEffect(() => {
+    if (initialRender.current === isBought) {
+      return;
+    }
+    updateItem();
+  }, [isBought, updateItem]);
 
   return (
     <div>
@@ -51,7 +53,7 @@ export default function CheckBox() {
         style={{ width: "25px", height: "25px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"
-        defaultChecked={checkbox_status}
+        defaultChecked={isBought}
         id="flexCheckIndeterminate"
         onChange={handleChange}
       ></input>

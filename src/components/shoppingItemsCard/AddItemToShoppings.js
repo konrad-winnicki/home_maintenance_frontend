@@ -19,14 +19,13 @@ const AddItemToShoppings = () => {
     setShoppingItem({ name: shoppingItem.name, quantity: event.target.value });
   };
 
-  const add_product = () => {
+  const addShopping = () => {
     let product_data = {
       name: shoppingItem.name,
       quantity: shoppingItem.quantity,
     };
-    appContext.stateChanger({ appState: APP_STATES.ONCLICK });
-
-    let response = addShoppingItem(product_data, session_code);
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    const response = addShoppingItem(product_data, session_code);
     const messages = {
       unlogged: "Not logged",
       success: "Shopping item addded",
@@ -66,10 +65,7 @@ const AddItemToShoppings = () => {
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
           className="btn btn-primary"
           onClick={() => {
-            appContext.stateChanger({
-              appState: APP_STATES.AWAITING_API_RESPONSE,
-            });
-            add_product();
+            addShopping();
           }}
         >
           <MdAddBox />

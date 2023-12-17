@@ -14,57 +14,55 @@ function SourceDescription(props) {
 
   const onClickNameHandler = () => {
     const new_name = ask_new_name();
-    if (new_name != null) {
-      const product_data = {
-        id: sourceContext.source.product_id,
-        updatedValues: {
-          ...sourceContext.source,
-          name: new_name,
-        },
-      };
-      appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-
-      let response = props.updateMethod(product_data, session_code);
-      const messages = {
-        unlogged: "Not logged",
-        success: "Name changed",
-        unknown: "Unknown error",
-      };
-      serverResponseTranslator(messages, response)
-        .then(() => {
-          appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-        })
-        .catch((error) => console.log(error));
-    } else {
-      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
+    if (new_name == null) {
+      return;
     }
+
+    const product_data = {
+      id: sourceContext.source.product_id,
+      updatedValues: {
+        ...sourceContext.source,
+        name: new_name,
+      },
+    };
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+
+    let response = props.updateMethod(product_data, session_code);
+    const messages = {
+      unlogged: "Not logged",
+      success: "Name changed",
+      unknown: "Unknown error",
+    };
+
+    serverResponseTranslator(messages, response).then(() => {
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    });
   };
 
   const onClickQuantityHandler = () => {
     const quantity = custom_quantity();
-    if (quantity != null) {
-      const product_data = {
-        id: sourceContext.source.product_id,
-        updatedValues: {
-          ...sourceContext.source,
-          quantity: quantity,
-        },
-      };
-      appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-
-      const response = props.updateMethod(product_data, session_code);
-
-      const messages = {
-        unlogged: "Not logged",
-        success: "Quantity changed",
-        unknown: "Unknown error",
-      };
-      serverResponseTranslator(messages, response).then(() => {
-        appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-      });
-    } else {
-      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
+    if (quantity == null) {
+      return;
     }
+    const product_data = {
+      id: sourceContext.source.product_id,
+      updatedValues: {
+        ...sourceContext.source,
+        quantity: quantity,
+      },
+    };
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+
+    const response = props.updateMethod(product_data, session_code);
+
+    const messages = {
+      unlogged: "Not logged",
+      success: "Quantity changed",
+      unknown: "Unknown error",
+    };
+    serverResponseTranslator(messages, response).then(() => {
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    });
   };
 
   return (

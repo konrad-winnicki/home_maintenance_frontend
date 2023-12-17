@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { APP_STATES } from "../commonComponents/NavigationBar";
 import { SourceContext } from "../../contexts/sourceContext";
 import { AppContext } from "../../contexts/appContext";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
+
 const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(SourceContext);
@@ -18,11 +20,17 @@ const DecreaseButton = () => {
       },
     };
     appContext.stateChanger({ app_state: APP_STATES.AWAITING_API_RESPONSE });
-    updateProduct(product_data, session_code)
-      .then(() => {
-        appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-      })
-      .catch((error) => console.log(error));
+    const response = updateProduct(product_data, session_code)
+    
+    const messages = {
+      unlogged: "Not logged",
+      success: "Product addded",
+      duplicated: "Product already exists",
+      unknown: "Unknown error",
+    };
+    serverResponseTranslator(messages, response).then(() => {
+      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+    })
   };
 
   return (

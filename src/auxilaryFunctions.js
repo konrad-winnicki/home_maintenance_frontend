@@ -71,7 +71,7 @@ export function notifications(message, type) {
 }
 
 export async function serverResponseTranslator(messages, response_from_server) {
-  response_from_server.then((response) => {
+  return response_from_server.then((response) => {
     let status_code = response.status;
     if (status_code === 401) {
     } else if (status_code > 199 && status_code < 300) {
@@ -81,7 +81,11 @@ export async function serverResponseTranslator(messages, response_from_server) {
     } else {
       notifications(messages.unknown, "error");
     }
-  });
+  }).catch((error) => {
+    notifications(messages.unknown, "error");
+    console.log(error)
+
+  })
 }
 
 export async function statusCodeTranslator(response, message) {

@@ -9,6 +9,7 @@ import "../Header.css";
 import { AppContext } from "../../contexts/appContext";
 import ShoppingItemsList from "./ShoppingItemsList";
 import { APP_STATES, NavigationBar } from "../commonComponents/NavigationBar";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
 class ShoppingItemsCard extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -28,23 +29,37 @@ class ShoppingItemsCard extends React.PureComponent {
   }
 
   componentDidUpdate() {
+    console.log('didupdate')
     if (this.state.appState === APP_STATES.REFRESHING) {
+      console.log('if')
       this.ProductListChanger();
+
     }
   }
 
   ProductListChanger() {
-    let result = getShoppingItems(this.session_code);
-    result
+    const response = getShoppingItems(this.session_code);
+   
+    response
       .then((response) => {
         response.json().then((json) => {
+
           this.stateChanger({
             shoppingItemsList: json,
-            appState: APP_STATES.DEFAULT,
           });
+
         });
       })
       .catch((error) => console.log(error));
+      
+      const messages = {
+        unknown: "Unknown error",
+      };
+      serverResponseTranslator(messages, response).then(() => {
+        console.log(this.state.shoppingItemsList)
+
+        this.stateChanger({ appState: APP_STATES.DEFAULT });
+      });
   }
 
   render() {
