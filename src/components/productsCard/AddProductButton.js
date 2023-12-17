@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { SiAddthis } from "react-icons/si";
-import { ask_product_name } from "../functions";
-import { addProduct } from "../services/store";
-import { APP_STATES } from "./NavigationBar";
-import { serverResponseTranslator } from "../functions";
-import { AppContext } from "../contexts/appContext";
+import { ask_product_name } from "../../auxilaryFunctions";
+import { addProduct } from "../../services/store";
+import { APP_STATES } from "../commonComponents/NavigationBar";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { AppContext } from "../../contexts/appContext";
 
 const AddProductButton = () => {
   const session_code = localStorage.getItem("session_code");

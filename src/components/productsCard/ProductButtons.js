@@ -1,9 +1,9 @@
 import React from "react";
-import DeleteButton from "./DeleteButton";
+import DeleteButton from "../commonComponents/DeleteButton";
 import IncreaseButton from "./IncreaseButton.js";
 import DecreaseButton from "./DecreaseButton.js";
-import "./ProductButtons.css";
-import { deleteProduct } from "../services/store";
+import "../SourceButtons.css";
+import { deleteProduct } from "../../services/store";
 
 export default function ProductButtons() {
   return (

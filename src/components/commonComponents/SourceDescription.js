@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import "./SourceDescription.css";
-import { ask_new_name } from "../functions";
-import { custom_quantity } from "../functions";
-import { serverResponseTranslator } from "../functions";
-import { SourceContext } from "../contexts/sourceContext";
-import { AppContext } from "../contexts/appContext";
+import { ask_new_name } from "../../auxilaryFunctions";
+import { custom_quantity } from "../../auxilaryFunctions";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { SourceContext } from "../../contexts/sourceContext";
+import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "./NavigationBar";
 
 function SourceDescription(props) {

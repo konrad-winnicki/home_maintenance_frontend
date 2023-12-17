@@ -1,6 +1,6 @@
 import React from "react";
 import ProductComponent from "./ProductComponent";
-import { SourceContext } from "../contexts/sourceContext";
+import { SourceContext } from "../../contexts/sourceContext";
 
 const ProductList = (props) => {
   return (

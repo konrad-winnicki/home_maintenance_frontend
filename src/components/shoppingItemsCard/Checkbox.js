@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { updateShoppingItem } from "../services/cart";
-import { SourceContext } from "../contexts/sourceContext";
-import { AppContext } from "../contexts/appContext";
-import { APP_STATES } from "./NavigationBar";
+import { updateShoppingItem } from "../../services/cart";
+import { SourceContext } from "../../contexts/sourceContext";
+import { AppContext } from "../../contexts/appContext";
+import { APP_STATES } from "../commonComponents/NavigationBar";
 export default function CheckBox() {
   const session_code = localStorage.getItem("session_code");
   const shoppingItemContext = useContext(SourceContext);

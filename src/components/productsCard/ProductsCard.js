@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
-import { getProducts } from "../services/store";
-import { serverResponseTranslator } from "../functions";
+import { getProducts } from "../../services/store";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
 import { ToastContainer } from "react-toastify";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
-import Scaner from "./Scaner.js";
-import styles from "../my-style.module.css";
-import "./Header.css";
-import { APP_STATES, NavigationBar } from "./NavigationBar";
-import { AppContext } from "../contexts/appContext";
+import Scaner from "../Scaner.js";
+import styles from "../../my-style.module.css";
+import "../Header.css";
+import { APP_STATES, NavigationBar } from "../commonComponents/NavigationBar";
+import { AppContext } from "../../contexts/appContext";
 
 class ProductsCard extends React.PureComponent {
   constructor() {

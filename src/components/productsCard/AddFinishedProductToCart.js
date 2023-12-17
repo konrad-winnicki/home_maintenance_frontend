@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { addFinishedProductsToShoppingList } from "../services/cart";
-import { serverResponseTranslator } from "../functions";
-import { AppContext } from "../contexts/appContext";
-import { APP_STATES } from "./NavigationBar";
+import { addFinishedProductsToShoppingList } from "../../services/cart";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { AppContext } from "../../contexts/appContext";
+import { APP_STATES } from "../commonComponents/NavigationBar";
 
 const AddFinishedProductsToCart = () => {
   const session_code = localStorage.getItem("session_code");

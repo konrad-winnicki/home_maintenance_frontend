@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { BsFillArrowDownSquareFill } from "react-icons/bs";
-import { updateProduct } from "../services/store";
+import { updateProduct } from "../../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { APP_STATES} from "./NavigationBar";
-import { SourceContext } from "../contexts/sourceContext";
-import { AppContext } from "../contexts/appContext";
+import { APP_STATES } from "../commonComponents/NavigationBar";
+import { SourceContext } from "../../contexts/sourceContext";
+import { AppContext } from "../../contexts/appContext";
 const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(SourceContext);
@@ -18,11 +18,11 @@ const DecreaseButton = () => {
       },
     };
     appContext.stateChanger({ app_state: APP_STATES.AWAITING_API_RESPONSE });
-    updateProduct(product_data, session_code).then(()=>{
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-
-    }).catch((error) => console.log(error));
-
+    updateProduct(product_data, session_code)
+      .then(() => {
+        appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (

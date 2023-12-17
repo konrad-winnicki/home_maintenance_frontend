@@ -1,5 +1,5 @@
 import React from "react";
-import { SourceContext } from "../contexts/sourceContext";
+import { SourceContext } from "../../contexts/sourceContext";
 import ShoppingItemComponent from "./ShoppingItemComponent";
 
 const ShoppingItemsList = (props) => {

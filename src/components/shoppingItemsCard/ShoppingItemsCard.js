@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 import { ToastContainer } from "react-toastify";
 
-import { getShoppingItems } from "../services/cart";
+import { getShoppingItems } from "../../services/cart";
 import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
 import AddItemToShoppings from "./AddItemToShoppings";
-import Scaner from "./Scaner.js";
-import "./Header.css";
-import { AppContext } from "../contexts/appContext";
+import Scaner from "../Scaner.js";
+import "../Header.css";
+import { AppContext } from "../../contexts/appContext";
 import ShoppingItemsList from "./ShoppingItemsList";
-import { APP_STATES, NavigationBar } from "./NavigationBar";
+import { APP_STATES, NavigationBar } from "../commonComponents/NavigationBar";
 class ShoppingItemsCard extends React.PureComponent {
   constructor(props) {
     super(props);

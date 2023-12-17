@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import { FaTrashRestoreAlt } from "react-icons/fa";
-import "./ProductComponent.css";
-import { serverResponseTranslator } from "../functions";
-import { SourceContext } from "../contexts/sourceContext";
-import { AppContext } from "../contexts/appContext";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { SourceContext } from "../../contexts/sourceContext";
+import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "./NavigationBar";
 
 const DeleteButton = (props) => {

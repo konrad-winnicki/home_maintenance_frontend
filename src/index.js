@@ -5,8 +5,8 @@ import { WrappedLoginComponent } from "./components/LoginComponent";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/authorizationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { WrappedProductsCard } from "./components/ProductsCard";
-import { WrappedShoppingItemsCard } from "./components/ShoppingItemsCard";
+import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
+import { WrappedShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
 export const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<WrappedLoginComponent />} />

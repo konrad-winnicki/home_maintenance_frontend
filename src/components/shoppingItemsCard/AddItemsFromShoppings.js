@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { APP_STATES } from "./NavigationBar";
-import { AppContext } from "../contexts/appContext";
-import { serverResponseTranslator } from "../functions";
-import { addShoppingItemsToStore } from "../services/store";
+import { APP_STATES } from "../commonComponents/NavigationBar";
+import { AppContext } from "../../contexts/appContext";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
+import { addShoppingItemsToStore } from "../../services/store";
 
 const AddItemsFromShopings = () => {
   const session_code = localStorage.getItem("session_code");

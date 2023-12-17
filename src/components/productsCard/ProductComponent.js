@@ -1,9 +1,9 @@
 import React from "react";
-import { updateProduct } from "../services/store";
+import { updateProduct } from "../../services/store";
 
-import SourceDescription from "./SourceDescription.js";
+import SourceDescription from "../commonComponents/SourceDescription.js";
 import ProductButtons from "./ProductButtons";
-import "./ProductComponent.css";
+import "../SourceComponent.css";
 
 function ProductComponent() {
   return (

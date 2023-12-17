@@ -1,9 +1,9 @@
 import React from "react";
 
-import SourceDescription from "./SourceDescription.js";
-import "./ProductComponent.css";
+import SourceDescription from "../commonComponents/SourceDescription.js";
+import "../SourceComponent.css";
 import ShopingItemButtons from "./ShoppingItemButtons.js";
-import { updateShoppingItem } from "../services/cart.js";
+import { updateShoppingItem } from "../../services/cart.js";
 function ShoppingItemComponent() {
   return (
     <div className="product__properties">

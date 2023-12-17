@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { MdAddBox } from "react-icons/md";
-import { addShoppingItem } from "../services/cart";
-import { APP_STATES } from "./NavigationBar";
-import { AppContext } from "../contexts/appContext";
-import { serverResponseTranslator } from "../functions";
+import { addShoppingItem } from "../../services/cart";
+import { APP_STATES } from "../commonComponents/NavigationBar";
+import { AppContext } from "../../contexts/appContext";
+import { serverResponseTranslator } from "../../auxilaryFunctions";
 const AddItemToShoppings = () => {
   const [shoppingItem, setShoppingItem] = useState({ name: "", quantity: "" });
   const session_code = localStorage.getItem("session_code");

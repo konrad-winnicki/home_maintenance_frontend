@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { BsFillArrowUpSquareFill } from "react-icons/bs";
-import { updateProduct } from "../services/store";
-import { APP_STATES } from "./NavigationBar";
-import { SourceContext } from "../contexts/sourceContext";
-import { AppContext } from "../contexts/appContext";
+import { updateProduct } from "../../services/store";
+import { APP_STATES } from "../commonComponents/NavigationBar";
+import { SourceContext } from "../../contexts/sourceContext";
+import { AppContext } from "../../contexts/appContext";
 const IncreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(SourceContext);
@@ -18,11 +18,12 @@ const IncreaseButton = () => {
       },
     };
     console.log(product_data.updatedValues);
-    appContext.stateChanger({appState:APP_STATES.AWAITING_API_RESPONSE});
-    updateProduct(product_data, session_code).then(()=>{
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
-    }).catch((error) => console.log(error));
-
+    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    updateProduct(product_data, session_code)
+      .then(() => {
+        appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
