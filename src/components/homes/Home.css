@@ -1,0 +1,11 @@
+.name {
+  margin-left: 2%;
+  margin-bottom: 2px;
+  border: 1px dotted greenyellow;
+  text-align: center;
+}
+
+.button {
+  height: 100%;
+  width: 75%;
+}

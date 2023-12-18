@@ -1,4 +1,5 @@
 const backendUrl = "http://localhost:5000/";
+const homesEndpoint = backendUrl + "homes";
 
 function headers(sessionCode) {
   return {
@@ -8,7 +9,7 @@ function headers(sessionCode) {
 }
 
 export function getHomes(sessionCode) {
-  let promise = fetch(backendUrl + "homes", {
+  let promise = fetch(homesEndpoint, {
     headers: headers(sessionCode),
     method: "GET",
   })
@@ -25,4 +26,12 @@ export function getHomes(sessionCode) {
       return "Error";
     });
   return promise;
+}
+
+export async function addHome(home, sessionCode) {
+  return fetch(homesEndpoint, {
+    headers: headers(sessionCode),
+    method: "POST",
+    body: JSON.stringify(home),
+  })
 }

@@ -1,5 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getHomes } from "../../services/home";
+import Home from "./Home";
 
 export default function HomeList() {
   const sessionCode = localStorage.getItem("session_code");
@@ -16,10 +17,10 @@ export default function HomeList() {
   }, [sessionCode]);
 
   return (
-    <>
-      {homes.map((home) => (
-        <li key={home.id}>{home.name}</li>
+    <div className="mt-4 mb-8">
+      {homes.map((h) => (
+        <Home key={h.id} home={h} />
       ))}
-    </>
+    </div>
   );
 }
