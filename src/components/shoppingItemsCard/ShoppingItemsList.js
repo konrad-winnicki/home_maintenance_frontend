@@ -3,6 +3,7 @@ import { ResourceContext } from "../../contexts/ResourceContext";
 import ShoppingItemComponent from "./ShoppingItemComponent";
 
 const ShoppingItemsList = (props) => {
+  console.log('shoping item list',props.shoppingItemsList)
   return (
     <div>
       {props.shoppingItemsList.map((shoppingItem) => (

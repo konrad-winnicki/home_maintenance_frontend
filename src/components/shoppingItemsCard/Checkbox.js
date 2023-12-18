@@ -38,12 +38,14 @@ export default function CheckBox() {
   }, [appContext, shoppingItemContext, isBought, session_code]);
 
   useEffect(() => {
+    console.log('checkbox', isBought, shoppingItemContext.resource.is_bought)
     if (initialRender.current === isBought) {
       return;
     }
     updateItem();
   }, [isBought, updateItem]);
 
+  
   return (
     <div>
       <input
@@ -51,7 +53,7 @@ export default function CheckBox() {
         style={{ width: "25px", height: "25px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"
-        defaultChecked={isBought}
+        checked={shoppingItemContext.resource.is_bought}
         id="flexCheckIndeterminate"
         onChange={handleChange}
       ></input>
