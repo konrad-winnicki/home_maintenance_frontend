@@ -1,8 +1,11 @@
 {
-  "appId": "mafalda.kitchen",
-  "appName": "Mafalda kitchen",
+  "appId": "mafaSoft.homeMaintenance",
+  "appName": "homeMaintenance",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
-  "cordova": {}
+  "cordova": {},
+  "server": {
+    "androidScheme": "http"
+  }
 }

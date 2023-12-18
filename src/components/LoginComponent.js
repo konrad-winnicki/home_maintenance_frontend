@@ -27,7 +27,7 @@ class LoginComponent extends React.Component {
       response_type: "code",
       prompt: "consent",
       scope: [
-        "https://www.googleapis.com/auth/userinfo.profile",
+        //"https://www.googleapis.com/auth/userinfo.profile",
         "https://www.googleapis.com/auth/userinfo.email",
       ].join(" "),
     };

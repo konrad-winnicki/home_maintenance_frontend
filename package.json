@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/eslint-parser": "^7.21.3",
-    "@capacitor/android": "4.6.2",
+    "@capacitor/android": "^4.6.2",
     "@capacitor/core": "^4.6.2",
     "@ericblade/quagga2": "^1.8.2",
     "@testing-library/jest-dom": "^5.16.5",
