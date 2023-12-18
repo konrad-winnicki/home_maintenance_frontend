@@ -1,12 +1,14 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import  WrappedLoginComponent from "./components/LoginComponent";
+import WrappedLoginComponent from "./components/LoginComponent";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/authorizationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
 import { WrappedShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
+import HomesCard from "./components/homes/HomesCard";
+import { HomeContextProvider } from "./contexts/homeContext";
 import Homes from "./components/homes/Homes";
 import { SocketContextProvider } from "./contexts/socketContext";
 
@@ -17,7 +19,7 @@ export const AppRoutes = () => (
     <Route element={<ProtectedRoute />}>
       <Route path="/products/" element={<WrappedProductsCard />} />
       <Route path="/shoppingItems/" element={<WrappedShoppingItemsCard />} />
-      <Route path="/homes" element={<Homes/>} />
+      <Route path="/homes" element={<HomesCard />} />
     </Route>
   </Routes>
 );
@@ -27,10 +29,12 @@ const productsComponent = createRoot(container);
 productsComponent.render(
     <Router>
       <AuthContextProvider>
-        <SocketContextProvider>
+          <SocketContextProvider>
+        <HomeContextProvider>
           <AppRoutes />
+        </HomeContextProvider>
         </SocketContextProvider>
-        
+
       </AuthContextProvider>
     </Router>
 );

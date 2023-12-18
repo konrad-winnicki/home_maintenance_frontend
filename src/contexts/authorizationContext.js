@@ -1,26 +1,20 @@
-import {createContext, useEffect, useState } from "react";
-
-
+import { createContext, useEffect, useState } from "react";
 
 export const AuthorizationContext = createContext({
   isLoggedIn: false,
   setLoggedIn: () => {},
 });
 
-
-
 export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
-  useEffect(()=>{
-    console.log('useeffect', isLoggedIn)
-  },[isLoggedIn])
+  useEffect(() => {
+    console.log("useeffect", isLoggedIn);
+  }, [isLoggedIn]);
 
   return (
     <div>
-      <AuthorizationContext.Provider
-        value={{ isLoggedIn, setLoggedIn }}
-      >
+      <AuthorizationContext.Provider value={{ isLoggedIn, setLoggedIn }}>
         {children}
       </AuthorizationContext.Provider>
     </div>

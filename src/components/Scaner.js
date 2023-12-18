@@ -14,33 +14,33 @@ class Scaner extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    if (this.props.app_state == "Stop scaning") {
+    if (this.props.app_state === "Stop scaning") {
       Quagga.offDetected();
       Quagga.stop();
       this.props.state_changer({ app_state: "default", product_id: null });
       let comments = document.querySelector("#videoStream");
       comments.innerHTML = "";
     }
-    if (this.props.app_state == "default") {
+    if (this.props.app_state === "default") {
       this.setState((ignored) => {
         return { code: null };
       });
     }
-    if (this.props.app_state == "Scaning barcode" && this.state.code == null) {
+    if (this.props.app_state === "Scaning barcode" && this.state.code == null) {
       this.scan_barcode(this.set_code);
     }
 
-    if (this.props.app_state == "Sending to server") {
+    if (this.props.app_state === "Sending to server") {
       this.send_to_server_barcode(this.state.code);
     }
-    if (this.props.app_state == "Canceled") {
+    if (this.props.app_state === "Canceled") {
       this.props.state_changer({ app_state: "default", product_id: null });
       this.setState((ignored) => {
         return { code: null };
       });
     }
 
-    if (this.props.app_state == "Scaning barcode" && this.state.code != null) {
+    if (this.props.app_state === "Scaning barcode" && this.state.code != null) {
       this.props.state_changer({
         app_state: "Sending to server",
         product_id: null,
@@ -119,12 +119,12 @@ class Scaner extends React.PureComponent {
         this.props.notifications(message, "success");
       })
       .catch((Error) => {
-        if (Error == 409) {
+        if (Error === 409) {
           let product = prompt(
             "Product with this name already exists. You have to set different name for importing barcode",
             ""
           );
-          if (product == "" || product == null) {
+          if (product === "" || product == null) {
             this.props.state_changer({
               app_state: "Canceled",
               product_id: null,
@@ -147,7 +147,7 @@ class Scaner extends React.PureComponent {
               this.props.notifications(message, "success");
             })
             .catch((Error) => {
-              if (Error == 409) {
+              if (Error === 409) {
                 this.props.state_changer({
                   app_state: "Canceled",
                   product_id: null,
@@ -162,9 +162,9 @@ class Scaner extends React.PureComponent {
             });
         }
 
-        if (Error == 404) {
+        if (Error === 404) {
           let product = prompt("Product name", "");
-          if (product == "" || product == null) {
+          if (product === "" || product == null) {
             this.props.state_changer({
               app_state: "Canceled",
               product_id: null,
@@ -187,12 +187,12 @@ class Scaner extends React.PureComponent {
               this.props.notifications(message, "success");
             })
             .catch((Error) => {
-              if (Error == 409) {
+              if (Error === 409) {
                 let product = prompt(
                   "Product already exists. Try again with different name",
                   ""
                 );
-                if (product == "" || product == null) {
+                if (product === "" || product == null) {
                   this.props.state_changer({
                     app_state: "Canceled",
                     product_id: null,
@@ -213,7 +213,7 @@ class Scaner extends React.PureComponent {
                     });
                   })
                   .catch((Error) => {
-                    if (Error == 409) {
+                    if (Error === 409) {
                       this.props.state_changer({
                         app_state: "Canceled",
                         product_id: null,
@@ -236,14 +236,14 @@ class Scaner extends React.PureComponent {
   render() {
     let button_name;
     let state = "Scaning barcode";
-    if (this.props.app_state != "Sending to server") {
+    if (this.props.app_state !== "Sending to server") {
       button_name = "Scan";
     }
-    if (this.props.app_state == "Scaning barcode") {
+    if (this.props.app_state === "Scaning barcode") {
       button_name = "Stop scaning";
       state = "Stop scaning";
     }
-    if (this.props.app_state == "Sending to server") {
+    if (this.props.app_state === "Sending to server") {
       button_name = "Stop scaning";
     }
     //if (this.props.app_state == "Stop scaning" || this.props.app_state == "default") {button_name = "Scaning barcode"}
@@ -255,7 +255,7 @@ class Scaner extends React.PureComponent {
         className="btn btn-warning btn-sm"
         disabled={
           this.props.app_state !== "default" &&
-          this.props.app_state != "Scaning barcode"
+          this.props.app_state !== "Scaning barcode"
             ? true
             : false
         }
