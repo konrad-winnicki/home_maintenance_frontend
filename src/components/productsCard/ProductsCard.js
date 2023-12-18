@@ -11,6 +11,7 @@ import "../CardHeader.css";
 import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
+import { SocketContext } from "../../contexts/socketContext";
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -26,6 +27,7 @@ class ProductsCard extends React.PureComponent {
     this.setState(new_state);
   }
   componentDidMount() {
+    this.props.socketContext.socket?.disconnect();
     this.getProducts();
   }
 
@@ -72,26 +74,26 @@ class ProductsCard extends React.PureComponent {
             }}
           >
             <div
-             className="flex-grow-1 mt-5 mb-8"
-             style={{
-               overflow: "auto",
-               paddingBottom: "1%",
-               marginBottom: "14%",
-             }} 
+              className="flex-grow-1 mt-5 mb-8"
+              style={{
+                overflow: "auto",
+                paddingBottom: "1%",
+                marginBottom: "14%",
+              }}
             >
               <div className="header mt-10">Products at home</div>
               <ProductList productList={this.state.productList} />
             </div>
 
             <div className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary d-flex justify-content-between fixed-bottom">
-                <AddProductButton></AddProductButton>
-                <AddFinishedProductsToCart></AddFinishedProductsToCart>
-                <Scaner
-                  notifications={this.notifications}
-                  app_state={this.state.app_state}
-                  state_changer={this.stateChanger}
-                  server_response_service={serverResponseTranslator}
-                ></Scaner>
+              <AddProductButton></AddProductButton>
+              <AddFinishedProductsToCart></AddFinishedProductsToCart>
+              <Scaner
+                notifications={this.notifications}
+                app_state={this.state.app_state}
+                state_changer={this.stateChanger}
+                server_response_service={serverResponseTranslator}
+              ></Scaner>
             </div>
           </AppContext.Provider>
         </div>
@@ -104,7 +106,14 @@ class ProductsCard extends React.PureComponent {
 
 export function WrappedProductsCard() {
   const appContext = useContext(AppContext);
-  return <ProductsCard appContext={appContext}></ProductsCard>;
+  const socketContext = useContext(SocketContext);
+
+  return (
+    <ProductsCard
+      appContext={appContext}
+      socketContext={socketContext}
+    ></ProductsCard>
+  );
 }
 
 class VideoAcceptor extends React.Component {

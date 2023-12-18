@@ -4,6 +4,7 @@ import { addShoppingItem } from "../../services/cart";
 import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { SocketContext } from "../../contexts/socketContext";
 const AddItemToShoppings = () => {
   const [shoppingItem, setShoppingItem] = useState({ name: "", quantity: "" });
   const session_code = localStorage.getItem("session_code");
@@ -24,6 +25,7 @@ const AddItemToShoppings = () => {
       name: shoppingItem.name,
       quantity: shoppingItem.quantity,
     };
+
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
     const response = addShoppingItem(product_data, session_code);
     const messages = {
@@ -32,7 +34,7 @@ const AddItemToShoppings = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
       setShoppingItem({ name: "", quantity: "" });
     });
   };

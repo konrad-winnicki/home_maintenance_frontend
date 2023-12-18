@@ -9,6 +9,8 @@ import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
 import { WrappedShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
 import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
+import Homes from "./components/homes/Homes";
+import { SocketContextProvider } from "./contexts/socketContext";
 
 export const AppRoutes = () => (
   <Routes>
@@ -25,13 +27,14 @@ export const AppRoutes = () => (
 const container = document.getElementById("root");
 const productsComponent = createRoot(container);
 productsComponent.render(
-  <StrictMode>
     <Router>
       <AuthContextProvider>
+          <SocketContextProvider>
         <HomeContextProvider>
           <AppRoutes />
         </HomeContextProvider>
+        </SocketContextProvider>
+
       </AuthContextProvider>
     </Router>
-  </StrictMode>
 );

@@ -11,6 +11,8 @@ import ShoppingItemsList from "./ShoppingItemsList";
 import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { SocketContext } from "../../contexts/socketContext";
+
 class ShoppingItemsCard extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -26,13 +28,22 @@ class ShoppingItemsCard extends React.PureComponent {
     this.setState(new_state);
   }
   componentDidMount() {
-    this.ProductListChanger();
-  }
+    window.addEventListener("beforeunload", () => {
+      this.props.socketContext.socket?.disconnect();
+    });
 
-  componentDidUpdate() {
-    if (this.state.appState === APP_STATES.REFRESHING) {
+    const socket = this.props.socketContext.createSocket(
+      this.session_code,
+      "b9e3c6fc-bc97-4790-9f46-623ce14b25f1"
+    );
+
+    socket.connect();
+    this.props.socketContext.setSocket(socket);
+    socket?.on("updateShoppingItems", () => {
       this.ProductListChanger();
-    }
+    });
+
+    this.ProductListChanger();
   }
 
   ProductListChanger() {
@@ -52,8 +63,6 @@ class ShoppingItemsCard extends React.PureComponent {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      console.log(this.state.shoppingItemsList);
-
       this.stateChanger({ appState: APP_STATES.DEFAULT });
     });
   }
@@ -116,7 +125,14 @@ class ShoppingItemsCard extends React.PureComponent {
 
 export function WrappedShoppingItemsCard() {
   const appContext = useContext(AppContext);
-  return <ShoppingItemsCard appContext={appContext}></ShoppingItemsCard>;
+  const socketContext = useContext(SocketContext);
+
+  return (
+    <ShoppingItemsCard
+      appContext={appContext}
+      socketContext={socketContext}
+    ></ShoppingItemsCard>
+  );
 }
 
 export default ShoppingItemsCard;
