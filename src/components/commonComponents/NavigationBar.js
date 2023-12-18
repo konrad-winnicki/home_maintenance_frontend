@@ -3,13 +3,16 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { ImListNumbered } from "react-icons/im";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavigationBar = () => {
   const navigate = useNavigate();
   return (
     <React.Fragment>
       <nav className="navbar fixed-top bg-warning">
+        <div className="col text-end">
+          <Link to="/homes">My homes</Link>
+        </div>
         <div className="col text-end">
           <button
             className="btn btn-outline-success"
