@@ -12,6 +12,7 @@ import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { SocketContext } from "../../contexts/socketContext";
+import { HomeContext } from "../../contexts/homeContext";
 
 class ShoppingItemsCard extends React.PureComponent {
   constructor(props) {
@@ -32,9 +33,11 @@ class ShoppingItemsCard extends React.PureComponent {
       this.props.socketContext.socket?.disconnect();
     });
 
+    //const homeId = this.props.homeContext.home.id
     const socket = this.props.socketContext.createSocket(
       this.session_code,
-      "b9e3c6fc-bc97-4790-9f46-623ce14b25f1"
+      'b9e3c6fc-bc97-4790-9f46-623ce14b25f1'
+      //homeId
     );
 
     socket.connect();
@@ -47,8 +50,9 @@ class ShoppingItemsCard extends React.PureComponent {
   }
 
   ProductListChanger() {
+    
+    this.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
     const response = getShoppingItems(this.session_code);
-
     response
       .then((response) => {
         response.json().then((json) => {
@@ -87,7 +91,7 @@ class ShoppingItemsCard extends React.PureComponent {
                 marginBottom: "14%",
               }}
             >
-              <div className="header">Shopping list</div>
+              <div className="header">Shopping list in the {this.props.homeContext.home?.name}</div>
               <ShoppingItemsList
                 shoppingItemsList={this.state.shoppingItemsList}
               ></ShoppingItemsList>
@@ -126,11 +130,13 @@ class ShoppingItemsCard extends React.PureComponent {
 export function WrappedShoppingItemsCard() {
   const appContext = useContext(AppContext);
   const socketContext = useContext(SocketContext);
+  const homeContext = useContext(HomeContext)
 
   return (
     <ShoppingItemsCard
       appContext={appContext}
       socketContext={socketContext}
+      homeContext={homeContext}
     ></ShoppingItemsCard>
   );
 }

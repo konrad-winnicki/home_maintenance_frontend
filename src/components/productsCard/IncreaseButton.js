@@ -5,6 +5,8 @@ import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import "../ResourceButtons.css";
+
 const IncreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
@@ -30,7 +32,7 @@ const IncreaseButton = () => {
 
   return (
     <button
-      className="button_surrounding btn btn-primary btn-sm "
+      className="button_surrounding btn btn-primary btn-sm"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         onClickHandler();

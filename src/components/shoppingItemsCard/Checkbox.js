@@ -15,7 +15,11 @@ export default function CheckBox() {
   const initialRender = useRef(shoppingItemContext.resource.is_bought);
 
   const handleChange = () => {
+    console.log('change')
+
     setBought(!isBought);
+    //updateItem(!isBought);
+
   };
 
   const updateItem = useCallback(() => {
@@ -37,13 +41,13 @@ export default function CheckBox() {
     });
   }, [appContext, shoppingItemContext, isBought, session_code]);
 
+  
   useEffect(() => {
-    console.log('checkbox', isBought, shoppingItemContext.resource.is_bought)
     if (initialRender.current === isBought) {
       return;
     }
     updateItem();
-  }, [isBought, updateItem]);
+  }, [isBought,updateItem]);
 
   
   return (
@@ -55,7 +59,7 @@ export default function CheckBox() {
         type="checkbox"
         checked={shoppingItemContext.resource.is_bought}
         id="flexCheckIndeterminate"
-        onChange={handleChange}
+        onChange={()=>{handleChange()}}
       ></input>
     </div>
   );

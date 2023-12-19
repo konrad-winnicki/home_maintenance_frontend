@@ -4,6 +4,7 @@ import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
+import "../ResourceButtons.css";
 
 const DeleteButton = (props) => {
   const session_code = localStorage.getItem("session_code");

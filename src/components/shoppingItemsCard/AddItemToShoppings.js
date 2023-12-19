@@ -4,7 +4,6 @@ import { addShoppingItem } from "../../services/cart";
 import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { SocketContext } from "../../contexts/socketContext";
 const AddItemToShoppings = () => {
   const [shoppingItem, setShoppingItem] = useState({ name: "", quantity: "" });
   const session_code = localStorage.getItem("session_code");

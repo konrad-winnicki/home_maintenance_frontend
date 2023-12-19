@@ -1,24 +1,25 @@
 import React, { useContext } from "react";
-import { SiAddthis } from "react-icons/si";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
-import { addHome } from "../../services/home";
-
-const AddHomeButton = () => {
+import { joinToHome } from "../../services/home";
+const JoinHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
 
   const onClickHandler = async () => {
-    const name = ask_home_name();
-    if (!name) {
+    const homeId = askHomeId();
+    if (!homeId) {
       return;
     }
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = addHome({ name }, sessionCode);
+    
+    
+    const response = joinToHome(homeId, sessionCode);
     serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
     });
+    
   };
 
   return (
@@ -28,7 +29,7 @@ const AddHomeButton = () => {
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >
-        <SiAddthis /> Home
+        Join Home
       </button>
     </div>
   );
@@ -40,9 +41,9 @@ const messages = {
   unknown: "Unknown error",
 };
 
-function ask_home_name() {
-  const name = prompt("Indicate home name:");
-  return name === "" ? null : name;
+function askHomeId() {
+  const homeId = prompt("Indicate home Id:");
+  return homeId === "" ? null : homeId;
 }
 
-export default AddHomeButton;
+export default JoinHomeButton;

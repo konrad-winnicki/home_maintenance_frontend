@@ -21,6 +21,7 @@ export default function HomeList() {
       {homes.map((h) => (
         <Home key={h.id} home={h} />
       ))}
+
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import "../ResourceButtons.css";
 
 const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");

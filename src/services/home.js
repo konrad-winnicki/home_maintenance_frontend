@@ -1,4 +1,4 @@
-const backendUrl = "http://localhost:5000/";
+import { backendUrl } from "../config";
 const homesEndpoint = backendUrl + "homes";
 
 function headers(sessionCode) {
@@ -29,9 +29,17 @@ export function getHomes(sessionCode) {
 }
 
 export async function addHome(home, sessionCode) {
-  return fetch(homesEndpoint, {
+  return fetch(homesEndpoint , {
     headers: headers(sessionCode),
     method: "POST",
     body: JSON.stringify(home),
+  })
+}
+
+
+export async function joinToHome(homeId, sessionCode) {
+  return fetch(homesEndpoint +`/${homeId}/members`, {
+    headers: headers(sessionCode),
+    method: "POST",
   })
 }

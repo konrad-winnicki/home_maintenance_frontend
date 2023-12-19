@@ -12,6 +12,8 @@ import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import { SocketContext } from "../../contexts/socketContext";
+import { HomeContext } from "../../contexts/homeContext";
+
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -81,7 +83,8 @@ class ProductsCard extends React.PureComponent {
                 marginBottom: "14%",
               }}
             >
-              <div className="header mt-10">Products at home</div>
+
+              <div className="header mt-10">Products in the {this.props.homeContext.home?.name}</div>
               <ProductList productList={this.state.productList} />
             </div>
 
@@ -107,11 +110,13 @@ class ProductsCard extends React.PureComponent {
 export function WrappedProductsCard() {
   const appContext = useContext(AppContext);
   const socketContext = useContext(SocketContext);
+  const homeContext = useContext(HomeContext);
 
   return (
     <ProductsCard
       appContext={appContext}
       socketContext={socketContext}
+      homeContext={homeContext}
     ></ProductsCard>
   );
 }
