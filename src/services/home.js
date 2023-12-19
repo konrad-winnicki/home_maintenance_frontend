@@ -1,5 +1,7 @@
 import { backendUrl } from "../config";
 const homesEndpoint = backendUrl + "homes";
+const homeEndpoint = (homeId) => homesEndpoint + "/" + homeId;
+const homeMembersEndpoint = (homeId) => homeEndpoint(homeId) + "/members";
 
 function headers(sessionCode) {
   return {
@@ -36,20 +38,17 @@ export async function addHome(home, sessionCode) {
   });
 }
 
-export async function joinToHome(homeId, sessionCode) {
-  return fetch(homesEndpoint + `/${homeId}/members`, {
+export async function joinHome(homeId, sessionCode) {
+  return fetch(homeMembersEndpoint(homeId), {
     headers: headers(sessionCode),
     method: "POST",
   });
 }
 
-export function deleteUserFromHome(homeId, userId, authorization_code) {
+export function deleteUserFromHome(homeId, userId, sessionCode) {
   const endpointUrl = homesEndpoint + `/${homeId}/members/${userId}`;
   return fetch(endpointUrl, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authorization_code,
-    },
+    headers: headers(sessionCode),
     method: "DELETE",
   });
 }

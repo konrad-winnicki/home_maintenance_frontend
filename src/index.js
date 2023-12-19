@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React, { StrictMode } from "react"; // TODO: enable StrictMode
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import WrappedLoginComponent from "./components/LoginComponent";
@@ -9,7 +9,6 @@ import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
 import { WrappedShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
 import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
-//import Homes from "./components/homes/Homes";
 import { SocketContextProvider } from "./contexts/socketContext";
 
 export const AppRoutes = () => (
