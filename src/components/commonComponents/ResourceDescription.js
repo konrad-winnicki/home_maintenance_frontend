@@ -6,11 +6,14 @@ import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
+import { HomeContext } from "../../contexts/homeContext";
 
 function ResourceDescription(props) {
   const session_code = localStorage.getItem("session_code");
   const resourceContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
+  const homeContext = useContext(HomeContext);
+  const homeId = homeContext.home.id;
 
   const onClickNameHandler = () => {
     const new_name = ask_new_name();
@@ -27,7 +30,7 @@ function ResourceDescription(props) {
     };
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
 
-    let response = props.updateMethod(product_data, session_code);
+    let response = props.updateMethod(product_data, homeId, session_code);
     const messages = {
       success: "Name changed",
       unknown: "Unknown error",
@@ -52,7 +55,7 @@ function ResourceDescription(props) {
     };
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
 
-    const response = props.updateMethod(product_data, session_code);
+    const response = props.updateMethod(product_data, homeId, session_code);
 
     const messages = {
       success: "Quantity changed",

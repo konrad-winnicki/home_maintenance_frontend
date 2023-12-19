@@ -29,17 +29,27 @@ export function getHomes(sessionCode) {
 }
 
 export async function addHome(home, sessionCode) {
-  return fetch(homesEndpoint , {
+  return fetch(homesEndpoint, {
     headers: headers(sessionCode),
     method: "POST",
     body: JSON.stringify(home),
-  })
+  });
 }
 
-
 export async function joinToHome(homeId, sessionCode) {
-  return fetch(homesEndpoint +`/${homeId}/members`, {
+  return fetch(homesEndpoint + `/${homeId}/members`, {
     headers: headers(sessionCode),
     method: "POST",
-  })
+  });
+}
+
+export function deleteUserFromHome(homeId, userId, authorization_code) {
+  const endpointUrl = homesEndpoint + `/${homeId}/members/${userId}`;
+  return fetch(endpointUrl, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization_code,
+    },
+    method: "DELETE",
+  });
 }

@@ -5,11 +5,15 @@ import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import "../ResourceButtons.css";
+import { HomeContext } from "../../contexts/homeContext";
 
 const DeleteButton = (props) => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
+  const homeContext = useContext(HomeContext);
+  const homeId = homeContext.home.id;
+
   const onClickHandler = () => {
     const confirmation = window.confirm("Are you sure?");
     if (!confirmation) {
@@ -17,7 +21,7 @@ const DeleteButton = (props) => {
     }
     const productId = productContext.resource.product_id;
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = props.deleteMethod(productId, session_code);
+    const response = props.deleteMethod(productId, homeId, session_code);
 
     const messages = {
       success: "Product deleted",

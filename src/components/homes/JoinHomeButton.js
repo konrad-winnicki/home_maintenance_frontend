@@ -13,9 +13,12 @@ const JoinHomeButton = () => {
       return;
     }
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    
-    
     const response = joinToHome(homeId, sessionCode);
+    const messages = {
+      success: "Joined new home",
+      duplicated: "You belongs to this home",
+      unknown: "Unknown error",
+    };
     serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
     });
@@ -35,11 +38,7 @@ const JoinHomeButton = () => {
   );
 };
 
-const messages = {
-  success: "Home added",
-  duplicated: "Home already exists",
-  unknown: "Unknown error",
-};
+
 
 function askHomeId() {
   const homeId = prompt("Indicate home Id:");

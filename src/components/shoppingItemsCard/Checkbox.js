@@ -4,11 +4,14 @@ import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { HomeContext } from "../../contexts/homeContext";
 
 export default function CheckBox() {
   const session_code = localStorage.getItem("session_code");
   const shoppingItemContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
+  const homeContext = useContext(HomeContext)
+  const homeId = homeContext.home.id
   const [isBought, setBought] = useState(
     shoppingItemContext.resource.is_bought
   );
@@ -31,7 +34,7 @@ export default function CheckBox() {
       },
     };
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = updateShoppingItem(shoppingItem, session_code);
+    const response = updateShoppingItem(shoppingItem, homeId, session_code);
     const messages = {
       unknown: "Unknown error",
     };
@@ -39,7 +42,7 @@ export default function CheckBox() {
       initialRender.current = isBought;
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
     });
-  }, [appContext, shoppingItemContext, isBought, session_code]);
+  }, [appContext, shoppingItemContext, isBought, homeId, session_code]);
 
   
   useEffect(() => {

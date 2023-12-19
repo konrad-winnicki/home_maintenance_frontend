@@ -20,6 +20,7 @@ class ProductsCard extends React.PureComponent {
     super();
     this.stateChanger = this.stateChanger.bind(this);
     this.session_code = localStorage.getItem("session_code");
+  
     this.state = {
       productList: [],
       appState: APP_STATES.DEFAULT,
@@ -29,7 +30,7 @@ class ProductsCard extends React.PureComponent {
     this.setState(new_state);
   }
   componentDidMount() {
-    this.props.socketContext.socket?.disconnect();
+   this.props.socketContext.socket?.disconnect();
     this.getProducts();
   }
 
@@ -40,7 +41,9 @@ class ProductsCard extends React.PureComponent {
   }
 
   getProducts() {
-    const response = getProducts(this.session_code);
+    const homeId = this.props.homeContext.home.id
+
+    const response = getProducts(homeId,this.session_code);
     response
       .then((response) => {
         response.json().then((json) => {

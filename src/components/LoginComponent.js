@@ -52,7 +52,7 @@ class LoginComponent extends React.Component {
 
   componentDidUpdate() {
     const navigate = this.props.navigate;
-    navigate("/products");
+    navigate("/homes");
   }
 
   render() {

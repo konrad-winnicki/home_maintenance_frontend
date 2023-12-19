@@ -33,11 +33,10 @@ class ShoppingItemsCard extends React.PureComponent {
       this.props.socketContext.socket?.disconnect();
     });
 
-    //const homeId = this.props.homeContext.home.id
+    const homeId = this.props.homeContext.home.id
     const socket = this.props.socketContext.createSocket(
       this.session_code,
-      'b9e3c6fc-bc97-4790-9f46-623ce14b25f1'
-      //homeId
+      homeId
     );
 
     socket.connect();
@@ -50,9 +49,10 @@ class ShoppingItemsCard extends React.PureComponent {
   }
 
   ProductListChanger() {
-    
+    const homeId = this.props.homeContext.home.id
+
     this.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = getShoppingItems(this.session_code);
+    const response = getShoppingItems(homeId, this.session_code);
     response
       .then((response) => {
         response.json().then((json) => {

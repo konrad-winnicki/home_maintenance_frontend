@@ -16,6 +16,13 @@ const AddHomeButton = () => {
     }
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
     const response = addHome({ name }, sessionCode);
+
+    const messages = {
+      success: "Home added",
+      duplicated: "Home already exists",
+      unknown: "Unknown error",
+    };
+    
     serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
     });
@@ -34,11 +41,7 @@ const AddHomeButton = () => {
   );
 };
 
-const messages = {
-  success: "Home added",
-  duplicated: "Home already exists",
-  unknown: "Unknown error",
-};
+
 
 function ask_home_name() {
   const name = prompt("Indicate home name:");

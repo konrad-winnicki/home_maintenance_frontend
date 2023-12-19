@@ -1,9 +1,9 @@
 import { backendUrl } from "../config";
-const productEndpoint = backendUrl + "store/products/";
-const addShoppingItemsToStoreEndpoint = backendUrl + "store/products/delivery/";
+const productEndpoint = backendUrl + `homes/`;
+//const addShoppingItemsToStoreEndpoint = backendUrl + "store/products/delivery/";
 
-export function addShoppingItemsToStore(authorization_code) {
-  return fetch(addShoppingItemsToStoreEndpoint, {
+export function addShoppingItemsToStore(homeId, authorization_code) {
+  return fetch(productEndpoint + `${homeId}/store/products/delivery/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -12,8 +12,8 @@ export function addShoppingItemsToStore(authorization_code) {
   })
 }
 
-export async function addProduct(product_data, authorization_code) {
-  return fetch(productEndpoint, {
+export async function addProduct(product_data, homeId, authorization_code) {
+  return fetch(productEndpoint + `${homeId}/store/products/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -23,8 +23,8 @@ export async function addProduct(product_data, authorization_code) {
   })
 }
 
-export function deleteProduct(productId, authorization_code) {
-  const endpointUrl = productEndpoint + productId;
+export function deleteProduct(productId, homeId, authorization_code) {
+  const endpointUrl = productEndpoint + `${homeId}/store/products/${productId}`;
   return fetch(endpointUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -34,8 +34,8 @@ export function deleteProduct(productId, authorization_code) {
   });
 }
 
-export function updateProduct(product_data, authorization_code) {
-  const endpointUrl = productEndpoint + product_data.id;
+export function updateProduct(product_data, homeId, authorization_code) {
+  const endpointUrl = productEndpoint + `${homeId}/store/products/${product_data.id}`
   return fetch(endpointUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -46,8 +46,8 @@ export function updateProduct(product_data, authorization_code) {
   });
 }
 
-export function getProducts(authorization_code) {
-  return fetch(backendUrl + "store/products/", {
+export function getProducts(homeId,authorization_code) {
+  return fetch(backendUrl + `homes/${homeId}/store/products/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,

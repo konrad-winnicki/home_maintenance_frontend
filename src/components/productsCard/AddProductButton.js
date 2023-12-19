@@ -5,11 +5,13 @@ import { addProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
+import { HomeContext } from "../../contexts/homeContext";
 
 const AddProductButton = () => {
   const session_code = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
-
+  const homeContext = useContext(HomeContext);
+  const homeId = homeContext.home.id;
   const onClickHandler = async () => {
     let product_name = ask_product_name();
     let product_data = {
@@ -20,7 +22,7 @@ const AddProductButton = () => {
       return;
     }
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = addProduct(product_data, session_code);
+    const response = addProduct(product_data, homeId, session_code);
     /*
    .then((response) => {
         const messages = {

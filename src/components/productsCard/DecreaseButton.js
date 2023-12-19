@@ -7,11 +7,14 @@ import { ResourceContext } from "../../contexts/ResourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
+import { HomeContext } from "../../contexts/homeContext";
 
 const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
+  const homeContext = useContext(HomeContext)
+  const homeId = homeContext.home.id
   const onClickHandler = () => {
     const product_data = {
       id: productContext.resource.product_id,
@@ -21,7 +24,7 @@ const DecreaseButton = () => {
       },
     };
     appContext.stateChanger({ app_state: APP_STATES.AWAITING_API_RESPONSE });
-    const response = updateProduct(product_data, session_code);
+    const response = updateProduct(product_data, homeId, session_code);
 
     const messages = {
       unknown: "Unknown error",

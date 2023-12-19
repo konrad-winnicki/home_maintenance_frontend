@@ -1,9 +1,9 @@
 import { backendUrl } from "../config";
-const addFinishedProductsEndpoint = backendUrl + "cart/items/shoppinglist";
-const shoppingItemsEndpoint = backendUrl + "cart/items/";
+const addFinishedProductsEndpoint = backendUrl + "homes/";
+const shoppingItemsEndpoint = backendUrl + "homes/";
 
-export function addShoppingItem(shoppingItem, authorization_code) {
-  return fetch(shoppingItemsEndpoint, {
+export function addShoppingItem(shoppingItem, homeId, authorization_code) {
+  return fetch(shoppingItemsEndpoint + `${homeId}/cart/items/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -14,8 +14,8 @@ export function addShoppingItem(shoppingItem, authorization_code) {
     
 }
 
-export function getShoppingItems(authorization_code) {
-  return fetch(shoppingItemsEndpoint, {
+export function getShoppingItems(homeId, authorization_code) {
+  return fetch(shoppingItemsEndpoint + `${homeId}/cart/items/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -24,8 +24,8 @@ export function getShoppingItems(authorization_code) {
   })
 }
 
-export function updateShoppingItem(product_data, authorization_code) {
-  const endpointUrl = shoppingItemsEndpoint + product_data.id;
+export function updateShoppingItem(product_data, homeId, authorization_code) {
+  const endpointUrl = shoppingItemsEndpoint +`${homeId}/cart/items/${product_data.id}` ;
   return fetch(endpointUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -36,8 +36,8 @@ export function updateShoppingItem(product_data, authorization_code) {
   });
 }
 
-export function deleteShoppingItem(shoppingItemId, authorization_code) {
-  const endpointUrl = shoppingItemsEndpoint + shoppingItemId;
+export function deleteShoppingItem(shoppingItemId, homeId, authorization_code) {
+  const endpointUrl = shoppingItemsEndpoint + `${homeId}/cart/items/${shoppingItemId}`;
   return fetch(endpointUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -47,8 +47,8 @@ export function deleteShoppingItem(shoppingItemId, authorization_code) {
   });
 }
 
-export function addFinishedProductsToShoppingList(authorization_code) {
-  return fetch(addFinishedProductsEndpoint, {
+export function addFinishedProductsToShoppingList(homeId, authorization_code) {
+  return fetch(shoppingItemsEndpoint + `${homeId}/cart/items/shoppinglist`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,

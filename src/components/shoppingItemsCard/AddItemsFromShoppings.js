@@ -3,13 +3,17 @@ import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { addShoppingItemsToStore } from "../../services/store";
+import { HomeContext } from "../../contexts/homeContext";
 
 const AddItemsFromShopings = () => {
   const session_code = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
+
+  const homeContext = useContext(HomeContext)
+  const homeId = homeContext.home.id
   const addShoppings = () => {
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const result = addShoppingItemsToStore(session_code);
+    const result = addShoppingItemsToStore(homeId, session_code);
     const messages = {
       success: "Shopping items transfered",
       unknown: "Unknown error",
