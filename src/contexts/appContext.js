@@ -1,24 +1,25 @@
 import { createContext } from "react";
+import { APP_STATES } from "../applicationStates";
 export const AppContext = createContext({
-  appState: "DEFAULT",
+  appState: APP_STATES.DEFAULT,
   stateChanger: () => {},
 });
 
 /*
-export const ProductContextProvider = ({ children }) => {
+export const AppContextProvider = ({ children }) => {
   //const [isLoggedIn, setLoggedIn] = useState(false);
     const product = this.props.product
   
   return (
     <div>
-      <ProductContext.Provider
-        value={{  }}
+      <AppContext.Provider
+        value={children.props}
       >
         {children}
-      </ProductContext.Provider>
+      </AppContext.Provider>
     </div>
   );
 };
 
-
 */
+

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { FaTrashRestoreAlt } from "react-icons/fa";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { ResourceContext } from "../../contexts/ResourceContext";
+import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import "../ResourceButtons.css";

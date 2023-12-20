@@ -3,7 +3,7 @@ import { BsFillArrowDownSquareFill } from "react-icons/bs";
 import { updateProduct } from "../../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { APP_STATES } from "../../applicationStates";
-import { ResourceContext } from "../../contexts/ResourceContext";
+import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
@@ -13,8 +13,8 @@ const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
-  const homeContext = useContext(HomeContext)
-  const homeId = homeContext.home.id
+  const homeContext = useContext(HomeContext);
+  const homeId = homeContext.home.id;
   const onClickHandler = () => {
     const product_data = {
       id: productContext.resource.product_id,

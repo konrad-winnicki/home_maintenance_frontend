@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import { updateShoppingItem } from "../../services/cart";
-import { ResourceContext } from "../../contexts/ResourceContext";
+import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
@@ -10,19 +10,18 @@ export default function CheckBox() {
   const session_code = localStorage.getItem("session_code");
   const shoppingItemContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
-  const homeContext = useContext(HomeContext)
-  const homeId = homeContext.home.id
+  const homeContext = useContext(HomeContext);
+  const homeId = homeContext.home.id;
   const [isBought, setBought] = useState(
     shoppingItemContext.resource.is_bought
   );
   const initialRender = useRef(shoppingItemContext.resource.is_bought);
 
   const handleChange = () => {
-    console.log('change')
+    console.log("change");
 
     setBought(!isBought);
     //updateItem(!isBought);
-
   };
 
   const updateItem = useCallback(() => {
@@ -44,15 +43,13 @@ export default function CheckBox() {
     });
   }, [appContext, shoppingItemContext, isBought, homeId, session_code]);
 
-  
   useEffect(() => {
     if (initialRender.current === isBought) {
       return;
     }
     updateItem();
-  }, [isBought,updateItem]);
+  }, [isBought, updateItem]);
 
-  
   return (
     <div>
       <input
@@ -62,7 +59,9 @@ export default function CheckBox() {
         type="checkbox"
         checked={shoppingItemContext.resource.is_bought}
         id="flexCheckIndeterminate"
-        onChange={()=>{handleChange()}}
+        onChange={() => {
+          handleChange();
+        }}
       ></input>
     </div>
   );

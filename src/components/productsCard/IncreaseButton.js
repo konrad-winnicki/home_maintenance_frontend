@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { BsFillArrowUpSquareFill } from "react-icons/bs";
 import { updateProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
-import { ResourceContext } from "../../contexts/ResourceContext";
+import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
@@ -12,8 +12,8 @@ const IncreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
-  const homeContext = useContext(HomeContext)
-  const homeId = homeContext.home.id
+  const homeContext = useContext(HomeContext);
+  const homeId = homeContext.home.id;
   const onClickHandler = () => {
     const product_data = {
       id: productContext.resource.product_id,
@@ -23,7 +23,7 @@ const IncreaseButton = () => {
       },
     };
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = updateProduct(product_data,homeId, session_code);
+    const response = updateProduct(product_data, homeId, session_code);
     const messages = {
       unknown: "Unknown error",
     };
