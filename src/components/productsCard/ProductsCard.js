@@ -10,7 +10,7 @@ import styles from "../../my-style.module.css";
 import "../CardHeader.css";
 import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
 
@@ -72,12 +72,7 @@ class ProductsCard extends React.PureComponent {
           <div className="row position-realtive">
             <VideoAcceptor />
           </div>
-          <AppContext.Provider
-            value={{
-              appState: this.state.appState,
-              stateChanger: this.stateChanger,
-            }}
-          >
+          
             <div
               className="flex-grow-1 mt-5 mb-8"
               style={{
@@ -101,7 +96,6 @@ class ProductsCard extends React.PureComponent {
                 server_response_service={serverResponseTranslator}
               ></Scaner>
             </div>
-          </AppContext.Provider>
         </div>
       </div>
     );
@@ -111,7 +105,7 @@ class ProductsCard extends React.PureComponent {
 }
 
 export function WrappedProductsCard() {
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
   const socketContext = useContext(SocketContext);
   const homeContext = useContext(HomeContext);
 

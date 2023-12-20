@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { joinToHome } from "../../services/home";
 const JoinHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
 
   const onClickHandler = async () => {
     const homeId = askHomeId();
     if (!homeId) {
       return;
     }
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = joinToHome(homeId, sessionCode);
     const messages = {
       success: "Joined new home",
@@ -20,7 +20,7 @@ const JoinHomeButton = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
     
   };

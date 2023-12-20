@@ -2,19 +2,19 @@ import React, { useContext } from "react";
 import { SiAddthis } from "react-icons/si";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { addHome } from "../../services/home";
 
 const AddHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
 
   const onClickHandler = async () => {
     const name = ask_home_name();
     if (!name) {
       return;
     }
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = addHome({ name }, sessionCode);
 
     const messages = {
@@ -24,7 +24,7 @@ const AddHomeButton = () => {
     };
     
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
   };
 

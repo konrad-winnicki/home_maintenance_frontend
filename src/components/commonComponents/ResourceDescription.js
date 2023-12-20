@@ -4,14 +4,14 @@ import { ask_new_name } from "../../services/auxilaryFunctions";
 import { custom_quantity } from "../../services/auxilaryFunctions";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/resourceContext";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
 
 function ResourceDescription(props) {
   const session_code = localStorage.getItem("session_code");
   const resourceContext = useContext(ResourceContext);
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
 
@@ -28,7 +28,7 @@ function ResourceDescription(props) {
         name: new_name,
       },
     };
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     let response = props.updateMethod(product_data, homeId, session_code);
     const messages = {
@@ -37,7 +37,7 @@ function ResourceDescription(props) {
     };
 
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
   };
 
@@ -53,7 +53,7 @@ function ResourceDescription(props) {
         quantity: quantity,
       },
     };
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     const response = props.updateMethod(product_data, homeId, session_code);
 
@@ -62,7 +62,7 @@ function ResourceDescription(props) {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
   };
 

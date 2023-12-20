@@ -9,11 +9,11 @@ import { jwtDecode } from "jwt-decode";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { GiCancel } from "react-icons/gi";
 import { deleteUserFromHome } from "../../services/home";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 
 export default function Home({ home }) {
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
   const homeContext = useContext(HomeContext);
   const sessionCode = localStorage.getItem("session_code");
 
@@ -40,7 +40,7 @@ export default function Home({ home }) {
     }
     const decodedToken = jwtDecode(sessionCode);
     const userId = decodedToken.user_id
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
   
     const response = deleteUserFromHome(home.id, userId, sessionCode )
 
@@ -49,7 +49,7 @@ export default function Home({ home }) {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
     
   };

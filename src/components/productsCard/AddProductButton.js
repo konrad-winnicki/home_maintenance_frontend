@@ -4,12 +4,12 @@ import { ask_product_name } from "../../services/auxilaryFunctions";
 import { addProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { HomeContext } from "../../contexts/homeContext";
 
 const AddProductButton = () => {
   const session_code = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
   const onClickHandler = async () => {
@@ -21,7 +21,7 @@ const AddProductButton = () => {
     if (!product_name) {
       return;
     }
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = addProduct(product_data, homeId, session_code);
     /*
    .then((response) => {
@@ -47,7 +47,7 @@ const AddProductButton = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
   };
 

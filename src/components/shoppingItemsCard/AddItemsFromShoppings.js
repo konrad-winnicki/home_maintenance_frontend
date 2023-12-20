@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { APP_STATES } from "../../applicationStates";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { addShoppingItemsToStore } from "../../services/store";
 import { HomeContext } from "../../contexts/homeContext";
 
 const AddItemsFromShopings = () => {
   const session_code = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
 
   const homeContext = useContext(HomeContext)
   const homeId = homeContext.home.id

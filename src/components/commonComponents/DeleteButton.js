@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FaTrashRestoreAlt } from "react-icons/fa";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/resourceContext";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
@@ -10,7 +10,7 @@ import { HomeContext } from "../../contexts/homeContext";
 const DeleteButton = (props) => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
 
@@ -20,7 +20,7 @@ const DeleteButton = (props) => {
       return;
     }
     const productId = productContext.resource.product_id;
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState( APP_STATES.AWAITING_API_RESPONSE );
     const response = props.deleteMethod(productId, homeId, session_code);
 
     const messages = {
@@ -28,7 +28,7 @@ const DeleteButton = (props) => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
   };
 
