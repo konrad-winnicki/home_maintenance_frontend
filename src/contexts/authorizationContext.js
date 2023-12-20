@@ -9,7 +9,7 @@ export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    console.log("useeffect", isLoggedIn);
+    console.log("useeffect LOGIN", isLoggedIn);
   }, [isLoggedIn]);
 
   return (

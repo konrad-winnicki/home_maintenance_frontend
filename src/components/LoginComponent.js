@@ -4,11 +4,9 @@ import { FcGoogle } from "react-icons/fc";
 import { AuthorizationContext } from "../contexts/authorizationContext";
 import { useNavigate } from "react-router-dom";
 import { backendUrl } from "../config";
-import {
-  getCookie,
-  autoLogOutTiming,
-} from "../loginAuxilaryFunctions";
-
+import { getCookie, autoLogOutTiming } from "../loginAuxilaryFunctions";
+import GoogleButton from "react-google-button";
+import {Linking} from "react"
 class LoginComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +39,15 @@ class LoginComponent extends React.Component {
   }
 
   componentDidMount() {
+    const navigate = this.props.navigate;
+
+    const url = 'localhost:5000/code/callback'
+    Linking.addEventListener('url', ({url})=>{
+      navigate("/homes")
+  })
+    Linking.addEventListener(url, ({url})=>{
+        navigate("/homes")
+    })
     const oauth_code = getCookie("session_code");
     if (oauth_code) {
       localStorage.setItem("session_code", oauth_code);
@@ -57,23 +64,12 @@ class LoginComponent extends React.Component {
 
   render() {
     return (
-      <div className="container vh-100 vw-100 d-flex  align-items-center">
-        {this.state.loginStatus === "unlogged" ? (
-          <Button
-            style={{
-              backgroundColor: "white",
-              color: "black",
-              borderColor: "black",
-              fontSize: "24px",
-              borderWidth: "medium",
-            }}
-            onClick={() => {
-              this.googleLogin();
-            }}
-          >
-            <FcGoogle /> Login with Google
-          </Button>
-        ) : null}
+      <div className="container vh-100 vw-100 d-flex align-items-center">
+        <div className="flex items-center justify-center">
+          <GoogleButton onClick={() => {
+            this.googleLogin();
+          }}></GoogleButton>
+        </div>
       </div>
     );
   }
