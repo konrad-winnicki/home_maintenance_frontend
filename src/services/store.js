@@ -3,7 +3,7 @@ const productEndpoint = backendUrl + `homes/`;
 //const addShoppingItemsToStoreEndpoint = backendUrl + "store/products/delivery/";
 
 export function addShoppingItemsToStore(homeId, authorization_code) {
-  return fetch(productEndpoint + `${homeId}/store/products/delivery/`, {
+  return fetch(productEndpoint + `${homeId}/store/products/delivery`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -13,7 +13,7 @@ export function addShoppingItemsToStore(homeId, authorization_code) {
 }
 
 export async function addProduct(product_data, homeId, authorization_code) {
-  return fetch(productEndpoint + `${homeId}/store/products/`, {
+  return fetch(productEndpoint + `${homeId}/store/products`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -47,7 +47,7 @@ export function updateProduct(product_data, homeId, authorization_code) {
 }
 
 export function getProducts(homeId,authorization_code) {
-  return fetch(backendUrl + `homes/${homeId}/store/products/`, {
+  return fetch(backendUrl + `homes/${homeId}/store/products`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,

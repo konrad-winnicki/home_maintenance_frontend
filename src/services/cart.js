@@ -1,9 +1,8 @@
 import { backendUrl } from "../config";
-const addFinishedProductsEndpoint = backendUrl + "homes/";
 const shoppingItemsEndpoint = backendUrl + "homes/";
 
 export function addShoppingItem(shoppingItem, homeId, authorization_code) {
-  return fetch(shoppingItemsEndpoint + `${homeId}/cart/items/`, {
+  return fetch(shoppingItemsEndpoint + `${homeId}/cart/items`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,
@@ -15,7 +14,7 @@ export function addShoppingItem(shoppingItem, homeId, authorization_code) {
 }
 
 export function getShoppingItems(homeId, authorization_code) {
-  return fetch(shoppingItemsEndpoint + `${homeId}/cart/items/`, {
+  return fetch(shoppingItemsEndpoint + `${homeId}/cart/items`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: authorization_code,

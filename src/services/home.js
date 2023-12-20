@@ -2,6 +2,8 @@ import { backendUrl } from "../config";
 const homesEndpoint = backendUrl + "homes";
 const homeEndpoint = (homeId) => homesEndpoint + "/" + homeId;
 const homeMembersEndpoint = (homeId) => homeEndpoint(homeId) + "/members";
+const homeMemberEndpoint = (homeId, userId) =>
+  homeMembersEndpoint(homeId) + "/" + userId;
 
 function headers(sessionCode) {
   return {
@@ -46,8 +48,7 @@ export async function joinHome(homeId, sessionCode) {
 }
 
 export function deleteUserFromHome(homeId, userId, sessionCode) {
-  const endpointUrl = homesEndpoint + `/${homeId}/members/${userId}`;
-  return fetch(endpointUrl, {
+  return fetch(homeMemberEndpoint(homeId, userId), {
     headers: headers(sessionCode),
     method: "DELETE",
   });
