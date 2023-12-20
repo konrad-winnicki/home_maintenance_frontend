@@ -26,13 +26,15 @@ export const AppRoutes = () => (
 const container = document.getElementById("root");
 const productsComponent = createRoot(container);
 productsComponent.render(
-  <Router>
-    <AuthContextProvider>
-      <SocketContextProvider>
-        <HomeContextProvider>
-          <AppRoutes />
-        </HomeContextProvider>
-      </SocketContextProvider>
-    </AuthContextProvider>
-  </Router>
+  <StrictMode>
+    <Router>
+      <AuthContextProvider>
+        <SocketContextProvider>
+          <HomeContextProvider>
+            <AppRoutes />
+          </HomeContextProvider>
+        </SocketContextProvider>
+      </AuthContextProvider>
+    </Router>
+  </StrictMode>
 );
