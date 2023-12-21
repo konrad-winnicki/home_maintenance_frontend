@@ -1,28 +1,25 @@
 import React, { useContext } from "react";
+import { SiAddthis } from "react-icons/si";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
-import { joinToHome } from "../../services/home";
+import { joinHome } from "../../services/home";
+
+// TODO: remove duplication
 const JoinHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
 
   const onClickHandler = async () => {
-    const homeId = askHomeId();
+    const homeId = promptForHomeId();
     if (!homeId) {
       return;
     }
     appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-    const response = joinToHome(homeId, sessionCode);
-    const messages = {
-      success: "Joined new home",
-      duplicated: "You belongs to this home",
-      unknown: "Unknown error",
-    };
+    const response = joinHome(homeId, sessionCode);
     serverResponseTranslator(messages, response).then(() => {
       appContext.stateChanger({ appState: APP_STATES.REFRESHING });
     });
-    
   };
 
   return (
@@ -32,16 +29,20 @@ const JoinHomeButton = () => {
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >
-        Join Home
+        <SiAddthis /> Join Home
       </button>
     </div>
   );
 };
 
+const messages = {
+  success: "Joined new home",
+  duplicated: "You belongs to this home",
+  unknown: "Unknown error",
+};
 
-
-function askHomeId() {
-  const homeId = prompt("Indicate home Id:");
+function promptForHomeId() {
+  const homeId = prompt("Give home invitation id:");
   return homeId === "" ? null : homeId;
 }
 

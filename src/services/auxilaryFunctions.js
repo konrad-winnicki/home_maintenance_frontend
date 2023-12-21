@@ -40,7 +40,6 @@ export function custom_quantity() {
   return new_value_from_user;
 }
 
-
 export function notifications(message, type) {
   console.log("dodalem notification o typie " + type);
   if (type === "success") {
@@ -62,20 +61,23 @@ export function notifications(message, type) {
 }
 
 export async function serverResponseTranslator(messages, response_from_server) {
-  return response_from_server.then((response) => {
-    let status_code = response.status;
-    if (status_code > 199 && status_code < 300) {
-      notifications(messages.success, "success");
-    } else if (status_code === 409) {
-      notifications(messages.duplication, "warning");
-    } else {
+  return response_from_server
+    .then((response) => {
+      const status_code = response.status;
+      if (status_code > 199 && status_code < 300) {
+        notifications(messages.success, "success");
+      } else if (status_code === 409) {
+        notifications(messages.duplication, "warning");
+      } else {
+        notifications(messages.unknown, "error");
+      }
+      return response;
+    })
+    .catch((error) => {
       notifications(messages.unknown, "error");
-    }
-  }).catch((error) => {
-    notifications(messages.unknown, "error");
-    console.log(error)
-
-  })
+      console.log(error);
+      return error;
+    });
 }
 
 export async function statusCodeTranslator(response, message) {
@@ -91,8 +93,6 @@ export async function statusCodeTranslator(response, message) {
     notifications(message.unknown, "error");
   }
 }
-
-
 
 /*FUNKCJA TYLKO DLA SKANERA*/
 
@@ -123,4 +123,9 @@ export function send_to_server(
   });
 
   return promise;
+}
+
+export function extractIdFromLocation(location) {
+  const regex = /\/([\w-]*)$/g;
+  return regex.exec(location).slice(1)[0];
 }
