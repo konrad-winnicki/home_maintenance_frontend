@@ -4,12 +4,12 @@ import { ask_product_name } from "../../services/auxilaryFunctions";
 import { addProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext } from "../../contexts/appContext";
 import { HomeContext } from "../../contexts/homeContext";
 
 const AddProductButton = () => {
   const session_code = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
   const onClickHandler = async () => {

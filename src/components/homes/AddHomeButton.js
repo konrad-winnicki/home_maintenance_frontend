@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { SiAddthis } from "react-icons/si";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext} from "../../contexts/appContext";
 import { addHome } from "../../services/home";
 
 const AddHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
 
   const onClickHandler = async () => {
     const name = ask_home_name();
@@ -22,7 +22,7 @@ const AddHomeButton = () => {
       duplicated: "Home already exists",
       unknown: "Unknown error",
     };
-    
+
     serverResponseTranslator(messages, response).then(() => {
       appContext.setAppState(APP_STATES.REFRESHING);
     });
@@ -40,8 +40,6 @@ const AddHomeButton = () => {
     </div>
   );
 };
-
-
 
 function ask_home_name() {
   const name = prompt("Indicate home name:");

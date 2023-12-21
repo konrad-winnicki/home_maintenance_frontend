@@ -9,11 +9,11 @@ import { jwtDecode } from "jwt-decode";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { GiCancel } from "react-icons/gi";
 import { deleteUserFromHome } from "../../services/home";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 
 export default function Home({ home }) {
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const sessionCode = localStorage.getItem("session_code");
 
@@ -26,7 +26,9 @@ export default function Home({ home }) {
     navigator.clipboard
       .writeText(home.id)
       .then(() => {
-        alert("Home id copied to clipboard. You can share it to invite other family members.");
+        alert(
+          "Home id copied to clipboard. You can share it to invite other family members."
+        );
       })
       .catch((err) => {
         console.error("Failed to copy text to clipboard:", err);
@@ -39,10 +41,10 @@ export default function Home({ home }) {
       return;
     }
     const decodedToken = jwtDecode(sessionCode);
-    const userId = decodedToken.user_id
+    const userId = decodedToken.user_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-  
-    const response = deleteUserFromHome(home.id, userId, sessionCode )
+
+    const response = deleteUserFromHome(home.id, userId, sessionCode);
 
     const messages = {
       success: "You left home",
@@ -51,7 +53,6 @@ export default function Home({ home }) {
     serverResponseTranslator(messages, response).then(() => {
       appContext.setAppState(APP_STATES.REFRESHING);
     });
-    
   };
   return (
     <>

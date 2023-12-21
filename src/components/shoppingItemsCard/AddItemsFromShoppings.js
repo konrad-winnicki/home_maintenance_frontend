@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import { APP_STATES } from "../../applicationStates";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { addShoppingItemsToStore } from "../../services/store";
 import { HomeContext } from "../../contexts/homeContext";
 
 const AddItemsFromShopings = () => {
   const session_code = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
 
-  const homeContext = useContext(HomeContext)
-  const homeId = homeContext.home.id
+  const homeContext = useContext(HomeContext);
+  const homeId = homeContext.home.id;
   const addShoppings = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const result = addShoppingItemsToStore(homeId, session_code);

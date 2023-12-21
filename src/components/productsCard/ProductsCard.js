@@ -10,7 +10,7 @@ import styles from "../../my-style.module.css";
 import "../CardHeader.css";
 import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext} from "../../contexts/appContext";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
 
@@ -106,7 +106,7 @@ class ProductsCard extends React.PureComponent {
 }
 
 export function WrappedProductsCard() {
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
   const socketContext = useContext(SocketContext);
   const homeContext = useContext(HomeContext);
 

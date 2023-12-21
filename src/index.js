@@ -11,7 +11,7 @@ import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
 //import Homes from "./components/homes/Homes";
 import { SocketContextProvider } from "./contexts/socketContext";
-import { AppContext2Provider } from "./contexts/appContext";
+import { AppContextProvider } from "./contexts/appContext";
 
 export const AppRoutes = () => (
   <Routes>
@@ -30,13 +30,13 @@ const productsComponent = createRoot(container);
 productsComponent.render(
   <Router>
     <AuthContextProvider>
-      <AppContext2Provider>
+      <AppContextProvider>
       <SocketContextProvider>
         <HomeContextProvider>
           <AppRoutes />
         </HomeContextProvider>
       </SocketContextProvider>
-      </AppContext2Provider>
+      </AppContextProvider>
     </AuthContextProvider>
   </Router>
 );

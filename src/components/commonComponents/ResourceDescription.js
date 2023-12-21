@@ -4,14 +4,14 @@ import { ask_new_name } from "../../services/auxilaryFunctions";
 import { custom_quantity } from "../../services/auxilaryFunctions";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/resourceContext";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext} from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
 
 function ResourceDescription(props) {
   const session_code = localStorage.getItem("session_code");
   const resourceContext = useContext(ResourceContext);
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
 

@@ -4,7 +4,7 @@ import { updateProduct } from "../../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/resourceContext";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext} from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
@@ -12,7 +12,7 @@ import { HomeContext } from "../../contexts/homeContext";
 const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
   const onClickHandler = () => {

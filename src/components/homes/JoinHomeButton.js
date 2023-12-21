@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { AppContext, AppContext2 } from "../../contexts/appContext";
+import { AppContext } from "../../contexts/appContext";
 import { joinToHome } from "../../services/home";
 const JoinHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
-  const appContext = useContext(AppContext2);
+  const appContext = useContext(AppContext);
 
   const onClickHandler = async () => {
     const homeId = askHomeId();
@@ -22,7 +22,6 @@ const JoinHomeButton = () => {
     serverResponseTranslator(messages, response).then(() => {
       appContext.setAppState(APP_STATES.REFRESHING);
     });
-    
   };
 
   return (
@@ -37,8 +36,6 @@ const JoinHomeButton = () => {
     </div>
   );
 };
-
-
 
 function askHomeId() {
   const homeId = prompt("Indicate home Id:");
