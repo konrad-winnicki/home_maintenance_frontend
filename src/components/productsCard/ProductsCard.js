@@ -23,7 +23,6 @@ class ProductsCard extends React.PureComponent {
   
     this.state = {
       productList: [],
-      appState: APP_STATES.DEFAULT,
     };
   }
   stateChanger(new_state) {
@@ -35,13 +34,16 @@ class ProductsCard extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    if (this.state.appState === APP_STATES.REFRESHING) {
+  
+    if (this.props.appContext.appState === APP_STATES.REFRESHING) {
       this.getProducts();
+
     }
   }
 
   getProducts() {
     const homeId = this.props.homeContext.home.id
+    this.props.appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     const response = getProducts(homeId,this.session_code);
     response
@@ -49,7 +51,6 @@ class ProductsCard extends React.PureComponent {
         response.json().then((json) => {
           this.stateChanger({
             productList: json,
-            appState: APP_STATES.DEFAULT,
           });
         });
       })
@@ -59,7 +60,7 @@ class ProductsCard extends React.PureComponent {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      this.stateChanger({ appState: APP_STATES.DEFAULT });
+      this.props.appContext.setAppState(APP_STATES.DEFAULT)
     });
   }
 

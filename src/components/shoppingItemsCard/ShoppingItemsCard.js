@@ -6,7 +6,7 @@ import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
 import AddItemToShoppings from "./AddItemToShoppings";
 import Scaner from "../Scaner.js";
 import "../CardHeader.css";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext, AppContext2 } from "../../contexts/appContext";
 import ShoppingItemsList from "./ShoppingItemsList";
 import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
@@ -19,7 +19,6 @@ class ShoppingItemsCard extends React.PureComponent {
     super(props);
     this.state = {
       shoppingItemsList: [],
-      appState: APP_STATES.DEFAULT,
     };
     this.session_code = localStorage.getItem("session_code");
     this.stateChanger = this.stateChanger.bind(this);
@@ -51,7 +50,7 @@ class ShoppingItemsCard extends React.PureComponent {
   ProductListChanger() {
     const homeId = this.props.homeContext.home.id
 
-    this.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    this.props.appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = getShoppingItems(homeId, this.session_code);
     response
       .then((response) => {
@@ -67,18 +66,12 @@ class ShoppingItemsCard extends React.PureComponent {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      this.stateChanger({ appState: APP_STATES.DEFAULT });
+      this.props.appContext.setAppState(APP_STATES.DEFAULT);
     });
   }
 
   render() {
     return (
-      <AppContext.Provider
-        value={{
-          appState: this.state.appState,
-          stateChanger: this.stateChanger,
-        }}
-      >
         <div>
           <NavigationBar />
           <ToastContainer></ToastContainer>
@@ -122,13 +115,12 @@ class ShoppingItemsCard extends React.PureComponent {
             </div>
           </div>
         </div>
-      </AppContext.Provider>
     );
   }
 }
 
 export function WrappedShoppingItemsCard() {
-  const appContext = useContext(AppContext);
+  const appContext = useContext(AppContext2);
   const socketContext = useContext(SocketContext);
   const homeContext = useContext(HomeContext)
 

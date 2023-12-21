@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { APP_STATES } from "../applicationStates";
 export const AppContext = createContext({
   appState: APP_STATES.DEFAULT,
@@ -13,6 +13,9 @@ export const AppContext2 = createContext({
 
 export const AppContext2Provider = ({ children }) => {
   const [ appState, setAppState] = useState( APP_STATES.DEFAULT);
+
+
+  useEffect(()=>{console.log(appState)},[appState])
   
   return (
     <div>

@@ -40,7 +40,7 @@ class LoginComponent extends React.Component {
 
   componentDidMount() {
     const navigate = this.props.navigate;
-
+/*
     const url = 'localhost:5000/code/callback'
     Linking.addEventListener('url', ({url})=>{
       navigate("/homes")
@@ -48,6 +48,7 @@ class LoginComponent extends React.Component {
     Linking.addEventListener(url, ({url})=>{
         navigate("/homes")
     })
+    */
     const oauth_code = getCookie("session_code");
     if (oauth_code) {
       localStorage.setItem("session_code", oauth_code);
