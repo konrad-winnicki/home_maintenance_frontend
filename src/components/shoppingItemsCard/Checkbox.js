@@ -32,14 +32,14 @@ export default function CheckBox() {
         is_bought: isBought,
       },
     };
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = updateShoppingItem(shoppingItem, homeId, session_code);
     const messages = {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
       initialRender.current = isBought;
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
   }, [appContext, shoppingItemContext, isBought, homeId, session_code]);
 

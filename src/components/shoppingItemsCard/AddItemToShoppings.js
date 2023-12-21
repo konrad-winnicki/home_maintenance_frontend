@@ -22,12 +22,13 @@ const AddItemToShoppings = () => {
   };
 
   const addShopping = () => {
+    console.log('ffff')
     let product_data = {
       name: shoppingItem.name,
       quantity: shoppingItem.quantity,
     };
 
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = addShoppingItem(product_data, homeId, session_code);
     const messages = {
       success: "Shopping item addded",
@@ -35,7 +36,7 @@ const AddItemToShoppings = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.DEFAULT });
+      appContext.setAppState(APP_STATES.DEFAULT);
       setShoppingItem({ name: "", quantity: "" });
     });
   };
