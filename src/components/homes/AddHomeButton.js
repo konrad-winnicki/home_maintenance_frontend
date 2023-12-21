@@ -17,7 +17,7 @@ const AddHomeButton = ({ addHomeToState }) => {
     if (!name) {
       return;
     }
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = addHome({ name }, sessionCode);
     serverResponseTranslator(messages, response)
       .then(r => r.headers.get("Location"))
@@ -26,7 +26,7 @@ const AddHomeButton = ({ addHomeToState }) => {
         addHomeToState({ id, name });
       })
       .then(() => {
-        appContext.stateChanger({ appState: APP_STATES.DEFAULT });
+        appContext.setAppState(APP_STATES.DEFAULT);;
       });
   };
 

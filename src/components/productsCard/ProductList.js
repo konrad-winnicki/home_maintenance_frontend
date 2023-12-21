@@ -1,6 +1,6 @@
 import React from "react";
 import ProductComponent from "./ProductComponent";
-import { ResourceContext } from "../../contexts/ResourceContext";
+import { ResourceContext } from "../../contexts/resourceContext";
 
 const ProductList = (props) => {
   return (

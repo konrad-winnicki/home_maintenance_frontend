@@ -26,7 +26,9 @@ export default function Home({ home }) {
     navigator.clipboard
       .writeText(home.id)
       .then(() => {
-        alert("Home id copied to clipboard. You can share it to invite other family members.");
+        alert(
+          "Home id copied to clipboard. You can share it to invite other family members."
+        );
       })
       .catch((err) => {
         console.error("Failed to copy text to clipboard:", err);
@@ -39,19 +41,18 @@ export default function Home({ home }) {
       return;
     }
     const decodedToken = jwtDecode(sessionCode);
-    const userId = decodedToken.user_id
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
-  
-    const response = deleteUserFromHome(home.id, userId, sessionCode )
+    const userId = decodedToken.user_id;
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+
+    const response = deleteUserFromHome(home.id, userId, sessionCode);
 
     const messages = {
       success: "You left home",
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
-    
   };
   return (
     <>

@@ -10,7 +10,7 @@ import styles from "../../my-style.module.css";
 import "../CardHeader.css";
 import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
-import { AppContext } from "../../contexts/appContext";
+import { AppContext} from "../../contexts/appContext";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
 
@@ -23,7 +23,6 @@ class ProductsCard extends React.PureComponent {
   
     this.state = {
       productList: [],
-      appState: APP_STATES.DEFAULT,
     };
   }
   stateChanger(new_state) {
@@ -35,13 +34,16 @@ class ProductsCard extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    if (this.state.appState === APP_STATES.REFRESHING) {
+  
+    if (this.props.appContext.appState === APP_STATES.REFRESHING) {
       this.getProducts();
+
     }
   }
 
   getProducts() {
     const homeId = this.props.homeContext.home.id
+    this.props.appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     const response = getProducts(homeId,this.session_code);
     response
@@ -49,7 +51,6 @@ class ProductsCard extends React.PureComponent {
         response.json().then((json) => {
           this.stateChanger({
             productList: json,
-            appState: APP_STATES.DEFAULT,
           });
         });
       })
@@ -59,7 +60,7 @@ class ProductsCard extends React.PureComponent {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      this.stateChanger({ appState: APP_STATES.DEFAULT });
+      this.props.appContext.setAppState(APP_STATES.DEFAULT)
     });
   }
 
@@ -72,12 +73,7 @@ class ProductsCard extends React.PureComponent {
           <div className="row position-realtive">
             <VideoAcceptor />
           </div>
-          <AppContext.Provider
-            value={{
-              appState: this.state.appState,
-              stateChanger: this.stateChanger,
-            }}
-          >
+          
             <div
               className="flex-grow-1 mt-5 mb-8"
               style={{
@@ -101,7 +97,6 @@ class ProductsCard extends React.PureComponent {
                 server_response_service={serverResponseTranslator}
               ></Scaner>
             </div>
-          </AppContext.Provider>
         </div>
       </div>
     );

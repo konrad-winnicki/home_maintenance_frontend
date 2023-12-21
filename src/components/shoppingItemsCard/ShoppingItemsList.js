@@ -1,9 +1,9 @@
 import React from "react";
-import { ResourceContext } from "../../contexts/ResourceContext";
+import { ResourceContext } from "../../contexts/resourceContext";
 import ShoppingItemComponent from "./ShoppingItemComponent";
 
 const ShoppingItemsList = (props) => {
-  console.log('shoping item list',props.shoppingItemsList)
+  console.log("shoping item list", props.shoppingItemsList);
   return (
     <div>
       {props.shoppingItemsList.map((shoppingItem) => (

@@ -21,7 +21,7 @@ const AddProductButton = () => {
     if (!product_name) {
       return;
     }
-    appContext.stateChanger({ appState: APP_STATES.AWAITING_API_RESPONSE });
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = addProduct(product_data, homeId, session_code);
     /*
    .then((response) => {
@@ -47,7 +47,7 @@ const AddProductButton = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      appContext.stateChanger({ appState: APP_STATES.REFRESHING });
+      appContext.setAppState(APP_STATES.REFRESHING);
     });
   };
 

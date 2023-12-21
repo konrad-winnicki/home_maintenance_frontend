@@ -14,6 +14,8 @@ export default function HomesCard() {
   function addHomeToState(home) {
     setHomes([...homes, home]);
   }
+
+
   useEffect(() => {
     getHomes(sessionCode)
       .then(r => r.json())
