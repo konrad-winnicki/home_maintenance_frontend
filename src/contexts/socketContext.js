@@ -1,4 +1,4 @@
-import {createContext, useCallback, useEffect, useState } from "react";
+import {createContext, useEffect, useState } from "react";
 import io from "socket.io-client";
 import { backendUrl } from "../config";
 
