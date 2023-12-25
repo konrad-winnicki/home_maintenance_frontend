@@ -1,15 +1,14 @@
 import { jwtDecode } from "jwt-decode";
 
-const getCookie = (cookieName) => {
-  const cookies = document.cookie.split(";");
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i].trim();
-    if (cookie.startsWith(`${cookieName}=`)) {
-      return cookie.substring(cookieName.length + 1);
-    }
+function getCodeFromQueryParam(queryString) {
+  const urlParams = new URLSearchParams(queryString);
+  const code = urlParams.get("code");
+  if (!code) {
+    return null;
   }
-  return null;
-};
+  const encodedCode = encodeURIComponent(code);
+  return encodedCode;
+}
 
 function calculateTimeToFinishToken(decodedToken) {
   const milisecondsPerSecond = 1000;
@@ -31,4 +30,4 @@ function autoLogOutTiming(currentToken, authorizationContext) {
   }, timeToLogout);
 }
 
-export {getCookie, autoLogOutTiming}
+export { autoLogOutTiming, getCodeFromQueryParam };

@@ -23,6 +23,24 @@ ionic capacitor add android
 npx cap run android
 ```
 
+# User authentication
+
+Oauth2 authentication code flow is used.
+Deep links (Android User Links) can include only URI parameters (cookies nor other headers are allowed). For this reason they can't 
+be used to securely pass JWT/oauth tokens.
+
+The authorization code is visible in Frontend but it's useless without client_secret that is stored only on backend.
+The code is then passed to backend which exchanges it for token.
+
+Used flow:
+1. Frontend redirects to Google IdP.
+2. Google authorizes user and asks her to confirm requested grants (basic - email only).
+3. Google redirects user browser to Frontend (on mobile app using Deep link) - passing authorization code in URL.
+4. Frontend extracts authorization codes and requests backend API to exchange it for a JWT token.
+5. Backend uses the code to exchange it for oauth tokens within Google and issues its own JWT session token.
+6. Backend replies with the JWT token to Frontend.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
