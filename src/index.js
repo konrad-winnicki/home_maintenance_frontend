@@ -1,7 +1,6 @@
-import React, { StrictMode } from "react"; // TODO: enable StrictMode
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import WrappedLoginComponent from "./components/LoginComponent";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthContextProvider } from "./contexts/authorizationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -11,11 +10,12 @@ import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
 import { SocketContextProvider } from "./contexts/socketContext";
 import { AppContextProvider } from "./contexts/appContext";
+import { LoginComponent } from "./components/LoginComponent";
 
 export const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<WrappedLoginComponent />} />
-    <Route path="/login" element={<WrappedLoginComponent />} />
+    <Route path="/" element={<LoginComponent />} />
+    <Route path="/login" element={<LoginComponent />} />
     <Route element={<ProtectedRoute />}>
       <Route path="/products/" element={<WrappedProductsCard />} />
       <Route path="/shoppingItems/" element={<WrappedShoppingItemsCard />} />

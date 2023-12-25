@@ -1,91 +1,68 @@
-import React, { useContext } from "react";
-import { Button } from "react-bootstrap";
-import { FcGoogle } from "react-icons/fc";
+import React, { useContext, useEffect } from "react";
 import { AuthorizationContext } from "../contexts/authorizationContext";
 import { useNavigate } from "react-router-dom";
-import { backendUrl } from "../config";
-import { getCookie, autoLogOutTiming } from "../loginAuxilaryFunctions";
+import {
+  autoLogOutTiming,
+  getCodeFromQueryParam,
+} from "../loginAuxilaryFunctions";
 import GoogleButton from "react-google-button";
-import {Linking} from "react"
-class LoginComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loginStatus: "unlogged",
-    };
-  }
+import { oauthClientId, oauthRedirectUri } from "../config";
+import { exchangeOauthCodeForToken } from "../services/login";
 
-  getGoogleOauth() {
+export function LoginComponent() {
+  const authorizationContext = useContext(AuthorizationContext);
+  const navigate = useNavigate();
+
+  function getGoogleOauthCodeUrl() {
     const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth?";
     const options = {
-      redirect_uri: backendUrl + "code/callback",
-      client_id:
-        "70482292417-ki5kct2g23kaloksimsjtf1figlvt3ao.apps.googleusercontent.com",
+      redirect_uri: oauthRedirectUri,
+      client_id: oauthClientId,
       access_type: "offline",
       response_type: "code",
       prompt: "consent",
-      scope: [
-        //"https://www.googleapis.com/auth/userinfo.profile",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ].join(" "),
+      scope: ["https://www.googleapis.com/auth/userinfo.email"].join(" "),
     };
     const qs = new URLSearchParams(options);
     return `${rootUrl}${qs.toString()}`;
   }
 
-  googleLogin() {
-    const uri = this.getGoogleOauth();
+  function redirectToGoogleLogin() {
+    const uri = getGoogleOauthCodeUrl();
     window.location.href = uri;
   }
 
-  componentDidMount() {
-    const navigate = this.props.navigate;
-/*
-    const url = 'localhost:5000/code/callback'
-    Linking.addEventListener('url', ({url})=>{
-      navigate("/homes")
-  })
-    Linking.addEventListener(url, ({url})=>{
-        navigate("/homes")
-    })
+  useEffect(() => {
+    /* TODO: deep links
+    App.addListener("appStateChange", ({ isActive }) => { console.log("App state changed. Is active?", isActive); });
+    App.addListener("appUrlOpen", (data) => { console.log("App opened with URL details:", data.url); });
     */
-    const oauth_code = getCookie("session_code");
-    if (oauth_code) {
-      localStorage.setItem("session_code", oauth_code);
-      document.cookie = `session_code=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      this.props.authorizationContext.setLoggedIn(true);
-      autoLogOutTiming(oauth_code, this.props.authorizationContext);
+
+    const oauthCode = getCodeFromQueryParam(window.location.search);
+    console.log("Oauth code from query param: " + oauthCode);
+    if (oauthCode !== undefined && oauthCode !== null) {
+      exchangeOauthCodeForToken(oauthCode).then((token) => {
+        // TODO: extract and use useCallback
+        console.log("Token exchanged: " + token);
+
+        if (token) {
+          localStorage.setItem("session_code", token);
+          authorizationContext.setLoggedIn(true);
+          autoLogOutTiming(token, authorizationContext);
+          // TODO: use routing instead of this redirect:
+          navigate("/homes");
+        }
+      }, [authorizationContext]);
     }
-  }
-
-  componentDidUpdate() {
-    const navigate = this.props.navigate;
-    navigate("/homes");
-  }
-
-  render() {
-    return (
-      <div className="container vh-100 vw-100 d-flex align-items-center">
-        <div className="flex items-center justify-center">
-          <GoogleButton onClick={() => {
-            this.googleLogin();
-          }}></GoogleButton>
-        </div>
-      </div>
-    );
-  }
-}
-
-function WrappedLoginComponent() {
-  const navigate = useNavigate();
-  const authorizationContext = useContext(AuthorizationContext);
+  });
 
   return (
-    <LoginComponent
-      navigate={navigate}
-      authorizationContext={authorizationContext}
-    ></LoginComponent>
+    !authorizationContext.isLoggedIn && (
+      <div className="container vh-100 vw-100 d-flex align-items-center">
+        <div className="flex items-center justify-center">
+          <GoogleButton onClick={redirectToGoogleLogin}></GoogleButton>
+        </div>
+      </div>
+    )
   );
 }
-
-export default WrappedLoginComponent;
