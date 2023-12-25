@@ -21,10 +21,12 @@ function ResourceDescription(props) {
       return;
     }
 
+    const {product_id, ...resource_without_product_id} = resourceContext.resource
+
     const product_data = {
-      id: resourceContext.resource.product_id,
+      id: product_id,
       updatedValues: {
-        ...resourceContext.resource,
+        ...resource_without_product_id,
         name: new_name,
       },
     };
@@ -46,10 +48,12 @@ function ResourceDescription(props) {
     if (quantity == null) {
       return;
     }
+
+    const {product_id, ...resource_without_product_id} = resourceContext.resource
     const product_data = {
-      id: resourceContext.resource.product_id,
+      id: product_id,
       updatedValues: {
-        ...resourceContext.resource,
+         ...resource_without_product_id,
         quantity: quantity,
       },
     };

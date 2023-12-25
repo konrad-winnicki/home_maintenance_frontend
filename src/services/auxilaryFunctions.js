@@ -89,7 +89,9 @@ export async function statusCodeTranslator(response, message) {
     notifications(message.succces, "success");
   } else if (statusCode === 409) {
     notifications(message.duplicated, "warning");
-  } else {
+  } else if(statusCode === 404) {
+    notifications(message.unknown, "error");
+  }else {
     notifications(message.unknown, "error");
   }
 }

@@ -22,10 +22,9 @@ const AddItemToShoppings = () => {
   };
 
   const addShopping = () => {
-    console.log('ffff')
     let product_data = {
       name: shoppingItem.name,
-      quantity: shoppingItem.quantity,
+      quantity: parseInt(shoppingItem.quantity),
     };
 
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);

@@ -25,10 +25,12 @@ export default function CheckBox() {
   };
 
   const updateItem = useCallback(() => {
+    const {product_id, ...resource_without_product_id} = shoppingItemContext.resource
+
     const shoppingItem = {
-      id: shoppingItemContext.resource.product_id,
+      id: product_id,
       updatedValues: {
-        ...shoppingItemContext.resource,
+        ...resource_without_product_id,
         is_bought: isBought,
       },
     };
