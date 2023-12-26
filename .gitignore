@@ -18,8 +18,15 @@
 .env.test.local
 .env.production.local
 
-# ionic
-android
+# ignored ionic/capacitor android folter with exception for Android Manifest
+android/*
+!android/app
+android/app/*
+!android/app/src
+android/app/src/*
+!android/app/src/main
+android/app/src/main/*
+!android/app/src/main/AndroidManifest.xml
 
 npm-debug.log*
 yarn-debug.log*
