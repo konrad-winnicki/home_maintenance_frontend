@@ -8,6 +8,7 @@ import {
 import GoogleButton from "react-google-button";
 import { oauthClientId, oauthRedirectUri } from "../config";
 import { exchangeOauthCodeForToken } from "../services/login";
+import { App } from "@capacitor/app"
 
 export function LoginComponent() {
   const authorizationContext = useContext(AuthorizationContext);
@@ -33,10 +34,13 @@ export function LoginComponent() {
   }
 
   useEffect(() => {
-    /* TODO: deep links
-    App.addListener("appStateChange", ({ isActive }) => { console.log("App state changed. Is active?", isActive); });
-    App.addListener("appUrlOpen", (data) => { console.log("App opened with URL details:", data.url); });
-    */
+    // TODO: where to place them?
+    App.addListener("appUrlOpen", (data) => { 
+      console.log("App opened with URL details:", data.url);
+      const extractedCode = data.url.split("?")[1];
+      console.log("Extracted code:", data.url);
+      navigate("/login?" + extractedCode)
+     });
 
     const oauthCode = getCodeFromQueryParam(window.location.search);
     console.log("Oauth code from query param: " + oauthCode);
