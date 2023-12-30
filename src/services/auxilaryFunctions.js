@@ -45,14 +45,12 @@ export function notifications(message, type) {
   if (type === "success") {
     toast.success(message, {
       position: toast.POSITION.TOP_RIGHT,
-      // className: "toast-message",
     });
   }
   if (type === "warning") {
-    console.log("adding warning toast" + message)
+    console.log("adding warning toast" + message);
     toast.warning(message, {
       position: toast.POSITION.TOP_RIGHT,
-      className: "toast-message", // TODO: is it needed?
     });
   }
   if (type === "error") {
@@ -63,11 +61,10 @@ export function notifications(message, type) {
 }
 
 export async function serverResponseTranslator(messages, response_from_server) {
-  
-  console.log('1 rrrr', response_from_server)
+  console.log("1 rrrr", response_from_server);
   return response_from_server
     .then((response) => {
-      console.log('rrrr', response)
+      console.log("rrrr", response);
       const status_code = response.status;
       if (status_code > 199 && status_code < 300) {
         notifications(messages.success, "success");
@@ -93,9 +90,9 @@ export async function statusCodeTranslator(response, message) {
     notifications(message.succces, "success");
   } else if (statusCode === 409) {
     notifications(message.duplicated, "warning");
-  } else if(statusCode === 404) {
+  } else if (statusCode === 404) {
     notifications(message.unknown, "error");
-  }else {
+  } else {
     notifications(message.unknown, "error");
   }
 }
