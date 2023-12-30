@@ -8,7 +8,6 @@ import Scaner from "../Scaner.js";
 import "../CardHeader.css";
 import { AppContext } from "../../contexts/appContext";
 import ShoppingItemsList from "./ShoppingItemsList";
-import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { SocketContext } from "../../contexts/socketContext";
@@ -72,51 +71,38 @@ class ShoppingItemsCard extends React.PureComponent {
 
   render() {
     return (
-      <div>
-        <NavigationBar />
-        <ToastContainer></ToastContainer>
-        <div className="container vh-100 vw-100 d-flex flex-column">
+      <React.Fragment>
+          <div className="header">
+            Shopping list in the {this.props.homeContext.home?.name}
+          </div>
           <div
-            className="flex-grow-1 mt-5"
-            style={{
-              overflow: "auto",
-              paddingBottom: "1%",
-              marginBottom: "14%",
-            }}
+           
           >
-            <div className="header">
-              Shopping list in the {this.props.homeContext.home?.name}
-            </div>
             <ShoppingItemsList
               shoppingItemsList={this.state.shoppingItemsList}
             ></ShoppingItemsList>
 
-            <div className="row mt-5 sticky-top">
-              <AddItemToShoppings></AddItemToShoppings>
-            </div>
+           
           </div>
 
-          <div
-            className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
+        <div
+          className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
           d-flex justify-content-between fixed-bottom"
-          >
-            <div className="col text-center ">
-              <AddItemsFromShoppings
-                shoppingItemsList={this.state.shoppingItemsList}
-              ></AddItemsFromShoppings>
-            </div>
-            <div className="col text-center">
-              {this.state.showComponent != null ? (
-                <Scaner
-                  notifications={this.notifications}
-                  app_state={this.state.app_state}
-                  state_changer={this.stateChanger}
-                ></Scaner>
-              ) : null}
-            </div>
+        >
+          <div className="col text-center ">
+            <AddItemsFromShoppings
+              shoppingItemsList={this.state.shoppingItemsList}
+            ></AddItemsFromShoppings>
+          </div>
+          <div className="col text-center">
+            <Scaner
+              notifications={this.notifications}
+              app_state={this.state.app_state}
+              state_changer={this.stateChanger}
+            ></Scaner>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

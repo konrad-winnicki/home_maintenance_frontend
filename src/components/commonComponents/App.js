@@ -7,7 +7,7 @@ import JoinHomeButton from "./JoinHomeButton";
 import { useContext, useState, useEffect } from "react";
 import { getHomes } from "../../services/home";
 
-export default function HomesCard() {
+export default function App() {
   const sessionCode = localStorage.getItem("session_code");
   const [homes, setHomes] = useState([]);
   const homeContext = useContext(HomeContext);
@@ -27,7 +27,10 @@ export default function HomesCard() {
     <div>
       {/* TODO: create a reusable frame component with common navigation, toast
       etc. */}
-        <div className="flex-grow-3 mt-1 mb-8">
+      <NavigationBar />
+      <ToastContainer />
+      <div className="container vh-100 vw-100 d-flex flex-column">
+        <div className="flex-grow-3 mt-5 mb-8">
           <div className="header mt-10">
             Current home: {homeContext.home?.name}
           </div>
@@ -38,6 +41,7 @@ export default function HomesCard() {
             <JoinHomeButton />
           </div>
         </div>
+      </div>
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import React, { StrictMode } from "react";
+import React, { StrictMode, useContext } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { AuthContextProvider } from "./contexts/authorizationContext";
+import { AuthContextProvider, AuthorizationContext } from "./contexts/authorizationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
 import { WrappedShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
@@ -11,8 +11,22 @@ import { HomeContextProvider } from "./contexts/homeContext";
 import { SocketContextProvider } from "./contexts/socketContext";
 import { AppContextProvider } from "./contexts/appContext";
 import { LoginComponent } from "./components/LoginComponent";
+import NavigationBar from "./components/commonComponents/NavigationBar";
+import { ToastContainer } from "react-toastify";
 
-export const AppRoutes = () => (
+export const AppRoutes = () => {
+
+  const authorizationContext = useContext(AuthorizationContext)
+
+    return(
+  
+  <div className="container vh-100 vw-100 d-flex flex-column" 
+   >
+  {authorizationContext.isLoggedIn? <NavigationBar />: ""}
+  {authorizationContext.isLoggedIn? <ToastContainer />: ""}
+
+  
+
   <Routes>
     <Route path="/" element={<LoginComponent />} />
     <Route path="/login" element={<LoginComponent />} />
@@ -22,7 +36,8 @@ export const AppRoutes = () => (
       <Route path="/homes" element={<HomesCard />} />
     </Route>
   </Routes>
-);
+  </div>)
+};
 
 const container = document.getElementById("root");
 const productsComponent = createRoot(container);

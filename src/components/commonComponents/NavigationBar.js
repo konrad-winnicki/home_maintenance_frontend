@@ -13,8 +13,8 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   return (
     <React.Fragment>
-      <nav className="navbar fixed-top bg-warning">
-        <div className="col text-center ">
+      <nav className="navbar bg-warning mb-1 sticky-top">
+        <div className="col-md-2 mx-1 text-center ">
           <button
             className="btn btn-outline-success"
               onClick={() => {
@@ -24,7 +24,7 @@ const NavigationBar = () => {
             <IoHome /> Homes
           </button>
         </div>
-        <div className="col text-end">
+        <div className="col-md-1 mx-1 text-end">
           <button
             className="btn btn-outline-success"
             disabled={!home ? true : false}
@@ -35,7 +35,7 @@ const NavigationBar = () => {
             <ImListNumbered />
           </button>
         </div>
-        <div className="col text-center ">
+        <div className="col-md-2 mx-1 text-center ">
           <button
             className="btn btn-outline-success"
             disabled={!home ? true : false}
