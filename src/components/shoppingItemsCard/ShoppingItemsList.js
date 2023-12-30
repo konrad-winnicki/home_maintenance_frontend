@@ -6,7 +6,6 @@ import AddItemToShoppings from "./AddItemToShoppings";
 const ShoppingItemsList = (props) => {
   console.log("shoping item list", props.shoppingItemsList);
   return (
-    <React.Fragment>
       <div
         className="flex-grow-1 mt-1"
         style={{
@@ -29,7 +28,6 @@ const ShoppingItemsList = (props) => {
           <AddItemToShoppings></AddItemToShoppings>
         </div>
       </div>
-    </React.Fragment>
   );
 };
 

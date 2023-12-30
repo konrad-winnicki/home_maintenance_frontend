@@ -3,20 +3,8 @@ import ProductComponent from "./ProductComponent";
 import { ResourceContext } from "../../contexts/resourceContext";
 
 
-
-/*
-className="flex-grow-1 mt-1 mb-8"
-    style={{
-      overflow: "auto",
-      paddingBottom: "1%",
-      marginBottom: "14%",
-    }}
-
-    */
-
 const ProductList = (props) => {
   return (
-    <React.Fragment>
     <div className="flex-grow-1 mt-1 mb-20" flex-grow-1 style={{
       overflow: "auto",
       paddingBottom: "1%",
@@ -33,7 +21,6 @@ const ProductList = (props) => {
         </ResourceContext.Provider>
       ))}
     </div>
-    </React.Fragment>
   );
 };
 

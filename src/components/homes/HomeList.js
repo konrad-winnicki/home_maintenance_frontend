@@ -4,7 +4,6 @@ import Home from "./Home";
 export default function HomeList({homes}) {
 
   return (
-    <React.Fragment>
     <div className="flex-grow-1 mt-1 mb-8" flex-grow-1 style={{
       overflow: "auto",
       paddingBottom: "1%",
@@ -14,6 +13,5 @@ export default function HomeList({homes}) {
         <Home key={h.id} home={h} />
       ))}
     </div>
-    </React.Fragment>
   );
 }

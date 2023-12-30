@@ -46,7 +46,8 @@ const AddProductButton = () => {
       duplicated: "Product already exists",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
+    serverResponseTranslator(messages, response).then((res) => {
+      console.log('in button', res)
       appContext.setAppState(APP_STATES.REFRESHING);
     });
   };

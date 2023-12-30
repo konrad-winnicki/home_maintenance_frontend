@@ -61,8 +61,11 @@ export function notifications(message, type) {
 }
 
 export async function serverResponseTranslator(messages, response_from_server) {
+  
+  console.log('1 rrrr', response_from_server)
   return response_from_server
     .then((response) => {
+      console.log('rrrr', response)
       const status_code = response.status;
       if (status_code > 199 && status_code < 300) {
         notifications(messages.success, "success");
