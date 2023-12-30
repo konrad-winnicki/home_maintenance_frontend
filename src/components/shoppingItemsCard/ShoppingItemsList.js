@@ -2,32 +2,26 @@ import React from "react";
 import { ResourceContext } from "../../contexts/resourceContext";
 import ShoppingItemComponent from "./ShoppingItemComponent";
 import AddItemToShoppings from "./AddItemToShoppings";
+import { ScrollableList } from "../commonComponents/ScrollableList";
 
 const ShoppingItemsList = (props) => {
   console.log("shoping item list", props.shoppingItemsList);
   return (
-      <div
-        className="flex-grow-1 mt-1"
-        style={{
-          overflow: "auto",
-          paddingBottom: "1%",
-          marginBottom: "1%",
-        }}
-      >
-        {props.shoppingItemsList.map((shoppingItem) => (
-          <ResourceContext.Provider
-            key={shoppingItem.product_id}
-            value={{
-              resource: shoppingItem,
-            }}
-          >
-            <ShoppingItemComponent></ShoppingItemComponent>
-          </ResourceContext.Provider>
-        ))}
-        <div className="row my-5 mx-0 sticky-top">
-          <AddItemToShoppings></AddItemToShoppings>
-        </div>
+    <ScrollableList>
+      {props.shoppingItemsList.map((shoppingItem) => (
+        <ResourceContext.Provider
+          key={shoppingItem.product_id}
+          value={{
+            resource: shoppingItem,
+          }}
+        >
+          <ShoppingItemComponent></ShoppingItemComponent>
+        </ResourceContext.Provider>
+      ))}
+      <div className="row my-5 mx-0 sticky-top">
+        <AddItemToShoppings></AddItemToShoppings>
       </div>
+    </ScrollableList>
   );
 };
 

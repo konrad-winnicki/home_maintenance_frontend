@@ -1,15 +1,11 @@
 import React from "react";
 import ProductComponent from "./ProductComponent";
 import { ResourceContext } from "../../contexts/resourceContext";
-
+import { ScrollableList } from "../commonComponents/ScrollableList";
 
 const ProductList = (props) => {
   return (
-    <div className="flex-grow-1 mt-1 mb-20" flex-grow-1 style={{
-      overflow: "auto",
-      paddingBottom: "1%",
-      marginBottom: "1%",
-    }}>
+    <ScrollableList>
       {props.productList.map((product) => (
         <ResourceContext.Provider
           key={product.product_id}
@@ -20,7 +16,7 @@ const ProductList = (props) => {
           <ProductComponent></ProductComponent>
         </ResourceContext.Provider>
       ))}
-    </div>
+    </ScrollableList>
   );
 };
 

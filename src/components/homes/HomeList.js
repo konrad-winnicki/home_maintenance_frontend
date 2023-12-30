@@ -1,17 +1,13 @@
 import React from "react";
 import Home from "./Home";
+import { ScrollableList } from "../commonComponents/ScrollableList";
 
-export default function HomeList({homes}) {
-
+export default function HomeList({ homes }) {
   return (
-    <div className="flex-grow-1 mt-1 mb-8" flex-grow-1 style={{
-      overflow: "auto",
-      paddingBottom: "1%",
-      marginBottom: "1%",
-    }}>
+    <ScrollableList>
       {homes.map((h) => (
         <Home key={h.id} home={h} />
       ))}
-    </div>
+    </ScrollableList>
   );
 }
