@@ -79,7 +79,7 @@ class ShoppingItemsCard extends React.PureComponent {
 
         <div
           className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
-          d-flex justify-content-between fixed-bottom"
+          d-flex justify-content-between sticky-bottom"
         >
           <div className="col text-center ">
             <AddItemsFromShoppings

@@ -12,7 +12,6 @@ import { AppContext } from "../../contexts/appContext";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
 
-
 class ProductsCard extends React.PureComponent {
   constructor() {
     super();
@@ -72,7 +71,8 @@ class ProductsCard extends React.PureComponent {
         </div>
         <ProductList productList={this.state.productList} />
 
-        <div className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary d-flex justify-content-between fixed-bottom">
+        <div className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary d-flex 
+        justify-content-between sticky-bottom">
           <AddProductButton></AddProductButton>
           <AddFinishedProductsToCart></AddFinishedProductsToCart>
           <Scaner
@@ -85,7 +85,6 @@ class ProductsCard extends React.PureComponent {
       </React.Fragment>
     );
   }
-
 }
 
 export function WrappedProductsCard() {

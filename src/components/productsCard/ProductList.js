@@ -17,10 +17,10 @@ className="flex-grow-1 mt-1 mb-8"
 const ProductList = (props) => {
   return (
     <React.Fragment>
-    <div className="flex-grow-1 mt-1 mb-8" flex-grow-1 style={{
+    <div className="flex-grow-1 mt-1 mb-20" flex-grow-1 style={{
       overflow: "auto",
       paddingBottom: "1%",
-      marginBottom: "14%",
+      marginBottom: "1%",
     }}>
       {props.productList.map((product) => (
         <ResourceContext.Provider

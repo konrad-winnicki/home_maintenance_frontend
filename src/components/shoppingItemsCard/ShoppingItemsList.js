@@ -12,7 +12,7 @@ const ShoppingItemsList = (props) => {
         style={{
           overflow: "auto",
           paddingBottom: "1%",
-          marginBottom: "14%",
+          marginBottom: "1%",
         }}
       >
         {props.shoppingItemsList.map((shoppingItem) => (

@@ -13,7 +13,7 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   return (
     <React.Fragment>
-      <nav className="navbar bg-warning mb-1 sticky-top">
+      <nav className="navbar bg-warning sticky-top">
         <div className="col-md-2 mx-1 text-center ">
           <button
             className="btn btn-outline-success"
