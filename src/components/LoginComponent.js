@@ -9,7 +9,7 @@ import GoogleButton from "react-google-button";
 import { oauthClientId, oauthRedirectUri } from "../config";
 import { exchangeOauthCodeForToken } from "../services/login";
 import { App } from "@capacitor/app"
-
+import logo from "../homeLoginS.png"
 export function LoginComponent() {
   const authorizationContext = useContext(AuthorizationContext);
   const navigate = useNavigate();
@@ -62,10 +62,16 @@ export function LoginComponent() {
 
   return (
     !authorizationContext.isLoggedIn && (
+     
       <div className="container vh-100 vw-100 d-flex align-items-center">
-        <div className="flex items-center justify-center">
+         <div className="row justify-content-center">
+        <img src={logo} alt="Logo" 
+         style={{ width: '40%', height: '40%', objectFit: 'cover', margin:'10px'}}
+        /> 
+        <div className="row justify-content-center">
           <GoogleButton onClick={redirectToGoogleLogin}></GoogleButton>
         </div>
+      </div>
       </div>
     )
   );
