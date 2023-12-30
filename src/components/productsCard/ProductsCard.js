@@ -1,18 +1,17 @@
 import React, { useContext } from "react";
 import { getProducts } from "../../services/store";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { ToastContainer } from "react-toastify";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
 import Scaner from "../Scaner.js";
 import styles from "../../my-style.module.css";
 import "../CardHeader.css";
-import NavigationBar from "../commonComponents/NavigationBar";
 import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
+
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -87,7 +86,6 @@ class ProductsCard extends React.PureComponent {
     );
   }
 
-  /**/
 }
 
 export function WrappedProductsCard() {

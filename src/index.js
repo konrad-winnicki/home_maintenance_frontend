@@ -17,7 +17,6 @@ import { ToastContainer } from "react-toastify";
 export const AppRoutes = () => {
 
   const authorizationContext = useContext(AuthorizationContext)
-
     return(
   
   <div className="container vh-100 vw-100 d-flex flex-column" 
@@ -26,7 +25,6 @@ export const AppRoutes = () => {
   {authorizationContext.isLoggedIn? <ToastContainer />: ""}
 
   
-
   <Routes>
     <Route path="/" element={<LoginComponent />} />
     <Route path="/login" element={<LoginComponent />} />

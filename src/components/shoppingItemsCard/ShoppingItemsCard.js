@@ -1,9 +1,6 @@
 import React, { useContext } from "react";
-import { ToastContainer } from "react-toastify";
-
 import { getShoppingItems } from "../../services/cart";
 import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
-import AddItemToShoppings from "./AddItemToShoppings";
 import Scaner from "../Scaner.js";
 import "../CardHeader.css";
 import { AppContext } from "../../contexts/appContext";
@@ -72,18 +69,13 @@ class ShoppingItemsCard extends React.PureComponent {
   render() {
     return (
       <React.Fragment>
-          <div className="header">
-            Shopping list in the {this.props.homeContext.home?.name}
-          </div>
-          <div
-           
-          >
-            <ShoppingItemsList
-              shoppingItemsList={this.state.shoppingItemsList}
-            ></ShoppingItemsList>
+        <div className="header">
+          Shopping list in the {this.props.homeContext.home?.name}
+        </div>
 
-           
-          </div>
+        <ShoppingItemsList
+          shoppingItemsList={this.state.shoppingItemsList}
+        ></ShoppingItemsList>
 
         <div
           className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 

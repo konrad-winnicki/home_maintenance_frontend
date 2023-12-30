@@ -1,10 +1,8 @@
-import { ToastContainer } from "react-toastify";
-import NavigationBar from "../commonComponents/NavigationBar";
+import React, { useContext, useState, useEffect  } from "react";
 import HomeList from "./HomeList";
 import { HomeContext } from "../../contexts/homeContext";
 import AddHomeButton from "./AddHomeButton";
 import JoinHomeButton from "./JoinHomeButton";
-import { useContext, useState, useEffect } from "react";
 import { getHomes } from "../../services/home";
 
 export default function HomesCard() {
@@ -24,10 +22,9 @@ export default function HomesCard() {
   }, [sessionCode]);
 
   return (
-    <div>
+    <React.Fragment>
       {/* TODO: create a reusable frame component with common navigation, toast
       etc. */}
-        <div className="flex-grow-3 mt-1 mb-8">
           <div className="header mt-10">
             Current home: {homeContext.home?.name}
           </div>
@@ -37,7 +34,6 @@ export default function HomesCard() {
             <AddHomeButton addHomeToState={addHomeToState} />
             <JoinHomeButton />
           </div>
-        </div>
-    </div>
+    </React.Fragment>
   );
 }
