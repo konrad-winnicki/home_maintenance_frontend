@@ -1,11 +1,13 @@
 import React from "react";
 import { ResourceContext } from "../../contexts/resourceContext";
 import ShoppingItemComponent from "./ShoppingItemComponent";
+import AddItemToShoppings from "./AddItemToShoppings";
+import { ScrollableList } from "../commonComponents/ScrollableList";
 
 const ShoppingItemsList = (props) => {
   console.log("shoping item list", props.shoppingItemsList);
   return (
-    <div>
+    <ScrollableList>
       {props.shoppingItemsList.map((shoppingItem) => (
         <ResourceContext.Provider
           key={shoppingItem.product_id}
@@ -16,7 +18,10 @@ const ShoppingItemsList = (props) => {
           <ShoppingItemComponent></ShoppingItemComponent>
         </ResourceContext.Provider>
       ))}
-    </div>
+      <div className="row my-5 mx-0 sticky-top">
+        <AddItemToShoppings></AddItemToShoppings>
+      </div>
+    </ScrollableList>
   );
 };
 
