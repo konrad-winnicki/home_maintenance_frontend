@@ -41,16 +41,18 @@ export function custom_quantity() {
 }
 
 export function notifications(message, type) {
-  console.log("dodalem notification o typie " + type);
+  console.log("dodalem notification o typie:" + type + ":");
   if (type === "success") {
     toast.success(message, {
       position: toast.POSITION.TOP_RIGHT,
-      className: "toast-message",
+      // className: "toast-message",
     });
   }
   if (type === "warning") {
+    console.log("adding warning toast" + message)
     toast.warning(message, {
       position: toast.POSITION.TOP_RIGHT,
+      className: "toast-message", // TODO: is it needed?
     });
   }
   if (type === "error") {
@@ -70,7 +72,7 @@ export async function serverResponseTranslator(messages, response_from_server) {
       if (status_code > 199 && status_code < 300) {
         notifications(messages.success, "success");
       } else if (status_code === 409) {
-        notifications(messages.duplication, "warning");
+        notifications(messages.duplicated, "warning");
       } else {
         notifications(messages.unknown, "error");
       }
@@ -88,7 +90,6 @@ export async function statusCodeTranslator(response, message) {
   if (statusCode === 401) {
     notifications(message.unlogged, "warning");
   } else if (statusCode > 199 && statusCode < 300) {
-    console.log("weszlo");
     notifications(message.succces, "success");
   } else if (statusCode === 409) {
     notifications(message.duplicated, "warning");

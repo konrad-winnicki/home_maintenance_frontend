@@ -31,7 +31,7 @@ const AddItemToShoppings = () => {
     const response = addShoppingItem(product_data, homeId, session_code);
     const messages = {
       success: "Shopping item addded",
-      duplication: "Shopping item already exists",
+      duplicated: "Shopping item already exists",
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
