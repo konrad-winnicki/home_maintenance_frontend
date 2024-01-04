@@ -8,10 +8,12 @@ import {
 import { AppContext } from "../../contexts/appContext";
 import { addHome } from "../../services/home";
 import "../commonComponents/BottomNavbarButtons.css";
+import { HomeContext } from "../../contexts/homeContext";
 
-const AddHomeButton = ({ addHomeToState }) => {
+const AddHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
+  const homeContext = useContext(HomeContext);
 
   const onClickHandler = async () => {
     const name = ask_home_name();
@@ -25,7 +27,7 @@ const AddHomeButton = ({ addHomeToState }) => {
       .then((l) => {
         const id = extractIdFromLocation(l);
         console.log('location', l)
-        addHomeToState({ id, name });
+        homeContext.addHomeToState({ id, name });
       })
       .then(() => {
         appContext.setAppState(APP_STATES.DEFAULT);;
