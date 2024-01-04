@@ -82,7 +82,7 @@ function ResourceDescription(props) {
       </div>
 
       <div
-        className="product__quantity"
+        className="product__quantity centered-text"
         onClick={() => {
           onClickQuantityHandler();
         }}

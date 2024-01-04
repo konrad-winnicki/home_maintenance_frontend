@@ -1,14 +1,17 @@
 .product__properties {
   display: inline-flex;
   width: 98%;
-  height: 6%;
+  padding: 0.5%;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0px 2px 2px 2px rgb(109, 109, 109);
+  box-shadow: 0px 2px 2px 2px rgb(58, 59, 57);
   margin: 4px;
   border-radius: 5px;
-  border: rgb(255, 255, 255);
-  background-color: rgb(255, 255, 255);
+  border-color: #f6bd60;
+  border-top: 2px solid #050505;
+  background-color: #F5CAC3;
+
+  
 }
 
 

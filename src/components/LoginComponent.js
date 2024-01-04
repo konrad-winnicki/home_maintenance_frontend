@@ -63,10 +63,10 @@ export function LoginComponent() {
   return (
     !authorizationContext.isLoggedIn && (
      
-      <div className="container vh-100 vw-100 d-flex align-items-center">
+      <div className="container vh-100 vw-100">
          <div className="row justify-content-center">
         <img src={logo} alt="Logo" 
-         style={{ width: '40%', height: '40%', objectFit: 'cover', margin:'10px'}}
+         style={{ width: '50%', height: '25%', objectFit: 'cover', marginTop:'35%', marginBottom: '10%'}}
         /> 
         <div className="row justify-content-center">
           <GoogleButton onClick={redirectToGoogleLogin}></GoogleButton>

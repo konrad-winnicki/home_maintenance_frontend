@@ -59,13 +59,13 @@ export default function Home({ home }) {
       <div className="product__properties">
         <div className="product__name">{home.name}</div>
         <button
-          className="button_surrounding btn btn-primary btn-sm"
+          className="resource_button"
           onClick={setHomeHandler}
         >
           <IoSettingsSharp />
         </button>
         <button
-          className="button_surrounding btn btn-primary btn-sm"
+          className="resource_button"
           onClick={() => {
             copyToClipboard();
           }}
@@ -73,7 +73,7 @@ export default function Home({ home }) {
           <HiOutlineClipboardDocumentList />
         </button>
         <button
-          className="button_surrounding btn btn-danger btn-sm"
+          className="resource_button"
           onClick={() => {
             leaveHome();
           }}

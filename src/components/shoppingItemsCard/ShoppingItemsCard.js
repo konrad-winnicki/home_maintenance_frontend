@@ -9,6 +9,7 @@ import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
+import { BottomNavBar } from "../commonComponents/BottomNavBar";
 
 class ShoppingItemsCard extends React.PureComponent {
   constructor(props) {
@@ -70,17 +71,14 @@ class ShoppingItemsCard extends React.PureComponent {
     return (
       <React.Fragment>
         <div className="header">
-          Shopping list in the {this.props.homeContext.home?.name}
+          Shopping list in {this.props.homeContext.home?.name}:
         </div>
 
         <ShoppingItemsList
           shoppingItemsList={this.state.shoppingItemsList}
         ></ShoppingItemsList>
 
-        <div
-          className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
-          d-flex justify-content-between sticky-bottom"
-        >
+        <BottomNavBar>
           <div className="col text-center ">
             <AddItemsFromShoppings
               shoppingItemsList={this.state.shoppingItemsList}
@@ -93,7 +91,7 @@ class ShoppingItemsCard extends React.PureComponent {
               state_changer={this.stateChanger}
             ></Scaner>
           </div>
-        </div>
+        </BottomNavBar>
       </React.Fragment>
     );
   }

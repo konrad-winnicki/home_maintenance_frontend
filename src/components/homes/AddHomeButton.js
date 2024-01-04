@@ -7,6 +7,7 @@ import {
 } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { addHome } from "../../services/home";
+import "../commonComponents/BottomNavbarButtons.css";
 
 const AddHomeButton = ({ addHomeToState }) => {
   const sessionCode = localStorage.getItem("session_code");
@@ -23,6 +24,7 @@ const AddHomeButton = ({ addHomeToState }) => {
       .then((r) => r.headers.get("Location"))
       .then((l) => {
         const id = extractIdFromLocation(l);
+        console.log('location', l)
         addHomeToState({ id, name });
       })
       .then(() => {
@@ -33,7 +35,8 @@ const AddHomeButton = ({ addHomeToState }) => {
   return (
     <div className="col text-center ">
       <button
-        className="btn btn-warning btn-sm"
+        className="bottom_navbar_buttons"
+
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >

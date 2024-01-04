@@ -48,7 +48,7 @@ const AddItemToShoppings = () => {
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
           className="form-control input-lg"
           type="text"
-          placeholder="Type product name"
+          placeholder="Product name"
           onChange={handleChangeName}
         ></input>
       </div>

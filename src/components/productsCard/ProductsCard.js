@@ -11,6 +11,7 @@ import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
+import { BottomNavBar } from "../commonComponents/BottomNavBar";
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -67,12 +68,12 @@ class ProductsCard extends React.PureComponent {
         </div>
 
         <div className="header">
-          Products in the {this.props.homeContext.home?.name}
+          Products in {this.props.homeContext.home?.name}:
+        
         </div>
         <ProductList productList={this.state.productList} />
 
-        <div className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary d-flex 
-        justify-content-between sticky-bottom">
+        <BottomNavBar>
           <AddProductButton></AddProductButton>
           <AddFinishedProductsToCart></AddFinishedProductsToCart>
           <Scaner
@@ -81,7 +82,7 @@ class ProductsCard extends React.PureComponent {
             state_changer={this.stateChanger}
             server_response_service={serverResponseTranslator}
           ></Scaner>
-        </div>
+        </BottomNavBar>
       </React.Fragment>
     );
   }

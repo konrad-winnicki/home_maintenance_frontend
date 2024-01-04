@@ -4,6 +4,7 @@ import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { joinHome } from "../../services/home";
+import "../commonComponents/BottomNavbarButtons.css";
 
 // TODO: remove duplication
 const JoinHomeButton = () => {
@@ -30,7 +31,7 @@ const JoinHomeButton = () => {
   return (
     <div className="col text-center ">
       <button
-        className="btn btn-warning btn-sm"
+        className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >

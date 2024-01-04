@@ -4,6 +4,7 @@ import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { addShoppingItemsToStore } from "../../services/store";
 import { HomeContext } from "../../contexts/homeContext";
+import "../commonComponents/BottomNavbarButtons.css";
 
 const AddItemsFromShopings = () => {
   const session_code = localStorage.getItem("session_code");
@@ -26,7 +27,7 @@ const AddItemsFromShopings = () => {
   return (
     <button
       type="button"
-      className="btn btn-warning btn-sm"
+      className="bottom_navbar_buttons"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         addShoppings();

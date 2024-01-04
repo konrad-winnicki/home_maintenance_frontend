@@ -36,7 +36,7 @@ const DecreaseButton = () => {
 
   return (
     <button
-      className="btn btn-primary btn-sm button_surrounding"
+      className="resource_button"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         onClickHandler();

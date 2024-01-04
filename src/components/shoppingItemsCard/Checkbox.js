@@ -5,6 +5,7 @@ import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { HomeContext } from "../../contexts/homeContext";
+import "../ResourceButtons.css";
 
 export default function CheckBox() {
   const session_code = localStorage.getItem("session_code");
@@ -55,7 +56,7 @@ export default function CheckBox() {
   return (
     <div>
       <input
-        className="form-check-input, button_surrounding"
+        className="form-check-input, resource_button"
         style={{ width: "25px", height: "25px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"

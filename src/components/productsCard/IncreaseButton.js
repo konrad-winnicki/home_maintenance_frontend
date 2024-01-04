@@ -34,7 +34,7 @@ const IncreaseButton = () => {
 
   return (
     <button
-      className="button_surrounding btn btn-primary btn-sm"
+      className="resource_button"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         onClickHandler();

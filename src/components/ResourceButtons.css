@@ -1,7 +1,15 @@
 
-.button_surrounding {
+.resource_button {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    margin: 7px;    
+    margin: 7px; 
+
+    background-color: #fbfaf8;
+    border: 3px solid;
+    color: #454444;
+    border-radius: 7px;
+    font-weight: bold;
+    
+    padding: 6px;
   }

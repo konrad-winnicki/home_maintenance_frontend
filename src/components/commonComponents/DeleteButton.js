@@ -34,7 +34,7 @@ const DeleteButton = (props) => {
 
   return (
     <button
-      className="btn btn-danger btn-sm button_surrounding"
+      className="resource_button"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         onClickHandler();

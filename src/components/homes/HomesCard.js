@@ -4,6 +4,7 @@ import { HomeContext } from "../../contexts/homeContext";
 import AddHomeButton from "./AddHomeButton";
 import JoinHomeButton from "./JoinHomeButton";
 import { getHomes } from "../../services/home";
+import { BottomNavBar } from "../commonComponents/BottomNavBar";
 
 export default function HomesCard() {
   const sessionCode = localStorage.getItem("session_code");
@@ -30,11 +31,10 @@ export default function HomesCard() {
           </div>
           {/* TODO: here is the place for the current "page" */}
           <HomeList homes={homes} />
-          <div className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
-          d-flex justify-content-between sticky-bottom">
+          <BottomNavBar>
             <AddHomeButton addHomeToState={addHomeToState} />
             <JoinHomeButton />
-          </div>
+          </BottomNavBar>
     </React.Fragment>
   );
 }
