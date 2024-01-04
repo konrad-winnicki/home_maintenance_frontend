@@ -14,7 +14,7 @@ export const SocketContextProvider = ({ children }) => {
   const createSocket = (session_code, home_context) => {
     const URL = backendUrl;
     const socket = io(URL, {
-      autoConnect: false,
+      autoConnect: true,
       auth: {
         session_code: session_code,
         home_context: home_context,

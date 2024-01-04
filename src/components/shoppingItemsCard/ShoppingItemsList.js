@@ -5,7 +5,6 @@ import AddItemToShoppings from "./AddItemToShoppings";
 import { ScrollableList } from "../commonComponents/ScrollableList";
 
 const ShoppingItemsList = (props) => {
-  console.log("shoping item list", props.shoppingItemsList);
   return (
     <ScrollableList>
       {props.shoppingItemsList.map((shoppingItem) => (

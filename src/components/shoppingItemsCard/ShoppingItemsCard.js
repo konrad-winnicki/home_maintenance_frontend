@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+
 import { getShoppingItems } from "../../services/cart";
 import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
 import Scaner from "../Scaner.js";
@@ -10,50 +11,57 @@ import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
 
-class ShoppingItemsCard extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shoppingItemsList: [],
-    };
-    this.session_code = localStorage.getItem("session_code");
-    this.stateChanger = this.stateChanger.bind(this);
-  }
-
-  stateChanger(new_state) {
-    this.setState(new_state);
-  }
-  componentDidMount() {
+export function ShoppingItemsCard() {
+  const initialized = useRef(false);
+  const appContext = useContext(AppContext);
+  const socketContext = useContext(SocketContext);
+  const homeContext = useContext(HomeContext);
+  const [shoppingItems, setShoppingItems] = useState([]);
+  const session_code = localStorage.getItem("session_code");
+  const showScanner = false;
+  useEffect(() => {
+    if (initialized.current) {
+      return;
+    }
+    initialized.current = true;
+    // TODO: this may not be called?
     window.addEventListener("beforeunload", () => {
-      this.props.socketContext.socket?.disconnect();
+      console.log("window event: beforeunload");
+      socketContext.socket?.disconnect();
     });
 
-    const homeId = this.props.homeContext.home.id;
-    const socket = this.props.socketContext.createSocket(
-      this.session_code,
-      homeId
+    const socket = socketContext.createSocket(
+      session_code,
+      homeContext.home.id
     );
 
-    socket.connect();
-    this.props.socketContext.setSocket(socket);
+    socketContext.setSocket(socket);
     socket?.on("updateShoppingItems", () => {
-      this.ProductListChanger();
+      ProductListChanger();
     });
 
-    this.ProductListChanger();
-  }
+    ProductListChanger();
+    return () => {
+      const socket = socketContext.socket;
+      if (socket) {
+        console.log("Disconnecting socket.");
+        socket.off("updateShoppingItems");
+        socket.close();
+        socket.disconnect();
+        socketContext.socket = null;
+      }
+    };
+  }, [session_code]);
 
-  ProductListChanger() {
-    const homeId = this.props.homeContext.home.id;
+  function ProductListChanger() {
+    const homeId = homeContext.home.id;
 
-    this.props.appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = getShoppingItems(homeId, this.session_code);
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+    const response = getShoppingItems(homeId, session_code);
     response
       .then((response) => {
         response.json().then((json) => {
-          this.stateChanger({
-            shoppingItemsList: json,
-          });
+          setShoppingItems(json);
         });
       })
       .catch((error) => console.log(error));
@@ -62,55 +70,36 @@ class ShoppingItemsCard extends React.PureComponent {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response).then(() => {
-      this.props.appContext.setAppState(APP_STATES.DEFAULT);
+      appContext.setAppState(APP_STATES.DEFAULT);
     });
   }
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="header">
-          Shopping list in the {this.props.homeContext.home?.name}
-        </div>
-
-        <ShoppingItemsList
-          shoppingItemsList={this.state.shoppingItemsList}
-        ></ShoppingItemsList>
-
-        <div
-          className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
-          d-flex justify-content-between sticky-bottom"
-        >
-          <div className="col text-center ">
-            <AddItemsFromShoppings
-              shoppingItemsList={this.state.shoppingItemsList}
-            ></AddItemsFromShoppings>
-          </div>
-          <div className="col text-center">
-            <Scaner
-              notifications={this.notifications}
-              app_state={this.state.app_state}
-              state_changer={this.stateChanger}
-            ></Scaner>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
-
-export function WrappedShoppingItemsCard() {
-  const appContext = useContext(AppContext);
-  const socketContext = useContext(SocketContext);
-  const homeContext = useContext(HomeContext);
-
   return (
-    <ShoppingItemsCard
-      appContext={appContext}
-      socketContext={socketContext}
-      homeContext={homeContext}
-    ></ShoppingItemsCard>
+    <div>
+      <div className="header">
+        Shopping list in the {homeContext.home?.name}
+      </div>
+      <ShoppingItemsList shoppingItemsList={shoppingItems}></ShoppingItemsList>
+
+      <div
+        className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
+          d-flex justify-content-between sticky-bottom"
+      >
+        <div className="col text-center ">
+          <AddItemsFromShoppings
+            shoppingItemsList={shoppingItems}
+          ></AddItemsFromShoppings>
+        </div>
+        <div className="col text-center">
+          {showScanner ? (
+            <Scaner
+              notifications={appContext.notifications}
+              app_state={appContext.appState}
+              state_changer={appContext.setAppState}
+            ></Scaner>
+          ) : null}
+        </div>
+      </div>
+    </div>
   );
 }
-
-export default ShoppingItemsCard;
