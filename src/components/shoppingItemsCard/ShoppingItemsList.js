@@ -7,7 +7,7 @@ import { ScrollableList } from "../commonComponents/ScrollableList";
 const ShoppingItemsList = (props) => {
   return (
     <ScrollableList>
-      {props.shoppingItemsList.map((shoppingItem) => (
+      {props.shoppingItems.map((shoppingItem) => (
         <ResourceContext.Provider
           key={shoppingItem.product_id}
           value={{

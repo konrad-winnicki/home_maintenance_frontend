@@ -43,6 +43,7 @@ export function ShoppingItemsCard() {
     });
 
     ProductListChanger();
+    
     return () => {
       const socket = socketContext.socket;
       if (socket) {
@@ -73,40 +74,34 @@ export function ShoppingItemsCard() {
     };
     serverResponseTranslator(messages, response)
       .then(() => {
-        this.props.appContext.setAppState(APP_STATES.DEFAULT);
+        appContext.setAppState(APP_STATES.DEFAULT);
       })
       .catch((error) => console.log(error));
   }
 
-  
-    return (
-      <React.Fragment>
-        <div className="header">
-          Shopping list in {this.props.homeContext.home?.name}:
+  return (
+     <React.Fragment>
+      <div className="header">
+        Shopping list in {homeContext.home?.name}:
+      </div>
+
+      <ShoppingItemsList
+        shoppingItems={shoppingItems}
+      ></ShoppingItemsList>
+
+      <BottomNavBar>
+        <div className="col text-center ">
+          <AddItemsFromShoppings
+          ></AddItemsFromShoppings>
         </div>
-
-        <ShoppingItemsList
-          shoppingItemsList={this.state.shoppingItemsList}
-          addProductToState={this.addProductToState}
-        ></ShoppingItemsList>
-
-        <BottomNavBar>
-          <div className="col text-center ">
-            <AddItemsFromShoppings
-              shoppingItemsList={this.state.shoppingItemsList}
-            ></AddItemsFromShoppings>
-          </div>
-          <div className="col text-center">
-
-            <Scaner
-              notifications={appContext.notifications}
-              app_state={appContext.appState}
-              state_changer={appContext.setAppState}
-            ></Scaner>
-
-          </div>
-        </BottomNavBar>
-      </React.Fragment>
-    );
-  }
-
+        <div className="col text-center">
+          {showScanner? <Scaner
+            notifications={appContext.notifications}
+            app_state={appContext.appState}
+            state_changer={appContext.setAppState}
+          ></Scaner>: ""}
+        </div>
+      </BottomNavBar>
+    </React.Fragment>
+  );
+}
