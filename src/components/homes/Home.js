@@ -50,18 +50,20 @@ export default function Home({ home }) {
       success: "You left home",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        homeContext.deleteHomeFromState(home.id);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
   return (
     <>
       <div className="product__properties">
         <div className="product__name">{home.name}</div>
-        <button
-          className="resource_button"
-          onClick={setHomeHandler}
-        >
+        <button className="resource_button" onClick={setHomeHandler}>
           <IoSettingsSharp />
         </button>
         <button

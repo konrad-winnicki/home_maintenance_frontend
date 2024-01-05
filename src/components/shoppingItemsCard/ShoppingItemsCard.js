@@ -24,6 +24,7 @@ class ShoppingItemsCard extends React.PureComponent {
   stateChanger(new_state) {
     this.setState(new_state);
   }
+
   componentDidMount() {
     window.addEventListener("beforeunload", () => {
       this.props.socketContext.socket?.disconnect();
@@ -62,9 +63,11 @@ class ShoppingItemsCard extends React.PureComponent {
     const messages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      this.props.appContext.setAppState(APP_STATES.DEFAULT);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        this.props.appContext.setAppState(APP_STATES.DEFAULT);
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -76,6 +79,7 @@ class ShoppingItemsCard extends React.PureComponent {
 
         <ShoppingItemsList
           shoppingItemsList={this.state.shoppingItemsList}
+          addProductToState={this.addProductToState}
         ></ShoppingItemsList>
 
         <BottomNavBar>

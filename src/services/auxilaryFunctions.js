@@ -69,18 +69,19 @@ export async function serverResponseTranslator(messages, response_from_server) {
       const status_code = response.status;
       if (status_code > 199 && status_code < 300) {
         notifications(messages.success, "success");
+        return Promise.resolve(response);
+
       } else if (status_code === 409) {
-        notifications(messages.duplication, "warning");
+        notifications(messages.duplicated, "warning");
+        return Promise.reject('duplication');
+
       } else {
         notifications(messages.unknown, "error");
+        return Promise.reject('unknown error');
       }
-      return response;
+
     })
-    .catch((error) => {
-      notifications(messages.unknown, "error");
-      console.log(error);
-      return error;
-    });
+    
 }
 
 export async function statusCodeTranslator(response, message) {

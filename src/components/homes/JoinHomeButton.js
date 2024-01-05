@@ -23,9 +23,11 @@ const JoinHomeButton = () => {
       duplicated: "You belong to this home",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        appContext.setAppState(APP_STATES.REFRESHING);
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -40,7 +42,6 @@ const JoinHomeButton = () => {
     </div>
   );
 };
-
 
 function promptForHomeId() {
   const homeId = prompt("Give home invitation id:");

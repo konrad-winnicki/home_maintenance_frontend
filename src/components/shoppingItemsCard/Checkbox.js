@@ -26,7 +26,8 @@ export default function CheckBox() {
   };
 
   const updateItem = useCallback(() => {
-    const {product_id, ...resource_without_product_id} = shoppingItemContext.resource
+    const { product_id, ...resource_without_product_id } =
+      shoppingItemContext.resource;
 
     const shoppingItem = {
       id: product_id,
@@ -40,10 +41,16 @@ export default function CheckBox() {
     const messages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      initialRender.current = isBought;
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        initialRender.current = isBought;
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   }, [appContext, shoppingItemContext, isBought, homeId, session_code]);
 
   useEffect(() => {
@@ -56,7 +63,7 @@ export default function CheckBox() {
   return (
     <div>
       <input
-        className="form-check-input, resource_button"
+        className=""
         style={{ width: "25px", height: "25px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"

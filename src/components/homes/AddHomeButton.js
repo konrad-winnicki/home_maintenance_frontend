@@ -26,11 +26,11 @@ const AddHomeButton = () => {
       .then((r) => r.headers.get("Location"))
       .then((l) => {
         const id = extractIdFromLocation(l);
-        console.log('location', l)
         homeContext.addHomeToState({ id, name });
       })
-      .then(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);;
+      .catch((error) => console.log(error))
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
       });
   };
 
@@ -38,7 +38,6 @@ const AddHomeButton = () => {
     <div className="col text-center ">
       <button
         className="bottom_navbar_buttons"
-
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >

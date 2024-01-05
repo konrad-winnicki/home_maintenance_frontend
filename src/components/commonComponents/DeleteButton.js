@@ -27,9 +27,14 @@ const DeleteButton = (props) => {
       success: "Product deleted",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        productContext.deleteResourceFromState(productId);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
 
   return (

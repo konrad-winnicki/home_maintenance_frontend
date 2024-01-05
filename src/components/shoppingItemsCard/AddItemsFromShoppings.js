@@ -19,9 +19,13 @@ const AddItemsFromShopings = () => {
       success: "Shopping items transfered",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, result).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, result)
+      .then(() => {
+        appContext.setAppState(APP_STATES.REFRESHING);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

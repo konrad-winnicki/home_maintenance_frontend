@@ -15,7 +15,7 @@ export default function HomesCard() {
       .then(r => r.json())
       .then(json => homeContext.setHomes(json))
       .catch((error) => console.log(error));
-  }, [sessionCode]);
+  }, []);
 
   return (
     <React.Fragment>

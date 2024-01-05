@@ -3,7 +3,7 @@ import { BsFillArrowUpSquareFill } from "react-icons/bs";
 import { updateProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/resourceContext";
-import { AppContext} from "../../contexts/appContext";
+import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
@@ -22,14 +22,26 @@ const IncreaseButton = () => {
         name: productContext.resource.name,
       },
     };
-    appContext.setAppState( APP_STATES.AWAITING_API_RESPONSE);
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = updateProduct(product_data, homeId, session_code);
     const messages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        const newValues = {
+          product_id: product_data.id,
+          name: product_data.updatedValues.name,
+          quantity: product_data.updatedValues.quantity,
+        };
+        productContext.modifyProductInState(product_data.id, newValues);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
 
   return (

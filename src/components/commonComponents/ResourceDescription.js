@@ -4,7 +4,7 @@ import { ask_new_name } from "../../services/auxilaryFunctions";
 import { custom_quantity } from "../../services/auxilaryFunctions";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/resourceContext";
-import { AppContext} from "../../contexts/appContext";
+import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
 
@@ -12,6 +12,7 @@ function ResourceDescription(props) {
   const session_code = localStorage.getItem("session_code");
   const resourceContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
+
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
 
@@ -21,26 +22,39 @@ function ResourceDescription(props) {
       return;
     }
 
-    const {product_id, ...resource_without_product_id} = resourceContext.resource
+    const { product_id: resource_id, ...resource_without_id } =
+      resourceContext.resource;
 
-    const product_data = {
-      id: product_id,
+    const resource_data = {
+      id: resource_id,
       updatedValues: {
-        ...resource_without_product_id,
+        ...resource_without_id,
         name: new_name,
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
-    let response = props.updateMethod(product_data, homeId, session_code);
+    let response = props.updateMethod(resource_data, homeId, session_code);
     const messages = {
       success: "Name changed",
+      duplicated: "Product already exists",
       unknown: "Unknown error",
     };
 
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        const newValues = {
+          ...resourceContext.resource,
+          name: resource_data.updatedValues.name,
+        };
+        resourceContext.modifyProductInState(resource_data.id, newValues);
+      })
+      .then(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      })
+      .catch(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
 
   const onClickQuantityHandler = () => {
@@ -49,11 +63,12 @@ function ResourceDescription(props) {
       return;
     }
 
-    const {product_id, ...resource_without_product_id} = resourceContext.resource
+    const { product_id, ...resource_without_product_id } =
+      resourceContext.resource;
     const product_data = {
       id: product_id,
       updatedValues: {
-         ...resource_without_product_id,
+        ...resource_without_product_id,
         quantity: quantity,
       },
     };
@@ -65,9 +80,18 @@ function ResourceDescription(props) {
       success: "Quantity changed",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        const newValues = {
+          ...resourceContext.resource,
+          quantity: product_data.updatedValues.quantity,
+        };
+        resourceContext.modifyProductInState(product_data.id, newValues);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
 
   return (

@@ -5,8 +5,8 @@ export const HomeContext = createContext({
   homes: [{ id: String, name: String }],
   setHome: () => {},
   setHomes: () => {},
-
   addHomeToState: () => {},
+  deleteHomeFromState: () => {},
 });
 
 export const HomeContextProvider = ({ children }) => {
@@ -16,13 +16,20 @@ export const HomeContextProvider = ({ children }) => {
     setHomes([...homes, home]);
   }
 
+  function deleteHomeFromState(homeId) {
+    const filteredHomeList =  homes.filter(home => home.id !== homeId
+    );
+    setHomes(filteredHomeList)
+  }
   useEffect(() => {
     console.log("Home Context changed to: ", home);
   }, [home]);
 
   return (
     <div>
-      <HomeContext.Provider value={{ home, homes, setHome, setHomes, addHomeToState }}>
+      <HomeContext.Provider
+        value={{ home, homes, setHome, setHomes, addHomeToState, deleteHomeFromState }}
+      >
         {children}
       </HomeContext.Provider>
     </div>
