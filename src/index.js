@@ -8,7 +8,7 @@ import {
 } from "./contexts/authorizationContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
-import { WrappedShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
+import { ShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
 import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
 import { SocketContextProvider } from "./contexts/socketContext";
@@ -38,7 +38,7 @@ export const AppRoutes = () => {
           <Route path="/products/" element={<WrappedProductsCard />} />
           <Route
             path="/shoppingItems/"
-            element={<WrappedShoppingItemsCard />}
+            element={<ShoppingItemsCard />}
           />
           <Route path="/homes" element={<HomesCard />} />
         </Route>

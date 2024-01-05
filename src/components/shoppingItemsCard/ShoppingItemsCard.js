@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+
 import { getShoppingItems } from "../../services/cart";
 import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
 import Scaner from "../Scaner.js";
@@ -11,51 +12,58 @@ import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
 
-class ShoppingItemsCard extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shoppingItemsList: [],
-    };
-    this.session_code = localStorage.getItem("session_code");
-    this.stateChanger = this.stateChanger.bind(this);
-  }
+export function ShoppingItemsCard() {
+  const initialized = useRef(false);
+  const appContext = useContext(AppContext);
+  const socketContext = useContext(SocketContext);
+  const homeContext = useContext(HomeContext);
+  const [shoppingItems, setShoppingItems] = useState([]);
+  const session_code = localStorage.getItem("session_code");
+  const showScanner = false;
+  useEffect(() => {
+    if (initialized.current) {
+      return;
+    }
+    initialized.current = true;
+    // TODO: this may not be called?
 
-  stateChanger(new_state) {
-    this.setState(new_state);
-  }
-
-  componentDidMount() {
     window.addEventListener("beforeunload", () => {
-      this.props.socketContext.socket?.disconnect();
+      console.log("window event: beforeunload");
+      socketContext.socket?.disconnect();
     });
 
-    const homeId = this.props.homeContext.home.id;
-    const socket = this.props.socketContext.createSocket(
-      this.session_code,
-      homeId
+    const socket = socketContext.createSocket(
+      session_code,
+      homeContext.home.id
     );
 
-    socket.connect();
-    this.props.socketContext.setSocket(socket);
+    socketContext.setSocket(socket);
     socket?.on("updateShoppingItems", () => {
-      this.ProductListChanger();
+      ProductListChanger();
     });
 
-    this.ProductListChanger();
-  }
+    ProductListChanger();
+    return () => {
+      const socket = socketContext.socket;
+      if (socket) {
+        console.log("Disconnecting socket.");
+        socket.off("updateShoppingItems");
+        socket.close();
+        socket.disconnect();
+        socketContext.socket = null;
+      }
+    };
+  }, [session_code]);
 
-  ProductListChanger() {
-    const homeId = this.props.homeContext.home.id;
+  function ProductListChanger() {
+    const homeId = homeContext.home.id;
 
-    this.props.appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = getShoppingItems(homeId, this.session_code);
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+    const response = getShoppingItems(homeId, session_code);
     response
       .then((response) => {
         response.json().then((json) => {
-          this.stateChanger({
-            shoppingItemsList: json,
-          });
+          setShoppingItems(json);
         });
       })
       .catch((error) => console.log(error));
@@ -70,7 +78,7 @@ class ShoppingItemsCard extends React.PureComponent {
       .catch((error) => console.log(error));
   }
 
-  render() {
+  
     return (
       <React.Fragment>
         <div className="header">
@@ -89,30 +97,16 @@ class ShoppingItemsCard extends React.PureComponent {
             ></AddItemsFromShoppings>
           </div>
           <div className="col text-center">
+
             <Scaner
-              notifications={this.notifications}
-              app_state={this.state.app_state}
-              state_changer={this.stateChanger}
+              notifications={appContext.notifications}
+              app_state={appContext.appState}
+              state_changer={appContext.setAppState}
             ></Scaner>
+
           </div>
         </BottomNavBar>
       </React.Fragment>
     );
   }
-}
 
-export function WrappedShoppingItemsCard() {
-  const appContext = useContext(AppContext);
-  const socketContext = useContext(SocketContext);
-  const homeContext = useContext(HomeContext);
-
-  return (
-    <ShoppingItemsCard
-      appContext={appContext}
-      socketContext={socketContext}
-      homeContext={homeContext}
-    ></ShoppingItemsCard>
-  );
-}
-
-export default ShoppingItemsCard;
