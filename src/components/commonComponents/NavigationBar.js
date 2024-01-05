@@ -6,6 +6,7 @@ import { IoHome } from "react-icons/io5";
 import { ImListNumbered } from "react-icons/im";
 import {useNavigate } from "react-router-dom";
 import { HomeContext } from "../../contexts/homeContext";
+import "./NavigationBarButtons.css";
 
 const NavigationBar = () => {
   const homeContext = useContext(HomeContext)
@@ -13,10 +14,11 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   return (
     <React.Fragment>
-      <nav className="navbar bg-warning sticky-top">
-        <div className="col-md-2 mx-1 text-center ">
+      <nav className="navbar sticky-top" style={{backgroundColor: '#f6bd60'}}>
+        <div className="col-md-2 mx-1 my-1 text-center ">
           <button
-            className="btn btn-outline-success"
+            className="navbar_buttons"
+
               onClick={() => {
               navigate("/homes");
             }}
@@ -24,9 +26,9 @@ const NavigationBar = () => {
             <IoHome /> Homes
           </button>
         </div>
-        <div className="col-md-1 mx-1 text-end">
+        <div className="col-md-1 mx-1 my-1 text-end">
           <button
-            className="btn btn-outline-success"
+            className="navbar_buttons"
             disabled={!home ? true : false}
             onClick={() => {
               navigate("/products");
@@ -35,9 +37,10 @@ const NavigationBar = () => {
             <ImListNumbered />
           </button>
         </div>
-        <div className="col-md-2 mx-1 text-center ">
+        <div className="col-md-2 mx-1 my-1 text-center ">
           <button
-            className="btn btn-outline-success"
+            className="navbar_buttons"
+
             disabled={!home ? true : false}
 
             onClick={() => {

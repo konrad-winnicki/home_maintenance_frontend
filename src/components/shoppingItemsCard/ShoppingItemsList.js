@@ -18,7 +18,8 @@ const ShoppingItemsList = (props) => {
         </ResourceContext.Provider>
       ))}
       <div className="row my-5 mx-0 sticky-top">
-        <AddItemToShoppings></AddItemToShoppings>
+        <AddItemToShoppings
+        ></AddItemToShoppings>
       </div>
     </ScrollableList>
   );

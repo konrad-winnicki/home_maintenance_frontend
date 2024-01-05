@@ -4,6 +4,7 @@ import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { joinHome } from "../../services/home";
+import "../commonComponents/BottomNavbarButtons.css";
 
 // TODO: remove duplication
 const JoinHomeButton = () => {
@@ -22,15 +23,17 @@ const JoinHomeButton = () => {
       duplicated: "You belong to this home",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        appContext.setAppState(APP_STATES.REFRESHING);
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
     <div className="col text-center ">
       <button
-        className="btn btn-warning btn-sm"
+        className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >
@@ -39,7 +42,6 @@ const JoinHomeButton = () => {
     </div>
   );
 };
-
 
 function promptForHomeId() {
   const homeId = prompt("Give home invitation id:");

@@ -252,7 +252,7 @@ class Scaner extends React.PureComponent {
 
       <button
         type="button"
-        className="btn btn-warning btn-sm"
+        className="btn btn-light btn-sm"
         disabled={
           this.props.app_state !== "default" &&
           this.props.app_state !== "Scaning barcode"

@@ -4,22 +4,18 @@ import { HomeContext } from "../../contexts/homeContext";
 import AddHomeButton from "./AddHomeButton";
 import JoinHomeButton from "./JoinHomeButton";
 import { getHomes } from "../../services/home";
+import { BottomNavBar } from "../commonComponents/BottomNavBar";
 
 export default function HomesCard() {
   const sessionCode = localStorage.getItem("session_code");
-  const [homes, setHomes] = useState([]);
   const homeContext = useContext(HomeContext);
-  function addHomeToState(home) {
-    setHomes([...homes, home]);
-  }
-
 
   useEffect(() => {
     getHomes(sessionCode)
       .then(r => r.json())
-      .then(json => setHomes(json))
+      .then(json => homeContext.setHomes(json))
       .catch((error) => console.log(error));
-  }, [sessionCode]);
+  }, []);
 
   return (
     <React.Fragment>
@@ -29,12 +25,11 @@ export default function HomesCard() {
             Current home: {homeContext.home?.name}
           </div>
           {/* TODO: here is the place for the current "page" */}
-          <HomeList homes={homes} />
-          <div className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
-          d-flex justify-content-between sticky-bottom">
-            <AddHomeButton addHomeToState={addHomeToState} />
+          <HomeList homes={homeContext.homes} />
+          <BottomNavBar>
+            <AddHomeButton />
             <JoinHomeButton />
-          </div>
+          </BottomNavBar>
     </React.Fragment>
   );
 }

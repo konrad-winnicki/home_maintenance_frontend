@@ -4,6 +4,7 @@ import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { addShoppingItemsToStore } from "../../services/store";
 import { HomeContext } from "../../contexts/homeContext";
+import "../commonComponents/BottomNavbarButtons.css";
 
 const AddItemsFromShopings = () => {
   const session_code = localStorage.getItem("session_code");
@@ -18,15 +19,19 @@ const AddItemsFromShopings = () => {
       success: "Shopping items transfered",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, result).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, result)
+      .then(() => {
+        appContext.setAppState(APP_STATES.REFRESHING);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <button
       type="button"
-      className="btn btn-warning btn-sm"
+      className="bottom_navbar_buttons"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         addShoppings();

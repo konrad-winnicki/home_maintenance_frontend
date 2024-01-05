@@ -1,11 +1,13 @@
 export const ScrollableList = ({ children }) => {
   return (
     <div
-      className="flex-grow-1 mt-1 mb-8"
+
+      className="flex-grow-1"
       style={{
         overflow: "auto",
-        paddingBottom: "1%",
-        marginBottom: "1%",
+        paddingTop: "3%",
+        paddingBottom: "3%",
+        marginBottom: "0%",
       }}
     >
       {children}

@@ -50,22 +50,24 @@ export default function Home({ home }) {
       success: "You left home",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        homeContext.deleteHomeFromState(home.id);
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
   return (
     <>
       <div className="product__properties">
         <div className="product__name">{home.name}</div>
-        <button
-          className="button_surrounding btn btn-primary btn-sm"
-          onClick={setHomeHandler}
-        >
+        <button className="resource_button" onClick={setHomeHandler}>
           <IoSettingsSharp />
         </button>
         <button
-          className="button_surrounding btn btn-primary btn-sm"
+          className="resource_button"
           onClick={() => {
             copyToClipboard();
           }}
@@ -73,7 +75,7 @@ export default function Home({ home }) {
           <HiOutlineClipboardDocumentList />
         </button>
         <button
-          className="button_surrounding btn btn-danger btn-sm"
+          className="resource_button"
           onClick={() => {
             leaveHome();
           }}

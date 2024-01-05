@@ -1,0 +1,12 @@
+.bottom_navbar_buttons {
+  background-color: #ffffff;
+  border: 3px solid;
+  color: #454444;
+  border-radius: 7px;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.bottom_navbar_buttons:active {
+  color: #F5CAC3;
+}

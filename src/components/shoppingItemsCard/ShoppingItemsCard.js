@@ -10,6 +10,7 @@ import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
+import { BottomNavBar } from "../commonComponents/BottomNavBar";
 
 export function ShoppingItemsCard() {
   const initialized = useRef(false);
@@ -25,6 +26,7 @@ export function ShoppingItemsCard() {
     }
     initialized.current = true;
     // TODO: this may not be called?
+
     window.addEventListener("beforeunload", () => {
       console.log("window event: beforeunload");
       socketContext.socket?.disconnect();
@@ -69,37 +71,42 @@ export function ShoppingItemsCard() {
     const messages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.DEFAULT);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        this.props.appContext.setAppState(APP_STATES.DEFAULT);
+      })
+      .catch((error) => console.log(error));
   }
 
-  return (
-    <div>
-      <div className="header">
-        Shopping list in the {homeContext.home?.name}
-      </div>
-      <ShoppingItemsList shoppingItemsList={shoppingItems}></ShoppingItemsList>
-
-      <div
-        className="mr-0 ml-0 mt-3 pt-3 pb-3 pr-0 pl-0 bg-primary 
-          d-flex justify-content-between sticky-bottom"
-      >
-        <div className="col text-center ">
-          <AddItemsFromShoppings
-            shoppingItemsList={shoppingItems}
-          ></AddItemsFromShoppings>
+  
+    return (
+      <React.Fragment>
+        <div className="header">
+          Shopping list in {this.props.homeContext.home?.name}:
         </div>
-        <div className="col text-center">
-          {showScanner ? (
+
+        <ShoppingItemsList
+          shoppingItemsList={this.state.shoppingItemsList}
+          addProductToState={this.addProductToState}
+        ></ShoppingItemsList>
+
+        <BottomNavBar>
+          <div className="col text-center ">
+            <AddItemsFromShoppings
+              shoppingItemsList={this.state.shoppingItemsList}
+            ></AddItemsFromShoppings>
+          </div>
+          <div className="col text-center">
+
             <Scaner
               notifications={appContext.notifications}
               app_state={appContext.appState}
               state_changer={appContext.setAppState}
             ></Scaner>
-          ) : null}
-        </div>
-      </div>
-    </div>
-  );
-}
+
+          </div>
+        </BottomNavBar>
+      </React.Fragment>
+    );
+  }
+

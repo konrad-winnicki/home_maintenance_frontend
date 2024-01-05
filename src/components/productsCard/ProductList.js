@@ -11,6 +11,8 @@ const ProductList = (props) => {
           key={product.product_id}
           value={{
             resource: product,
+            modifyProductInState: props.modifyProductInState,
+            deleteResourceFromState: props.deleteResourceFromState
           }}
         >
           <ProductComponent></ProductComponent>

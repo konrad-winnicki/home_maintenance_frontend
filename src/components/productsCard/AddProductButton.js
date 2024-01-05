@@ -3,11 +3,15 @@ import { SiAddthis } from "react-icons/si";
 import { ask_product_name } from "../../services/auxilaryFunctions";
 import { addProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseTranslator,
+  extractIdFromLocation,
+} from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { HomeContext } from "../../contexts/homeContext";
+import "../commonComponents/BottomNavbarButtons.css";
 
-const AddProductButton = () => {
+const AddProductButton = (props) => {
   const session_code = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
@@ -46,16 +50,26 @@ const AddProductButton = () => {
       duplicated: "Product already exists",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then((res) => {
-      console.log('in button', res)
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then((response) => response.headers.get("Location"))
+      .then((location) => {
+        const id = extractIdFromLocation(location);
+        props.addProductToState({
+          id,
+          name: product_data.name,
+          quantity: product_data.quantity,
+        });
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
 
   return (
     <div className="col text-center ">
       <button
-        className="btn btn-warning btn-sm"
+        className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         onClick={() => onClickHandler()}
       >

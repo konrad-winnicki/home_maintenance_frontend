@@ -4,7 +4,7 @@ import { updateProduct } from "../../services/store";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/resourceContext";
-import { AppContext} from "../../contexts/appContext";
+import { AppContext } from "../../contexts/appContext";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
@@ -29,14 +29,26 @@ const DecreaseButton = () => {
     const messages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response).then(() => {
-      appContext.setAppState(APP_STATES.REFRESHING);
-    });
+    serverResponseTranslator(messages, response)
+      .then(() => {
+        const newValues = {
+          product_id: product_data.id,
+          name: product_data.updatedValues.name,
+          quantity: product_data.updatedValues.quantity,
+        };
+        productContext.modifyProductInState(product_data.id, newValues);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
 
   return (
     <button
-      className="btn btn-primary btn-sm button_surrounding"
+      className="resource_button"
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       onClick={() => {
         onClickHandler();

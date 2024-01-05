@@ -20,7 +20,10 @@ import { ToastContainer } from "react-toastify";
 export const AppRoutes = () => {
   const authorizationContext = useContext(AuthorizationContext);
   return (
-    <div className="container vh-100 vw-100 px-0 d-flex flex-column">
+    <div
+      className="container vh-100 vw-100 px-0 d-flex flex-column"
+      style={{ backgroundColor: "#fafaf9" }}
+    >
       {authorizationContext.isLoggedIn && (
         <>
           <NavigationBar />
