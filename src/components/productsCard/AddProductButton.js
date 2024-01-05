@@ -55,7 +55,7 @@ const AddProductButton = (props) => {
       .then((location) => {
         const id = extractIdFromLocation(location);
         props.addProductToState({
-          id,
+          product_id: id,
           name: product_data.name,
           quantity: product_data.quantity,
         });
