@@ -80,11 +80,10 @@ class ProductsCard extends React.PureComponent {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-      .then(() => {
-        this.props.appContext.setAppState(APP_STATES.DEFAULT);
-      })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        this.props.appContext.setAppState(APP_STATES.DEFAULT);
       });
   }
 

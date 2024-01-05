@@ -61,27 +61,26 @@ export function notifications(message, type) {
 }
 
 export async function serverResponseTranslator(messages, response_from_server) {
-  
-  console.log('1 rrrr', response_from_server)
-  return response_from_server
-    .then((response) => {
-      console.log('rrrr', response)
+  console.log("1 rrrr", response_from_server);
+  return response_from_server.then((response) => {
+    return response.json().then((body) => {
+     
       const status_code = response.status;
       if (status_code > 199 && status_code < 300) {
         notifications(messages.success, "success");
         return Promise.resolve(response);
-
       } else if (status_code === 409) {
         notifications(messages.duplicated, "warning");
-        return Promise.reject('duplication');
-
+        return Promise.reject("duplication");
+      } else if (status_code === 400 && body.QuantityViolation) {
+        console.log('DDDDDDDDDDDDDD')
+        return Promise.reject("QuantityViolation");
       } else {
         notifications(messages.unknown, "error");
-        return Promise.reject('unknown error');
+        return Promise.reject("unknown error");
       }
-
-    })
-    
+    });
+  });
 }
 
 export async function statusCodeTranslator(response, message) {
@@ -93,9 +92,9 @@ export async function statusCodeTranslator(response, message) {
     notifications(message.succces, "success");
   } else if (statusCode === 409) {
     notifications(message.duplicated, "warning");
-  } else if(statusCode === 404) {
+  } else if (statusCode === 404) {
     notifications(message.unknown, "error");
-  }else {
+  } else {
     notifications(message.unknown, "error");
   }
 }

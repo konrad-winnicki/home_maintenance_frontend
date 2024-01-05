@@ -30,13 +30,14 @@ const DecreaseButton = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-      .then(() => {
+      .then((e) => {
         const newValues = {
           product_id: product_data.id,
           name: product_data.updatedValues.name,
           quantity: product_data.updatedValues.quantity,
         };
         productContext.modifyProductInState(product_data.id, newValues);
+        console.log(e)
       })
       .catch((error) => {
         console.log(error);

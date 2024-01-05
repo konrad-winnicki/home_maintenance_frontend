@@ -73,10 +73,9 @@ export function ShoppingItemsCard() {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-      .then(() => {
+      .catch((error) => console.log(error)).finally(() => {
         appContext.setAppState(APP_STATES.DEFAULT);
-      })
-      .catch((error) => console.log(error));
+      });
   }
 
   return (
