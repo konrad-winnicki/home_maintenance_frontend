@@ -1,3 +1,5 @@
+import { oauthRedirectUri } from "../config";
+
 import { toast } from "react-toastify";
 export function askQuantity(string = "") {
   //let string = string
@@ -60,21 +62,29 @@ export function notifications(message, type) {
   }
 }
 
+async function getResponseBody(response) {
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return response.json();
+  }
+  return null;
+}
+
 export async function serverResponseTranslator(messages, response_from_server) {
-  console.log("1 rrrr", response_from_server);
   return response_from_server.then((response) => {
-    return response.json().then((body) => {
-     
+    return getResponseBody(response).then((body) => {
+      const location = response.headers.get("Location")
       const status_code = response.status;
       if (status_code > 199 && status_code < 300) {
         notifications(messages.success, "success");
-        return Promise.resolve(response);
+        return Promise.resolve({location, body});
       } else if (status_code === 409) {
         notifications(messages.duplicated, "warning");
         return Promise.reject("duplication");
       } else if (status_code === 400 && body.QuantityViolation) {
-        console.log('DDDDDDDDDDDDDD')
         return Promise.reject("QuantityViolation");
+      } else if (status_code === 401) {
+        window.location.href = oauthRedirectUri;
       } else {
         notifications(messages.unknown, "error");
         return Promise.reject("unknown error");

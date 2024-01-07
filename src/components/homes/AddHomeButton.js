@@ -23,9 +23,9 @@ const AddHomeButton = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = addHome({ name }, sessionCode);
     serverResponseTranslator(messages, response)
-      .then((r) => r.headers.get("Location"))
-      .then((l) => {
-        const id = extractIdFromLocation(l);
+      .then((result) => {
+        const id = extractIdFromLocation(result.location);
+        console.log('home', id)
         homeContext.addHomeToState({ id, name });
       })
       .catch((error) => console.log(error))

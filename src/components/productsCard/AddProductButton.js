@@ -51,9 +51,8 @@ const AddProductButton = (props) => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-      .then((response) => response.headers.get("Location"))
-      .then((location) => {
-        const id = extractIdFromLocation(location);
+      .then((result) => {
+        const id = extractIdFromLocation(result.location);
         props.addProductToState({
           product_id: id,
           name: product_data.name,

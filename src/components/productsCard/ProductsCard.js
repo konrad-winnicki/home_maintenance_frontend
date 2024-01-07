@@ -65,21 +65,15 @@ class ProductsCard extends React.PureComponent {
     this.props.appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     const response = getProducts(homeId, this.session_code);
-    response
-      .then((response) => {
-        response.json().then((json) => {
-          console.log("products", this.state.productList);
-          this.stateChanger({
-            productList: json,
-          });
-        });
-      })
-      .catch((error) => console.log(error));
-
     const messages = {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
+    .then((result) => {
+      this.stateChanger({
+        productList: result.body,
+      });
+    })
       .catch((error) => {
         console.log(error);
       }).finally(() => {

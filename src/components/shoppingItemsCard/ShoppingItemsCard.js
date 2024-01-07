@@ -27,11 +27,6 @@ export function ShoppingItemsCard() {
     initialized.current = true;
     // TODO: this may not be called?
 
-    window.addEventListener("beforeunload", () => {
-      console.log("window event: beforeunload");
-      socketContext.socket?.disconnect();
-    });
-
     const socket = socketContext.createSocket(
       session_code,
       homeContext.home.id
@@ -61,20 +56,18 @@ export function ShoppingItemsCard() {
 
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     const response = getShoppingItems(homeId, session_code);
-    response
-      .then((response) => {
-        response.json().then((json) => {
-          setShoppingItems(json);
-        });
-      })
-      .catch((error) => console.log(error));
-
     const messages = {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-      .catch((error) => console.log(error)).finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+    .then((result) => {
+      setShoppingItems(result.body)
+     
+    })
+      .catch((error) => {
+        console.log(error);
+      }).finally(() => {
+       appContext.setAppState(APP_STATES.DEFAULT);
       });
   }
 
