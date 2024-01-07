@@ -9,7 +9,6 @@ import styles from "../../my-style.module.css";
 import "../CardHeader.css";
 import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
-import { SocketContext } from "../../contexts/socketContext";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
 
@@ -56,14 +55,11 @@ class ProductsCard extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.socketContext.socket?.disconnect();
     this.getProducts();
   }
 
   getProducts() {
     const homeId = this.props.homeContext.home.id;
-    this.props.appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-
     const response = getProducts(homeId, this.session_code);
     const messages = {
       unknown: "Unknown error",
@@ -76,9 +72,7 @@ class ProductsCard extends React.PureComponent {
     })
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
-        this.props.appContext.setAppState(APP_STATES.DEFAULT);
-      });
+      })
   }
 
   render() {
@@ -116,13 +110,11 @@ class ProductsCard extends React.PureComponent {
 
 export function WrappedProductsCard() {
   const appContext = useContext(AppContext);
-  const socketContext = useContext(SocketContext);
   const homeContext = useContext(HomeContext);
 
   return (
     <ProductsCard
       appContext={appContext}
-      socketContext={socketContext}
       homeContext={homeContext}
     ></ProductsCard>
   );

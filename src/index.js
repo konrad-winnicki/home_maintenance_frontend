@@ -11,7 +11,6 @@ import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
 import { ShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
 import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
-import { SocketContextProvider } from "./contexts/socketContext";
 import { AppContextProvider } from "./contexts/appContext";
 import { LoginComponent } from "./components/LoginComponent";
 import NavigationBar from "./components/commonComponents/NavigationBar";
@@ -36,10 +35,7 @@ export const AppRoutes = () => {
         <Route path="/login" element={<LoginComponent />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/products/" element={<WrappedProductsCard />} />
-          <Route
-            path="/shoppingItems/"
-            element={<ShoppingItemsCard />}
-          />
+          <Route path="/shoppingItems/" element={<ShoppingItemsCard />} />
           <Route path="/homes" element={<HomesCard />} />
         </Route>
       </Routes>
@@ -54,11 +50,9 @@ productsComponent.render(
     <Router>
       <AuthContextProvider>
         <AppContextProvider>
-          <SocketContextProvider>
             <HomeContextProvider>
               <AppRoutes />
             </HomeContextProvider>
-          </SocketContextProvider>
         </AppContextProvider>
       </AuthContextProvider>
     </Router>
