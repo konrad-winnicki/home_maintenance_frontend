@@ -5,6 +5,7 @@ import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
 import "../commonComponents/BottomNavbarButtons.css";
+import { TbTransferIn } from "react-icons/tb";
 
 const AddFinishedProductsToCart = () => {
   const session_code = localStorage.getItem("session_code");
@@ -35,7 +36,7 @@ const AddFinishedProductsToCart = () => {
           addFinishedProductToShoppings();
         }}
       >
-        Add to shopping list
+        <TbTransferIn/> missing
       </button>
     </div>
   );

@@ -55,7 +55,9 @@ const AddItemToShoppings = () => {
 
   return (
     <React.Fragment>
-      <div className="col-6 text-center mt-2">
+      <div className="col-6 text-center mb-2"
+
+     >
         <input
           value={shoppingItem.name}
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
@@ -65,7 +67,7 @@ const AddItemToShoppings = () => {
           onChange={handleChangeName}
         ></input>
       </div>
-      <div className="col-4 text-center mt-2">
+      <div className="col-4 text-center mb-2">
         <input
           value={shoppingItem.quantity}
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
@@ -75,7 +77,7 @@ const AddItemToShoppings = () => {
           onChange={handleChangeQuantity}
         ></input>
       </div>
-      <div className="col-2 text-center">
+      <div className="col-2 text-center px-2">
         <button
           disabled={
             shoppingItem.name === "" || shoppingItem.quantity === ""

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import "./ResourceDescription.css";
 import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
@@ -14,6 +14,18 @@ function ResourceDescription(props) {
 
   const appContext = useContext(AppContext);
 
+  const timeoutRef = useRef(null);
+
+  const handleMouseDown = (callbackToEdit) => {
+    timeoutRef.current = setTimeout(() => {
+      appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+      callbackToEdit();
+    }, 500);
+  };
+
+  const handleMouseUp = () => {
+    clearTimeout(timeoutRef.current);
+  };
 
   useEffect(() => {
     if (appContext.appState === APP_STATES.DEFAULT) {
@@ -24,9 +36,12 @@ function ResourceDescription(props) {
     if (appContext.appState !== APP_STATES.DEFAULT) {
       setIsDisabled(true);
     }
-  }, [appContext]);
 
-  
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, [appContext.appState]);
+
   return (
     <React.Fragment>
       {!editName ? (
@@ -36,20 +51,48 @@ function ResourceDescription(props) {
             isDisabled
               ? null
               : () => {
-                  appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-                  setEditName(true);
+                  !props.showButtons
+                    ? props.setShowButtons(true)
+                    : props.setShowButtons(false);
                 }
           }
+          onMouseDown={
+            isDisabled
+              ? null
+              : () => {
+                  handleMouseDown(() => {
+                    setEditName(true);
+                  });
+                }
+          }
+          onMouseUp={handleMouseUp}
+          onTouchStart={
+            isDisabled
+              ? null
+              : () => {
+                  handleMouseDown(() => {
+                    setEditName(true);
+                  });
+                }
+          }
+          onTouchEnd={handleMouseUp}
         >
           {resourceContext.resource.name}
         </div>
       ) : (
-        <div style={{ marginLeft: "2.5%", marginRight: "2.5%", width: "65%" }}>
+        <div
+          style={{
+            marginLeft: "2.5%",
+            marginRight: "2.5%",
+            marginTop: "2.5%",
+            marginBottom: "2.5%",
+            width: "65%",
+          }}
+        >
           <ChangeResource
             resourceName={"Name"}
             resourceValue={resourceContext.resource.name}
-            resourceType={'text'}
-
+            resourceType={"text"}
             updateMethod={props.updateMethod}
           ></ChangeResource>
         </div>
@@ -62,19 +105,48 @@ function ResourceDescription(props) {
             isDisabled
               ? null
               : () => {
-                  appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-                  setEditQuantity(true);
+                  !props.showButtons
+                    ? props.setShowButtons(true)
+                    : props.setShowButtons(false);
                 }
           }
+          onMouseDown={
+            isDisabled
+              ? null
+              : () => {
+                  handleMouseDown(() => {
+                    setEditQuantity(true);
+                  });
+                }
+          }
+          onMouseUp={handleMouseUp}
+          onTouchStart={
+            isDisabled
+              ? null
+              : () => {
+                  handleMouseDown(() => {
+                    setEditQuantity(true);
+                  });
+                }
+          }
+          onTouchEnd={handleMouseUp}
         >
           {resourceContext.resource.quantity}
         </div>
       ) : (
-        <div style={{ marginLeft: "2.5%", marginRight: "2.5%", width: "30%" }}>
+        <div
+          style={{
+            marginLeft: "2.5%",
+            marginRight: "2.5%",
+            marginTop: "2.5%",
+            marginBottom: "2.5%",
+            width: "30%",
+          }}
+        >
           <ChangeResource
             resourceName={"Quantity"}
             resourceValue={resourceContext.resource.quantity}
-            resourceType={'number'}
+            resourceType={"number"}
             updateMethod={props.updateMethod}
           ></ChangeResource>
         </div>

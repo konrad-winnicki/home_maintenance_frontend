@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState} from "react";
 import "./ResourceDescription.css";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/resourceContext";
@@ -7,6 +7,7 @@ import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
 
 export function ChangeResource(props) {
+
   const resourceContext = useContext(ResourceContext);
 
   const [inputValue, setInputValue] = useState(props.resourceValue);
@@ -20,17 +21,15 @@ export function ChangeResource(props) {
     setInputValue(e.target.value);
   };
 
-function extractResourceIdFromProperties(){
-  const { product_id: resource_id, ...properties } =
-      resourceContext.resource;
-      return {id: resource_id, properties}
-}
+  function extractResourceIdFromProperties() {
+    const { product_id: resource_id, ...properties } = resourceContext.resource;
+    return { id: resource_id, properties };
+  }
 
   function resourceWithUpdatedName(newValue) {
-    
-    const resourceData = extractResourceIdFromProperties()
-    if (newValue === resourceData.properties.name){
-      return null
+    const resourceData = extractResourceIdFromProperties();
+    if (newValue === resourceData.properties.name || newValue === "") {
+      return null;
     }
     const resource_data = {
       id: resourceData.id,
@@ -43,9 +42,9 @@ function extractResourceIdFromProperties(){
   }
 
   function resourceWithUpdatedQuantity(newValue) {
-    const resourceData = extractResourceIdFromProperties()
-    if (newValue === resourceData.properties.quantity){
-      return null
+    const resourceData = extractResourceIdFromProperties();
+    if (newValue === resourceData.properties.quantity) {
+      return null;
     }
 
     const resource_data = {
@@ -58,57 +57,63 @@ function extractResourceIdFromProperties(){
     return resource_data;
   }
 
-
-  function resourceWithUpdatedProperty (propertyName){
-    switch(propertyName){
-      case "Name": return resourceWithUpdatedName(inputValue);
-      case "Quantity": return resourceWithUpdatedQuantity(inputValue)
-      default: return null
+  function resourceWithUpdatedProperty(propertyName) {
+    switch (propertyName) {
+      case "Name":
+        return resourceWithUpdatedName(inputValue);
+      case "Quantity":
+        return resourceWithUpdatedQuantity(inputValue);
+      default:
+        return null;
     }
   }
 
   const sendData = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
-    let updatedResource = resourceWithUpdatedProperty(props.resourceName)
-    if (!updatedResource){
+    let updatedResource = resourceWithUpdatedProperty(props.resourceName);
+    if (!updatedResource) {
       appContext.setAppState(APP_STATES.DEFAULT);
-      
+    } else {
+      let response = props.updateMethod(updatedResource, homeId, session_code);
+      const messages = {
+        success: `${props.resourceName} changed`,
+        duplicated: "Product already exists",
+        unknown: "Unknown error",
+      };
 
-    }else{
-    let response = props.updateMethod(updatedResource, homeId, session_code);
-    const messages = {
-      success: `${props.resourceName} changed`,
-      duplicated: "Product already exists",
-      unknown: "Unknown error",
-    };
-
-    serverResponseTranslator(messages, response)
-      .then(() => {
-        resourceContext.modifyProductInState({
-          ...updatedResource.updatedValues,
-          product_id: updatedResource.id,
+      serverResponseTranslator(messages, response)
+        .then(() => {
+          resourceContext.modifyProductInState({
+            ...updatedResource.updatedValues,
+            product_id: updatedResource.id,
+          });
+        })
+        .catch((error) => console.log(error))
+        .finally(() => {
+          appContext.setAppState(APP_STATES.DEFAULT);
         });
-      })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
-      });}
+    }
   };
 
+  
 
   return (
-          <input
-            value={inputValue}
-            autoFocus
-            className="form-control input-lg"
-            style={{ fontWeight: "bold", display: "inline-block" }}
-            type={props.resourceType}
-            onChange={handleChange}
-            onClick={() => {
-              sendData();
-            }}
-          ></input>
+    <input
+      value={inputValue}
+      autoFocus
+      className="form-control input-lg"
+      style={{
+        fontWeight: "bold",
+        display: "inline-block",
+      }}
+      type={props.resourceType}
+      min="0"
+      onChange={handleChange}
+      onClick={() => {
+        sendData();
+      }}
+    ></input>
   );
 }
 
