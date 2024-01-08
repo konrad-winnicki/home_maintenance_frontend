@@ -18,8 +18,15 @@
   color: #f9f7f7;
 }
 
-.navbar_buttons:disabled {
+
+.navbar_buttons:first {
   color: #f6bd60;
     background-color: #f6bd60;
+
+}
+
+.navbar_buttons:disabled {
+  color: #b4b3b2;
+  background-color: #faf9f7;
 
 }

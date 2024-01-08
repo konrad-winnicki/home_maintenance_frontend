@@ -36,7 +36,8 @@ const DecreaseButton = () => {
           name: product_data.updatedValues.name,
           quantity: product_data.updatedValues.quantity,
         };
-        productContext.modifyProductInState(product_data.id, newValues);
+        console.log(' new values', newValues)
+        productContext.modifyProductInState(newValues);
         console.log(result)
       })
       .catch((error) => {

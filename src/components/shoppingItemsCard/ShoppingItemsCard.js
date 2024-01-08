@@ -11,7 +11,6 @@ import Scaner from "../Scaner.js";
 import "../CardHeader.css";
 import { AppContext } from "../../contexts/appContext";
 import ShoppingItemsList from "./ShoppingItemsList";
-import { APP_STATES } from "../../applicationStates";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";

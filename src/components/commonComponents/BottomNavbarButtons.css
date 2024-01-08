@@ -7,6 +7,12 @@
   padding: 5px;
 }
 
+.bottom_navbar_buttons:disabled {
+  color: #b4b3b2;
+  background-color: #faf9f7;
+
+}
+
 .bottom_navbar_buttons:active {
   color: #F5CAC3;
 }

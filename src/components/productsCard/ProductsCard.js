@@ -7,10 +7,10 @@ import ProductList from "./ProductList.js";
 import Scaner from "../Scaner.js";
 import styles from "../../my-style.module.css";
 import "../CardHeader.css";
-import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
+import { APP_STATES } from "../../applicationStates";
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -44,10 +44,10 @@ class ProductsCard extends React.PureComponent {
     this.stateChanger({ productList: filteredProductList });
   }
 
-  modifyProductInState(productId, newValues) {
+  modifyProductInState(changedResource) {
     const updatedProducts = this.state.productList.map((product) => {
-      if (product.product_id === productId) {
-        return newValues;
+      if (product.product_id === changedResource.product_id) {
+        return changedResource;
       }
       return product;
     });
@@ -55,6 +55,7 @@ class ProductsCard extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.props.appContext.setAppState(APP_STATES.DEFAULT)
     this.getProducts();
   }
 
@@ -65,14 +66,14 @@ class ProductsCard extends React.PureComponent {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-    .then((result) => {
-      this.stateChanger({
-        productList: result.body,
-      });
-    })
+      .then((result) => {
+        this.stateChanger({
+          productList: result.body,
+        });
+      })
       .catch((error) => {
         console.log(error);
-      })
+      });
   }
 
   render() {

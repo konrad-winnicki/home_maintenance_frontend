@@ -20,11 +20,10 @@ const AddItemsFromShopings = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, result)
-      .then(() => {
-        appContext.setAppState(APP_STATES.REFRESHING);
-      })
       .catch((error) => {
         console.log(error);
+      }).finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
       });
   };
 

@@ -34,7 +34,7 @@ const IncreaseButton = () => {
           name: product_data.updatedValues.name,
           quantity: product_data.updatedValues.quantity,
         };
-        productContext.modifyProductInState(product_data.id, newValues);
+        productContext.modifyProductInState(newValues);
       })
       .catch((error) => {
         console.log(error);

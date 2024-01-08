@@ -20,10 +20,10 @@ const AddFinishedProductsToCart = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-      .then(() => {
-        appContext.setAppState(APP_STATES.REFRESHING);
-      })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => {
+        appContext.setAppState(APP_STATES.DEFAULT);
+      });
   };
 
   return (
