@@ -15,6 +15,7 @@ import { AppContextProvider } from "./contexts/appContext";
 import { LoginComponent } from "./components/LoginComponent";
 import NavigationBar from "./components/commonComponents/NavigationBar";
 import { ToastContainer } from "react-toastify";
+import SwipeRightProvider from "./contexts/SwipeRightOld";
 
 export const AppRoutes = () => {
   const authorizationContext = useContext(AuthorizationContext);
@@ -50,9 +51,11 @@ productsComponent.render(
     <Router>
       <AuthContextProvider>
         <AppContextProvider>
-            <HomeContextProvider>
-              <AppRoutes />
-            </HomeContextProvider>
+          <HomeContextProvider>
+            {/*<SwipeRightProvider>*/}
+            <AppRoutes />
+            {/*</SwipeRightProvider>*/}
+          </HomeContextProvider>
         </AppContextProvider>
       </AuthContextProvider>
     </Router>

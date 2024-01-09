@@ -28,6 +28,7 @@ export default function HomesCard() {
       etc. */}
       <div className="header mt-10">Current home: {homeContext.home?.name}</div>
       {/* TODO: here is the place for the current "page" */}
+     
       <HomeList homes={homeContext.homes} />
       <BottomNavBar>
         <AddHomeButton />

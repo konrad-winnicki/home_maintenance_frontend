@@ -1,26 +1,26 @@
 import React from "react";
 import { ResourceContext } from "../../contexts/resourceContext";
 import ShoppingItemComponent from "./ShoppingItemComponent";
-import AddItemToShoppings from "./AddItemToShoppings";
 import { ScrollableList } from "../commonComponents/ScrollableList";
+import SwipeRightProvider from "../../contexts/SwipeRight";
 
 const ShoppingItemsList = (props) => {
   return (
     <ScrollableList>
       {props.shoppingItems.map((shoppingItem) => (
-        <ResourceContext.Provider
-          key={shoppingItem.product_id}
-          value={{
-            resource: shoppingItem,
-          }}
-        >
-          <ShoppingItemComponent></ShoppingItemComponent>
-        </ResourceContext.Provider>
+        <div key={shoppingItem.product_id}>
+        <SwipeRightProvider>
+          <ResourceContext.Provider
+            key={shoppingItem.product_id}
+            value={{
+              resource: shoppingItem,
+            }}
+          >
+            <ShoppingItemComponent></ShoppingItemComponent>
+          </ResourceContext.Provider>
+        </SwipeRightProvider>
+        </div>
       ))}
-      <div className="row my-5 mx-0 sticky-top">
-        <AddItemToShoppings
-        ></AddItemToShoppings>
-      </div>
     </ScrollableList>
   );
 };

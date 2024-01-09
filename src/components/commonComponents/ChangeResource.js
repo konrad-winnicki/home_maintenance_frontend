@@ -1,4 +1,4 @@
-import React, { useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import "./ResourceDescription.css";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/resourceContext";
@@ -7,7 +7,6 @@ import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
 
 export function ChangeResource(props) {
-
   const resourceContext = useContext(ResourceContext);
 
   const [inputValue, setInputValue] = useState(props.resourceValue);
@@ -95,8 +94,6 @@ export function ChangeResource(props) {
         });
     }
   };
-
-  
 
   return (
     <input

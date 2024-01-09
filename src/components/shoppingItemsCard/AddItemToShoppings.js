@@ -37,13 +37,11 @@ const AddItemToShoppings = () => {
       unknown: "Unknown error",
     };
     serverResponseTranslator(messages, response)
-      .then(() => {
-        setShoppingItem({ name: "", quantity: "" });
-      })
       .catch((error) => {
         console.log(error);
       })
       .finally(() => {
+        setShoppingItem({ name: "", quantity: "" });
         appContext.setAppState(APP_STATES.DEFAULT);
       });
 
@@ -54,8 +52,11 @@ const AddItemToShoppings = () => {
   };
 
   return (
-    <React.Fragment>
-      <div className="col-6 text-center mb-2"
+    <div className="row mb-3" 
+    style={{  borderTop: "4px solid  #f6bd60"
+    }}
+    >
+      <div className="col-6 px-4 my-3"
 
      >
         <input
@@ -63,11 +64,11 @@ const AddItemToShoppings = () => {
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
           className="form-control input-lg"
           type="text"
-          placeholder="Product name"
+          placeholder="Name"
           onChange={handleChangeName}
         ></input>
       </div>
-      <div className="col-4 text-center mb-2">
+      <div className="col-3 p-0 text-center my-3">
         <input
           value={shoppingItem.quantity}
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
@@ -77,7 +78,7 @@ const AddItemToShoppings = () => {
           onChange={handleChangeQuantity}
         ></input>
       </div>
-      <div className="col-2 text-center px-2">
+      <div className="col-2 p-0 text-center my-3">
         <button
           disabled={
             shoppingItem.name === "" || shoppingItem.quantity === ""
@@ -93,7 +94,7 @@ const AddItemToShoppings = () => {
           <MdAddBox />
         </button>
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

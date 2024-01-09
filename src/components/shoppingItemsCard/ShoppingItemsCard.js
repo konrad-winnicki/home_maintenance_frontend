@@ -1,12 +1,7 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-
-import { getShoppingItems } from "../../services/cart";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import ShopingItemButtons from "./ShoppingItemButtons.js";
 import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
+import { getShoppingItems } from "../../services/cart";
 import Scaner from "../Scaner.js";
 import "../CardHeader.css";
 import { AppContext } from "../../contexts/appContext";
@@ -15,7 +10,8 @@ import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
 import io from "socket.io-client";
-import { backendUrl } from "../../config"
+import { backendUrl } from "../../config";
+import AddItemToShoppings from "./AddItemToShoppings";
 
 export function ShoppingItemsCard() {
   const [shoppingItems, setShoppingItems] = useState([]);
@@ -26,7 +22,6 @@ export function ShoppingItemsCard() {
   const session_code = localStorage.getItem("session_code");
   const showScanner = false;
 
-
   const createSocket = (session_code, homeId) => {
     const URL = backendUrl;
     const socket = io(URL, {
@@ -36,6 +31,7 @@ export function ShoppingItemsCard() {
         home_context: homeId,
       },
     });
+    console.log("New socket created: " + socket);
 
     return socket;
   };
@@ -52,7 +48,7 @@ export function ShoppingItemsCard() {
       })
       .catch((error) => {
         console.log(error);
-      })
+      });
   }, [homeContext.home.id, session_code]);
 
   useEffect(() => {
@@ -61,8 +57,7 @@ export function ShoppingItemsCard() {
     // }
     // initialized.current = true;
 
-   
-    const socket = createSocket(session_code, homeContext.home.id)
+    const socket = createSocket(session_code, homeContext.home.id);
     socket.on("updateShoppingItems", ProductListChanger);
     ProductListChanger();
 
@@ -70,8 +65,8 @@ export function ShoppingItemsCard() {
       console.log("Unmounting component - cleaning up");
       if (socket) {
         console.log("Disconnecting socket.");
-        socket.off("updateShoppingItems");
-        socket.close();
+        socket.off();
+        // socket.close();
         socket.disconnect();
       }
     };
@@ -82,7 +77,7 @@ export function ShoppingItemsCard() {
       <div className="header">Shopping list in {homeContext.home?.name}:</div>
 
       <ShoppingItemsList shoppingItems={shoppingItems}></ShoppingItemsList>
-
+      <AddItemToShoppings></AddItemToShoppings>
       <BottomNavBar>
         <div className="col text-center ">
           <AddItemsFromShoppings></AddItemsFromShoppings>

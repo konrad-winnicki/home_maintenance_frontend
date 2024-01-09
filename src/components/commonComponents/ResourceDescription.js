@@ -16,6 +16,16 @@ function ResourceDescription(props) {
 
   const timeoutRef = useRef(null);
 
+
+
+
+ 
+
+
+
+
+
+
   const handleMouseDown = (callbackToEdit) => {
     timeoutRef.current = setTimeout(() => {
       appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
@@ -37,10 +47,12 @@ function ResourceDescription(props) {
       setIsDisabled(true);
     }
 
+    
+
     return () => {
       clearTimeout(timeoutRef.current);
     };
-  }, [appContext.appState]);
+  }, [appContext]);
 
   return (
     <React.Fragment>
@@ -56,6 +68,7 @@ function ResourceDescription(props) {
                     : props.setShowButtons(false);
                 }
           }
+          //onBlur={props.setShowButtons(false)}
           onMouseDown={
             isDisabled
               ? null
@@ -101,6 +114,9 @@ function ResourceDescription(props) {
       {!editQuantity ? (
         <div
           className="product__quantity centered-text"
+
+
+          
           onClick={
             isDisabled
               ? null

@@ -64,7 +64,7 @@ export default function CheckBox() {
     <div>
       <input
         className=""
-        style={{ width: "25px", height: "25px" }}
+        style={{ width: "25px", height: "25px", paddingRight: "10px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"
         checked={shoppingItemContext.resource.is_bought}

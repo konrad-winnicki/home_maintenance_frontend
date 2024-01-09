@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { HomeContext } from "../../contexts/homeContext";
 import "./Home.css";
 import "../ResourceComponent.css";
@@ -7,15 +7,16 @@ import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { IoSettingsSharp } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
-import { GiCancel } from "react-icons/gi";
 import { deleteUserFromHome } from "../../services/home";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
+import { SwipeRightContext } from "../../contexts/SwipeRight";
 
 export default function Home({ home }) {
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const sessionCode = localStorage.getItem("session_code");
+  const swipeRightContext = useContext(SwipeRightContext);
 
   function setHomeHandler() {
     console.log("sethome");
@@ -59,8 +60,14 @@ export default function Home({ home }) {
         appContext.setAppState(APP_STATES.DEFAULT);
       });
   };
+
+  useEffect(() => {
+    swipeRightContext.setActionFunction(() => leaveHome);
+  }, []);
+
+
   return (
-    <>
+    <div>
       <div className="product__properties">
         <div className="product__name">{home.name}</div>
         <button className="resource_button" onClick={setHomeHandler}>
@@ -74,15 +81,7 @@ export default function Home({ home }) {
         >
           <HiOutlineClipboardDocumentList />
         </button>
-        <button
-          className="resource_button"
-          onClick={() => {
-            leaveHome();
-          }}
-        >
-          <GiCancel />
-        </button>
       </div>
-    </>
+    </div>
   );
 }
