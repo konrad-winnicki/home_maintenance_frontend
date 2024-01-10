@@ -51,7 +51,7 @@ function ProductComponent() {
 
   
   useEffect(()=>{
-    swipeRightContext.setActionFunction(() => deleteProductFromStore)
+    swipeRightContext.stateHandler(deleteProductFromStore)
 
   },[])
 

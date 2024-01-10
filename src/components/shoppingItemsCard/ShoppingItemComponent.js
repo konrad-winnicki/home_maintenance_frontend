@@ -53,7 +53,7 @@ function ShoppingItemComponent() {
   
 
   useEffect(()=>{
-    swipeRightContext.setActionFunction(() => deleteFromShoppings)
+    swipeRightContext.stateHandler(deleteFromShoppings)
 
   },[])
 

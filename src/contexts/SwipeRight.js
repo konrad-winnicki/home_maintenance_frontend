@@ -1,15 +1,16 @@
 import { createContext, useRef, useState } from "react";
 
 export const SwipeRightContext = createContext({
-  setActionFunction: () => {},
+  stateHandler:()=>{}
 });
 
 export default function SwipeRightProvider({ children }) {
-  const [actionFunction, setActionFunction] = useState(null);
+  const [actionFunction, setActionFunction] = useState(() => {});
 
+  const stateHandler = (a)=>{
+    setActionFunction(()=>a)
+  }
 
-
- 
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
   const maxPixels = window.innerWidth;
@@ -30,8 +31,7 @@ export default function SwipeRightProvider({ children }) {
 
       if (swipeDistance > moveDistanceReaction) {
         console.log("Swiped to the right");
-        actionFunction()
-
+        actionFunction();
       } else {
         console.log("to short move");
       }
@@ -56,9 +56,8 @@ export default function SwipeRightProvider({ children }) {
       const swipeDistance = touchEndX.current - touchStartX.current;
       if (swipeDistance > moveDistanceReaction) {
         console.log("Swiped to the right");
-        console.log(actionFunction)
-        actionFunction()
-
+        console.log(actionFunction);
+        actionFunction();
       } else {
         console.log("to short move");
       }
@@ -66,7 +65,6 @@ export default function SwipeRightProvider({ children }) {
     touchStartX.current = null;
     touchEndX.current = null;
   };
-
 
   return (
     <div
@@ -79,7 +77,7 @@ export default function SwipeRightProvider({ children }) {
     >
       <SwipeRightContext.Provider
         value={{
-          setActionFunction
+          stateHandler
         }}
       >
         {children}
