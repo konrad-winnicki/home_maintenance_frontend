@@ -29,7 +29,7 @@ function ProductComponent() {
       `Do you want to delete ${productContext.resource.name}?`
     );
     if (!confirmation) {
-      return;
+      return null
     }
     const productId = productContext.resource.product_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
@@ -52,8 +52,8 @@ function ProductComponent() {
   
   useEffect(()=>{
     swipeRightContext.stateHandler(deleteProductFromStore)
-
-  },[])
+console.log('buttons', showButtons)
+  },[showButtons])
 
   return (
     <div

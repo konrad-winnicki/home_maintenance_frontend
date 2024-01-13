@@ -1,83 +1,106 @@
 import { createContext, useRef, useState } from "react";
 
 export const SwipeRightContext = createContext({
-  stateHandler:()=>{}
+  stateHandler: () => {},
+  isMoving: false,
 });
 
 export default function SwipeRightProvider({ children }) {
   const [actionFunction, setActionFunction] = useState(() => {});
+  const [isMoving, setMoving] = useState(false);
+  const stateHandler = (a) => {
+    setActionFunction(() => a);
+  };
 
-  const stateHandler = (a)=>{
-    setActionFunction(()=>a)
-  }
+  const startPositionX = useRef(null);
+  const startPositionY = useRef(null);
 
-  const touchStartX = useRef(null);
-  const touchEndX = useRef(null);
+  const endPositionX = useRef(null);
+  const endPositionY = useRef(null);
+
+  const transformationDistanceX = useRef(0);
+  const transformationDistanceY = useRef(0);
+  const deltaY = useRef(null);
+
   const maxPixels = window.innerWidth;
-  const moveDistanceReaction = maxPixels / 5;
-  const handleTouchStart = (event) => {
-    touchStartX.current = event.touches[0].clientX;
-  };
+  const subliminalSwipeDistanceReaction = maxPixels / 3;
 
-  const handleTouchMove = (event) => {
-    if (touchStartX.current !== null) {
-      touchEndX.current = event.touches[0].clientX;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStartX.current && touchEndX.current) {
-      const swipeDistance = touchEndX.current - touchStartX.current;
-
-      if (swipeDistance > moveDistanceReaction) {
-        console.log("Swiped to the right");
-        actionFunction();
-      } else {
-        console.log("to short move");
-      }
-    }
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isClicked, setClicked] = useState(false);
 
   const handleMouseStart = (event) => {
-    touchStartX.current = event.clientX;
-    console.log(event.clientX);
+    startPositionX.current = event.clientX;
+    startPositionY.current = event.clientY;
+
+    setClicked(true);
   };
 
   const handleMouseMove = (event) => {
-    if (touchStartX.current !== null) {
-      touchEndX.current = event.clientX;
+    if (!isClicked) {
+      return;
+    }
+    setMoving(true);
+    const actualMousePosition = event;
+    console.log("variable", actualMousePosition.clientX);
+    transformationDistanceX.current =
+      actualMousePosition.clientX - startPositionX.current;
+    deltaY.current = Math.abs(event.clientY - startPositionY.current);
+    endPositionX.current = actualMousePosition.clientX;
+    if (deltaY.current > 20) {
+      setClicked(false);
+      setPosition({
+        x: 0,
+        y: 0,
+      });
+      return;
+    } else {
+      setPosition({
+        x: transformationDistanceX.current,
+        y: transformationDistanceY.current,
+      });
     }
   };
 
   const handleMouseEnd = () => {
-    if (touchStartX.current && touchEndX.current) {
-      const swipeDistance = touchEndX.current - touchStartX.current;
-      if (swipeDistance > moveDistanceReaction) {
-        console.log("Swiped to the right");
-        console.log(actionFunction);
-        actionFunction();
-      } else {
-        console.log("to short move");
+    setClicked(false);
+    const swipeDistance = endPositionX.current - startPositionX.current;
+    if (swipeDistance > subliminalSwipeDistanceReaction) {
+      if (actionFunction() === undefined) {
+        return;
       }
     }
-    touchStartX.current = null;
-    touchEndX.current = null;
+    setPosition({
+      x: 0,
+      y: 0,
+    });
+
+    startPositionX.current = null;
+    endPositionX.current = null;
   };
 
   return (
     <div
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseStart}
+      className="movable-div"
+      style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+      onMouseDown={(event) => {
+        handleMouseStart(event);
+      }}
+      onTouchStart={(touchEvent) => {
+        const event = touchEvent.touches[0];
+        handleMouseStart(event);
+      }}
       onMouseMove={handleMouseMove}
+      onTouchMove={(touchEvent) => {
+        const event = touchEvent.touches[0];
+        handleMouseMove(event);
+      }}
       onMouseUp={handleMouseEnd}
+      onTouchEnd={handleMouseEnd}
     >
       <SwipeRightContext.Provider
         value={{
-          stateHandler
+          isMoving,
+          stateHandler,
         }}
       >
         {children}

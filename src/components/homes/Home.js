@@ -39,7 +39,7 @@ export default function Home({ home }) {
   const leaveHome = () => {
     const confirmation = window.confirm(`Do you want to leave ${home.name}?`);
     if (!confirmation) {
-      return;
+      return null
     }
     const decodedToken = jwtDecode(sessionCode);
     const userId = decodedToken.user_id;

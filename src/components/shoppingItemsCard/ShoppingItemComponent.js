@@ -30,7 +30,7 @@ function ShoppingItemComponent() {
       `Do you want to delete ${shoppingItemContext.resource.name}?`
     );
     if (!confirmation) {
-      return;
+      return null
     }
     const productId = shoppingItemContext.resource.product_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
