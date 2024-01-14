@@ -25,7 +25,7 @@ const AddHomeButton = () => {
     serverResponseTranslator(messages, response)
       .then((result) => {
         const id = extractIdFromLocation(result.location);
-        console.log('home', id)
+        console.log('adding home with id', id)
         homeContext.addHomeToState({ id, name });
       })
       .catch((error) => console.log(error))

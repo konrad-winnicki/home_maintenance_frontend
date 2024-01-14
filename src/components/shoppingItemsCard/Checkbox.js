@@ -22,7 +22,6 @@ export default function CheckBox() {
     console.log("change");
 
     setBought(!isBought);
-    //updateItem(!isBought);
   };
 
   const updateItem = useCallback(() => {
@@ -61,10 +60,9 @@ export default function CheckBox() {
   }, [isBought, updateItem]);
 
   return (
-    <div>
       <input
-        className=""
-        style={{ width: "25px", height: "25px", paddingRight: "10px" }}
+
+        style={{width: "25px", height: "25px", paddingRight: "10px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"
         checked={shoppingItemContext.resource.is_bought}
@@ -73,6 +71,6 @@ export default function CheckBox() {
           handleChange();
         }}
       ></input>
-    </div>
+  
   );
 }

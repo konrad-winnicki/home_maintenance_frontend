@@ -8,10 +8,8 @@ const ShoppingItemsList = (props) => {
   return (
     <ScrollableList>
       {props.shoppingItems.map((shoppingItem) => (
-        <div key={shoppingItem.product_id}>
-        <SwipeRightProvider>
+        <SwipeRightProvider key={shoppingItem.product_id}>
           <ResourceContext.Provider
-            key={shoppingItem.product_id}
             value={{
               resource: shoppingItem,
             }}
@@ -19,7 +17,6 @@ const ShoppingItemsList = (props) => {
             <ShoppingItemComponent></ShoppingItemComponent>
           </ResourceContext.Provider>
         </SwipeRightProvider>
-        </div>
       ))}
     </ScrollableList>
   );

@@ -16,7 +16,6 @@ export default function SwipeRightProvider({ children }) {
   const startPositionY = useRef(null);
 
   const endPositionX = useRef(null);
-  const endPositionY = useRef(null);
 
   const transformationDistanceX = useRef(0);
   const transformationDistanceY = useRef(0);

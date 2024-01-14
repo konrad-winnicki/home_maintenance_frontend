@@ -11,6 +11,8 @@ export default function HomesCard() {
   const homeContext = useContext(HomeContext);
 
   useEffect(() => {
+
+    console.log('use effect homecard', homeContext.homes)
     const response = getHomes(sessionCode);
     const messages = {
       unknown: "Unknown error",

@@ -23,13 +23,13 @@ function ProductComponent() {
   const sessionCode = localStorage.getItem("session_code");
 
   const swipeRightContext = useContext(SwipeRightContext);
- 
+
   const deleteProductFromStore = () => {
     const confirmation = window.confirm(
       `Do you want to delete ${productContext.resource.name}?`
     );
     if (!confirmation) {
-      return null
+      return null;
     }
     const productId = productContext.resource.product_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
@@ -49,16 +49,13 @@ function ProductComponent() {
       });
   };
 
-  
-  useEffect(()=>{
-    swipeRightContext.stateHandler(deleteProductFromStore)
-console.log('buttons', showButtons)
-  },[showButtons])
+  useEffect(() => {
+    swipeRightContext.stateHandler(deleteProductFromStore);
+    console.log("buttons", showButtons);
+  }, [showButtons]);
 
   return (
-    <div
-      className="product__properties"
-    >
+    <div className="product__properties">
       <ResourceDescription
         setShowButtons={setShowButtons}
         showButtons={showButtons}

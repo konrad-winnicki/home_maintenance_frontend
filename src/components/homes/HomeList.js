@@ -3,15 +3,13 @@ import Home from "./Home";
 import { ScrollableList } from "../commonComponents/ScrollableList";
 import SwipeRightProvider from "../../contexts/SwipeRight.js";
 
-export default function HomeList({ homes }) {
+export default function HomeList(props) {
   return (
     <ScrollableList>
-      {homes.map((h) => (
-        <div key={h.id}>
-          <SwipeRightProvider>
-            <Home key={h.id} home={h} />
+      {props.homes.map((h) => (
+          <SwipeRightProvider key={h.id}>
+            <Home home={h} />
           </SwipeRightProvider>
-        </div>
       ))}
     </ScrollableList>
   );

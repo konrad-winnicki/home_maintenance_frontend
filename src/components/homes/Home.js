@@ -39,7 +39,7 @@ export default function Home({ home }) {
   const leaveHome = () => {
     const confirmation = window.confirm(`Do you want to leave ${home.name}?`);
     if (!confirmation) {
-      return null
+      return null;
     }
     const decodedToken = jwtDecode(sessionCode);
     const userId = decodedToken.user_id;
@@ -53,6 +53,10 @@ export default function Home({ home }) {
     };
     serverResponseTranslator(messages, response)
       .then(() => {
+        console.log(
+          "Removed in API, changing context state removing ",
+          home.id
+        );
         homeContext.deleteHomeFromState(home.id);
       })
       .catch((error) => console.log(error))
@@ -60,8 +64,6 @@ export default function Home({ home }) {
         appContext.setAppState(APP_STATES.DEFAULT);
       });
   };
-
-  
 
   useEffect(() => {
     swipeRightContext.stateHandler(leaveHome);

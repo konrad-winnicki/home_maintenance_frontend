@@ -63,7 +63,7 @@ function ResourceDescription(props) {
   }, [appContext, clickedRef, editName]);
 
   return (
-    <React.Fragment>
+    <>
       {!editName ? (
         <div
           className="product__name"
@@ -147,7 +147,7 @@ function ResourceDescription(props) {
           ></ChangeResource>
         </div>
       )}
-    </React.Fragment>
+    </>
   );
 }
 

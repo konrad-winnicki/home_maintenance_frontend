@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import ShopingItemButtons from "./ShoppingItemButtons.js";
 import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
 import { getShoppingItems } from "../../services/cart";
 import Scaner from "../Scaner.js";
@@ -75,7 +74,6 @@ export function ShoppingItemsCard() {
   return (
     <React.Fragment>
       <div className="header">Shopping list in {homeContext.home?.name}:</div>
-
       <ShoppingItemsList shoppingItems={shoppingItems}></ShoppingItemsList>
       <AddItemToShoppings></AddItemToShoppings>
       <BottomNavBar>
