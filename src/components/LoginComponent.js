@@ -9,7 +9,7 @@ import GoogleButton from "react-google-button";
 import { oauthClientId, oauthRedirectUri } from "../config";
 import { exchangeOauthCodeForToken } from "../services/login";
 import { App } from "@capacitor/app"
-import logo from "../homeLoginS.png"
+import logo from "../logo.png"
 export function LoginComponent() {
   const authorizationContext = useContext(AuthorizationContext);
   const navigate = useNavigate();

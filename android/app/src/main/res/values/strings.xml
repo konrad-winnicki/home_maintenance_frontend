@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Mafalda kitchen</string>
-    <string name="title_activity_main">Mafalda kitchen</string>
+    <string name="app_name">Home maintenance</string>
+    <string name="title_activity_main">Home maintenance</string>
     <string name="package_name">mafalda.kitchen</string>
     <string name="custom_url_scheme">mafa</string>
 </resources>
