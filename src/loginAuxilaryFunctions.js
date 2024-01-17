@@ -26,8 +26,18 @@ function autoLogOutTiming(currentToken, authorizationContext) {
   const decodedToken = jwtDecode(currentToken);
   const timeToLogout = calculateTimeToFinishToken(decodedToken);
   setTimeout(() => {
+    removeTokenFromLocalStorage('session_code')
     authorizationContext.setLoggedIn(false);
   }, timeToLogout);
 }
 
-export { autoLogOutTiming, getCodeFromQueryParam };
+
+function setTokenInLocalStorage (token) {
+  localStorage.setItem("session_code", token)
+}
+
+function removeTokenFromLocalStorage (token) {
+  localStorage.removeItem("session_code")
+}
+
+export { autoLogOutTiming, getCodeFromQueryParam, setTokenInLocalStorage, removeTokenFromLocalStorage};

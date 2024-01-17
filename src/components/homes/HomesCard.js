@@ -33,8 +33,9 @@ export default function HomesCard() {
      
       <HomeList homes={homeContext.homes} />
       <BottomNavBar>
-        <AddHomeButton />
-        <JoinHomeButton />
+      <AddHomeButton />
+      <JoinHomeButton />
+
       </BottomNavBar>
     </React.Fragment>
   );

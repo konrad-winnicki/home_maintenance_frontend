@@ -10,7 +10,7 @@ export const AppContextProvider = ({ children }) => {
   const [appState, setAppState] = useState(APP_STATES.DEFAULT);
 
   useEffect(() => {
-    console.log(appState);
+    console.log('APP STATE', appState);
   }, [appState]);
 
   return (

@@ -8,6 +8,8 @@ export const AuthorizationContext = createContext({
 export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
+
+  
   useEffect(() => {
     console.log("useeffect LOGIN", isLoggedIn);
   }, [isLoggedIn]);

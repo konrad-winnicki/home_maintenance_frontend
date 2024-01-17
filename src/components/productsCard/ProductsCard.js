@@ -4,7 +4,7 @@ import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
-import Scaner from "../Scaner.js";
+import Scaner, { WrappedScaner } from "../Scaner.js";
 import styles from "../../my-style.module.css";
 import "../CardHeader.css";
 import { AppContext } from "../../contexts/appContext";
@@ -23,6 +23,7 @@ class ProductsCard extends React.PureComponent {
     this.state = {
       productList: [],
     };
+    this.showScaner = true;
   }
 
   stateChanger(new_state) {
@@ -55,7 +56,7 @@ class ProductsCard extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.appContext.setAppState(APP_STATES.DEFAULT)
+    this.props.appContext.setAppState(APP_STATES.DEFAULT);
     this.getProducts();
   }
 
@@ -97,12 +98,12 @@ class ProductsCard extends React.PureComponent {
             addProductToState={this.addProductToState}
           ></AddProductButton>
           <AddFinishedProductsToCart></AddFinishedProductsToCart>
-          <Scaner
-            notifications={this.notifications}
-            app_state={this.state.app_state}
-            state_changer={this.stateChanger}
-            server_response_service={serverResponseTranslator}
-          ></Scaner>
+          {this.showScaner ? (
+            <WrappedScaner
+            ></WrappedScaner>
+          ) : (
+            ""
+          )}
         </BottomNavBar>
       </React.Fragment>
     );

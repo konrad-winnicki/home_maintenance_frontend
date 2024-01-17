@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   autoLogOutTiming,
   getCodeFromQueryParam,
+  setTokenInLocalStorage,
 } from "../loginAuxilaryFunctions";
 import GoogleButton from "react-google-button";
 import { oauthClientId, oauthRedirectUri } from "../config";
@@ -33,6 +34,14 @@ export function LoginComponent() {
     window.location.href = uri;
   }
 
+  function procceedWhenToken(token){
+    console.log("Token exchanged: " + token);
+    setTokenInLocalStorage(token)
+    authorizationContext.setLoggedIn(true);
+    autoLogOutTiming(token, authorizationContext);
+    navigate("/homes");
+  }
+
   useEffect(() => {
     // TODO: where to place them?
     App.addListener("appUrlOpen", (data) => { 
@@ -46,16 +55,8 @@ export function LoginComponent() {
     console.log("Oauth code from query param: " + oauthCode);
     if (oauthCode !== undefined && oauthCode !== null) {
       exchangeOauthCodeForToken(oauthCode).then((token) => {
-        // TODO: extract and use useCallback
-        console.log("Token exchanged: " + token);
-
-        if (token) {
-          localStorage.setItem("session_code", token);
-          authorizationContext.setLoggedIn(true);
-          autoLogOutTiming(token, authorizationContext);
-          // TODO: use routing instead of this redirect:
-          navigate("/homes");
-        }
+        procceedWhenToken(token)
+        
       }, [authorizationContext]);
     }
   });

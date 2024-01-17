@@ -1,35 +1,91 @@
-import React from "react";
+import React, { useContext } from "react";
 import Quagga from "@ericblade/quagga2";
 import { BsUpcScan } from "react-icons/bs";
 import * as myFunction from "../services/auxilaryFunctions.js";
-
+import { AppContext } from "../contexts/appContext.js";
+import { APP_STATES } from "../applicationStates.js";
+import { HomeContext } from "../contexts/homeContext.js";
+import "../components/commonComponents/BottomNavbarButtons.css";
 // export const url = "https://localhost:5000/products/";
 export const url = "https://backend.home-maintenance.click/";
 
 class Scaner extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { code: null };
+    this.state = { code: null, status: "STOP_SCANNING", isScanning:false };
     this.set_code = this.set_code.bind(this);
   }
 
-  componentDidUpdate() {
-    if (this.props.app_state === "Stop scaning") {
+  /*
+  shouldComponentUpdate(props, prevState) {
+    console.log("should update", prevState, this.state.code);
+    if (
+      props.appContext.appState === APP_STATES.SCANNING &&
+      this.state.code == null
+    ) {
+      console.log("scaning");
+      this.setState((previous) => {
+        return { status: "SCANNING" };
+      });
+      this.scanBarcode(this.set_code);
+    }
+/*
+    if (prevState.status === "SCANNING") {
+      this.setState((previous) => {
+        return { status: "STOP_SCANNING" };
+      });
+    }
+
+
+    if (prevState.code) {
+      this.setState((previous) => {
+        return { status: "STOP_SCANNING" };
+      });
+    }
+*
+    if (prevState.state === "STOP_SCANNING") {
       Quagga.offDetected();
       Quagga.stop();
-      this.props.state_changer({ app_state: "default", product_id: null });
+      props.appContext.setAppState(APP_STATES.DEFAULT);
       let comments = document.querySelector("#videoStream");
       comments.innerHTML = "";
     }
-    if (this.props.app_state === "default") {
+  }
+*/
+  componentDidMount(prevProps, prevState) {
+    console.log("mount", this.state, prevProps, prevState);
+  }
+
+  componentDidUpdate(props, prevState) {
+    if (this.state.isScanning){
+      console.log('start scanning')
+    }
+    /*
+    if (this.props.app_state === "Stop scaning") {
+      Quagga.offDetected();
+      Quagga.stop();
+      this.props.appContext.setAppState(APP_STATES.DEFAULT);
+
+      this.props.state_changer({ app_state: APP_STATES.DEFAULT, product_id: null });
+      let comments = document.querySelector("#videoStream");
+      comments.innerHTML = "";
+    }
+
+    */
+   /*
+    if (props.appContext.appState === APP_STATES.DEFAULT) {
       this.setState((ignored) => {
         return { code: null };
       });
     }
-    if (this.props.app_state === "Scaning barcode" && this.state.code == null) {
-      this.scan_barcode(this.set_code);
-    }
-
+    if (
+      props.appContext.appState === APP_STATES.SCANNING &&
+      this.state.code == null
+    ) {
+      console.log("scaning");
+      this.scanBarcode(this.set_code);
+    }*/
+    /*
     if (this.props.app_state === "Sending to server") {
       this.send_to_server_barcode(this.state.code);
     }
@@ -39,12 +95,17 @@ class Scaner extends React.PureComponent {
         return { code: null };
       });
     }
-
-    if (this.props.app_state === "Scaning barcode" && this.state.code != null) {
+*/
+    if (
+      this.props.appContext.appState === APP_STATES.SCANNING &&
+      this.state.code != null
+    ) {
+      console.log("scaning");
+      /*
       this.props.state_changer({
         app_state: "Sending to server",
         product_id: null,
-      });
+      });*/
     }
   }
 
@@ -54,7 +115,17 @@ class Scaner extends React.PureComponent {
     });
   }
 
-  scan_barcode(function_changing_local_status) {
+
+  setIsScanning (param){
+    console.log('set is scanning')
+    this.setState((previous) => {
+      console.log('prev', previous)
+      return { isScanning: param };
+    });
+    console.log('After setState:', this.state);
+
+  }
+  scanBarcode(function_changing_local_status) {
     Quagga.init(
       {
         numOfWorkers: navigator.hardwareConcurrency,
@@ -234,40 +305,45 @@ class Scaner extends React.PureComponent {
   }
 
   render() {
-    let button_name;
-    let state = "Scaning barcode";
-    if (this.props.app_state !== "Sending to server") {
+   
+   const button_name = this.state.isScanning? "Stop": "dd"
+   
+    /*
+    if (this.props.appContext.appState === APP_STATES.DEFAULT) {
       button_name = "Scan";
     }
-    if (this.props.app_state === "Scaning barcode") {
+    if (this.props.appContext.appState !== APP_STATES.DEFAULT) {
       button_name = "Stop scaning";
       state = "Stop scaning";
     }
-    if (this.props.app_state === "Sending to server") {
-      button_name = "Stop scaning";
-    }
+    */
     //if (this.props.app_state == "Stop scaning" || this.props.app_state == "default") {button_name = "Scaning barcode"}
+    
+    
     return (
       <div className="col text-center ">
+        <button
+          type="button"
+          className="bottom_navbar_buttons"
+          //disabled={this.props.appContext.appState !== APP_STATES.DEFAULT ? true : false}
 
-      <button
-        type="button"
-        className="btn btn-light btn-sm"
-        disabled={
-          this.props.app_state !== "default" &&
-          this.props.app_state !== "Scaning barcode"
-            ? true
-            : false
-        }
-        onClick={() => {
-          this.props.state_changer({ app_state: state, product_id: null });
-        }}
-      >
-        {button_name} <BsUpcScan />
-      </button>
+          onClick={() => {
+            this.state.isScanning? this.setIsScanning(false): this.setIsScanning(true)
+           // this.props.appContext.setAppState(APP_STATES.SCANNING);
+          }}
+        >
+          {button_name} <BsUpcScan />
+        </button>
       </div>
     );
   }
+}
+
+export function WrappedScaner() {
+  const appContext = useContext(AppContext);
+  const homeContext = useContext(HomeContext);
+
+  return <Scaner appContext={appContext} homeContext={homeContext}></Scaner>;
 }
 
 function beep_sound() {

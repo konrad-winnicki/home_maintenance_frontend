@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { IoSettingsSharp } from "react-icons/io5";
+
 import { IoHome } from "react-icons/io5";
 import { ImListNumbered } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
@@ -9,38 +11,79 @@ import { HomeContext } from "../../contexts/homeContext";
 import "./NavigationBarButtons.css";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
-
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import AddHomeButton from "../homes/AddHomeButton";
+import JoinHomeButton from "../homes/JoinHomeButton";
+import DeleteAccountButton from "../users/deleteAccount";
+import { AuthorizationContext } from "../../contexts/authorizationContext";
 const NavigationBar = () => {
   const homeContext = useContext(HomeContext);
   const appContext = useContext(AppContext);
-
+const authorizationContext = useContext(AuthorizationContext)
   const home = homeContext.home;
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log("nav", appContext.appState);
+  });
 
-  useEffect(()=>{
-    console.log('nav', appContext.appState)
-  })
   return (
     <React.Fragment>
       <nav className="navbar sticky-top" style={{ backgroundColor: "#f6bd60" }}>
-        
-        <div className="col-md-2 mx-1 my-1 text-center ">
-          <button
-          disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+        <div className="col-md-1 mx-3 my-2"
+        style={{alignItems: 'center'}}>
+          <DropdownButton
+                  style={{alignItems: 'center'}}
 
-            className="navbar_buttons"
-            onClick={() => {
-              navigate("/homes");
-            }}
+            disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+            id="dropdown-basic-button"
+            title={ <IoSettingsSharp />}
           >
-            <IoHome /> Homes
-          </button>
+           
+
+            <div className="col text-left" style={{ marginLeft: "15px" }}>
+              Account
+            </div>
+            <Dropdown.Divider />
+
+            <Dropdown.Item>
+              {" "}
+              <DeleteAccountButton></DeleteAccountButton>
+            </Dropdown.Item>
+
+            <Dropdown.Divider />
+            <Dropdown.Item>
+              {" "}
+              <div className="col text-left" style={{ marginLeft: "15px" }}
+                  onClick={()=> {
+                    localStorage.clear()
+                    authorizationContext.setLoggedIn(false)}}
+                              >
+
+                LogOut
+              </div>
+            </Dropdown.Item>
+          </DropdownButton>
         </div>
         <div className="col-md-1 mx-1 my-1 text-end">
           <button
             className="navbar_buttons"
-            disabled={!home || appContext.appState !== APP_STATES.DEFAULT ? true : false}
+            disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+
+            onClick={() => {
+              navigate("/homes");
+            }}
+          >
+            <IoHome />
+          </button>
+          </div>
+        <div className="col-md-1 mx-1 my-1 text-end">
+          <button
+            className="navbar_buttons"
+            disabled={
+              !home || appContext.appState !== APP_STATES.DEFAULT ? true : false
+            }
             onClick={() => {
               navigate("/products");
             }}
@@ -48,15 +91,17 @@ const NavigationBar = () => {
             <ImListNumbered />
           </button>
         </div>
-        <div className="col-md-2 mx-1 my-1 text-center ">
+        <div className="col-md-2 mx-3 my-1 text-center ">
           <button
             className="navbar_buttons"
-            disabled={!home || appContext.appState !== APP_STATES.DEFAULT ? true : false}
+            disabled={
+              !home || appContext.appState !== APP_STATES.DEFAULT ? true : false
+            }
             onClick={() => {
               navigate("/shoppingItems");
             }}
           >
-            <AiOutlineShoppingCart /> Shoping list
+            <AiOutlineShoppingCart />
           </button>
         </div>
       </nav>

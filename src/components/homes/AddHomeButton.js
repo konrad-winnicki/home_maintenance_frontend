@@ -35,13 +35,12 @@ const AddHomeButton = () => {
   };
 
   return (
-    <div className="col text-center ">
-      <button
-        className="bottom_navbar_buttons"
+    <div className="col text-center">
+      <button className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >
-        <SiAddthis /> Add Home
+       Add Home
       </button>
     </div>
   );

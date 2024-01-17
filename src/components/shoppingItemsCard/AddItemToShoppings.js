@@ -52,11 +52,11 @@ const AddItemToShoppings = () => {
   };
 
   return (
-    <div className="row mb-3" 
-    style={{  borderTop: "4px solid  #f6bd60"
-    }}
+    <div className="" 
+    style={{  borderTop: "4px solid  #f6bd60",alignContent: 'space-between',
+    display: 'flex'}}
     >
-      <div className="col-6 px-4 my-3"
+      <div className=" px-4 my-3"
 
      >
         <input
@@ -68,7 +68,7 @@ const AddItemToShoppings = () => {
           onChange={handleChangeName}
         ></input>
       </div>
-      <div className="col-3 p-0 text-center my-3">
+      <div className=" text-center my-3">
         <input
           value={shoppingItem.quantity}
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
@@ -78,7 +78,7 @@ const AddItemToShoppings = () => {
           onChange={handleChangeQuantity}
         ></input>
       </div>
-      <div className="col-2 p-0 text-center my-3">
+      <div className="text-center m-3">
         <button
           disabled={
             shoppingItem.name === "" || shoppingItem.quantity === ""

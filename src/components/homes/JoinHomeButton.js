@@ -49,12 +49,11 @@ const JoinHomeButton = () => {
 
   return (
     <div className="col text-center ">
-      <button
-        className="bottom_navbar_buttons"
+      <button className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >
-        <SiAddthis /> Join Home
+         Join Home
       </button>
     </div>
   );
