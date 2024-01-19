@@ -4,13 +4,14 @@ import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
-import Scaner, { WrappedScaner } from "../Scaner.js";
-import styles from "../../my-style.module.css";
+import { WrappedScaner } from "../Scaner.js";
 import "../CardHeader.css";
 import { AppContext } from "../../contexts/appContext";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
 import { APP_STATES } from "../../applicationStates";
+import { ProductScanerActions } from "../ProductScanerActions";
+import { VideoAcceptor } from "../VideoAcceptor";
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -60,6 +61,10 @@ class ProductsCard extends React.PureComponent {
     this.getProducts();
   }
 
+  componentDidUpdate() {
+    console.log("product updated", this.state);
+  }
+
   getProducts() {
     const homeId = this.props.homeContext.home.id;
     const response = getProducts(homeId, this.session_code);
@@ -100,6 +105,9 @@ class ProductsCard extends React.PureComponent {
           <AddFinishedProductsToCart></AddFinishedProductsToCart>
           {this.showScaner ? (
             <WrappedScaner
+              addProductToState={this.addProductToState}
+              modifyProductInState={this.modifyProductInState}
+              ScanerActions={ProductScanerActions}
             ></WrappedScaner>
           ) : (
             ""
@@ -120,16 +128,6 @@ export function WrappedProductsCard() {
       homeContext={homeContext}
     ></ProductsCard>
   );
-}
-
-class VideoAcceptor extends React.Component {
-  render() {
-    return (
-      <div>
-        <div className={styles.video2} id={"videoStream"}></div>
-      </div>
-    );
-  }
 }
 
 export default ProductsCard;

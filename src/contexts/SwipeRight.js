@@ -30,7 +30,6 @@ export default function SwipeRightProvider({ children }) {
   const handleMouseStart = (event) => {
     startPositionX.current = event.clientX;
     startPositionY.current = event.clientY;
-
     setClicked(true);
   };
 
@@ -82,6 +81,7 @@ export default function SwipeRightProvider({ children }) {
       className="movable-div"
       style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
       onMouseDown={(event) => {
+
         handleMouseStart(event);
       }}
       onTouchStart={(touchEvent) => {

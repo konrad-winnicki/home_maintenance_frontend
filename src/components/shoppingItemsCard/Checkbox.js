@@ -13,18 +13,16 @@ export default function CheckBox() {
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
-  const [isBought, setBought] = useState(
-    shoppingItemContext.resource.is_bought
-  );
-  const initialRender = useRef(shoppingItemContext.resource.is_bought);
+  const inputRef = useRef(shoppingItemContext.resource.is_bought);
+
 
   const handleChange = () => {
-    console.log("change");
+    updateItem(!shoppingItemContext.resource.is_bought);
 
-    setBought(!isBought);
+
   };
 
-  const updateItem = useCallback(() => {
+  const updateItem = (isBoughtState) => {
     const { product_id, ...resource_without_product_id } =
       shoppingItemContext.resource;
 
@@ -32,7 +30,7 @@ export default function CheckBox() {
       id: product_id,
       updatedValues: {
         ...resource_without_product_id,
-        is_bought: isBought,
+        is_bought:isBoughtState,
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
@@ -40,32 +38,24 @@ export default function CheckBox() {
     const messages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response)
-      .then(() => {
-        initialRender.current = isBought;
-      })
+     serverResponseTranslator(messages, response)
       .catch((error) => {
         console.log(error);
       })
       .finally(() => {
         appContext.setAppState(APP_STATES.DEFAULT);
       });
-  }, [appContext, shoppingItemContext, isBought, homeId, session_code]);
+  }
 
-  useEffect(() => {
-    if (initialRender.current === isBought) {
-      return;
-    }
-    updateItem();
-  }, [isBought, updateItem]);
 
   return (
       <input
+      ref={inputRef} 
 
         style={{width: "25px", height: "25px", paddingRight: "10px" }}
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         type="checkbox"
-        checked={shoppingItemContext.resource.is_bought}
+        checked={shoppingItemContext.resource.is_bought }
         id="flexCheckIndeterminate"
         onChange={() => {
           handleChange();

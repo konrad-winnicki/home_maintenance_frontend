@@ -2,7 +2,6 @@ import { oauthRedirectUri } from "../config";
 
 import { toast } from "react-toastify";
 export function askQuantity(string = "") {
-  //let string = string
   let quantity = prompt("Quantity" + string, "");
   if (quantity === null || quantity === "") {
     return null;
@@ -83,7 +82,14 @@ export async function serverResponseTranslator(messages, response_from_server) {
         return Promise.reject("duplication");
       } else if (status_code === 400 && body.QuantityViolation) {
         return Promise.reject("QuantityViolation");
-      } else if (status_code === 401) {
+        
+      } else if (status_code === 404) {
+        return Promise.reject("ItemNotExists");
+        
+      }
+      
+      
+      else if (status_code === 401) {
         window.location.href = oauthRedirectUri;
       } else {
         notifications(messages.unknown, "error");
@@ -91,6 +97,25 @@ export async function serverResponseTranslator(messages, response_from_server) {
       }
     });
   });
+}
+
+
+
+
+export async function notoficator (response, message) {
+  const statusCode = response.status;
+  if (statusCode === 401) {
+    notifications(message.unlogged, "warning");
+  } else if (statusCode > 199 && statusCode < 300) {
+    console.log("weszlo");
+    notifications(message.succces, "success");
+  } else if (statusCode === 409) {
+    notifications(message.duplicated, "warning");
+  } else if (statusCode === 404) {
+    notifications(message.unknown, "error");
+  } else {
+    notifications(message.unknown, "error");
+  }
 }
 
 export async function statusCodeTranslator(response, message) {
@@ -109,36 +134,7 @@ export async function statusCodeTranslator(response, message) {
   }
 }
 
-/*FUNKCJA TYLKO DLA SKANERA*/
 
-export function send_to_server(
-  url,
-  product_to_send,
-  method,
-  session_code,
-  component
-) {
-  let server_address = url;
-  if (method === "POST") {
-  } else if (method === "PUT" || method === "DELETE" || method === "PATCH") {
-    let id_of_product = product_to_send.id;
-    server_address = server_address + id_of_product;
-  }
-
-  let promise = fetch(server_address, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: session_code,
-      Active_component: component,
-    },
-    method: method,
-    body: JSON.stringify(product_to_send),
-  }).then((response) => {
-    return response;
-  });
-
-  return promise;
-}
 
 export function extractIdFromLocation(location) {
   const regex = /\/([\w-]*)$/g;
