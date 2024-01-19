@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { serverResponseTranslator, serverResponseResolver, actionTaker, notificator } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
 
@@ -24,29 +24,29 @@ const DecreaseButton = () => {
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = updateProduct(product_data, homeId, session_code);
-
-    const messages = {
-      unknown: "Unknown error",
-    };
-    serverResponseTranslator(messages, response)
-      .then((result) => {
-        const newValues = {
-          product_id: product_data.id,
-          name: product_data.updatedValues.name,
-          quantity: product_data.updatedValues.quantity,
-        };
-        console.log(' new values', newValues)
-        productContext.modifyProductInState(newValues);
-        console.log(result)
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+    updateProduct(product_data, homeId, session_code)
+    .then((response) => {
+      const notificatorMessages = {
+        unknown: "Unknown error",
+      };
+     serverResponseResolver(response).then((result) => {
+        actionTaker(result.statusCode, () => {
+          const newValues = {
+            product_id: product_data.id,
+            name: product_data.updatedValues.name,
+            quantity: product_data.updatedValues.quantity,
+          };
+          productContext.modifyProductInState(newValues);
+        })
+        notificator(result.statusCode, notificatorMessages);
       });
-  };
+    })
+    .catch((error) => console.log(error))
+    .finally(() => {
+      appContext.setAppState(APP_STATES.DEFAULT);
+    });
+
+  }
 
   return (
     <button

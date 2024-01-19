@@ -15,11 +15,8 @@ export default function CheckBox() {
   const homeId = homeContext.home.id;
   const inputRef = useRef(shoppingItemContext.resource.is_bought);
 
-
   const handleChange = () => {
     updateItem(!shoppingItemContext.resource.is_bought);
-
-
   };
 
   const updateItem = (isBoughtState) => {
@@ -30,7 +27,7 @@ export default function CheckBox() {
       id: product_id,
       updatedValues: {
         ...resource_without_product_id,
-        is_bought:isBoughtState,
+        is_bought: isBoughtState,
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
@@ -38,29 +35,26 @@ export default function CheckBox() {
     const messages = {
       unknown: "Unknown error",
     };
-     serverResponseTranslator(messages, response)
+    serverResponseTranslator(messages, response)
       .catch((error) => {
         console.log(error);
       })
       .finally(() => {
         appContext.setAppState(APP_STATES.DEFAULT);
       });
-  }
-
+  };
 
   return (
-      <input
-      ref={inputRef} 
-
-        style={{width: "25px", height: "25px", paddingRight: "10px" }}
-        disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
-        type="checkbox"
-        checked={shoppingItemContext.resource.is_bought }
-        id="flexCheckIndeterminate"
-        onChange={() => {
-          handleChange();
-        }}
-      ></input>
-  
+    <input
+      ref={inputRef}
+      style={{ width: "25px", height: "25px", paddingRight: "10px" }}
+      disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
+      type="checkbox"
+      checked={shoppingItemContext.resource.is_bought}
+      id="flexCheckIndeterminate"
+      onChange={() => {
+        handleChange();
+      }}
+    ></input>
   );
 }

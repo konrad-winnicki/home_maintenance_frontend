@@ -1,7 +1,10 @@
 import React, { useContext } from "react";
 import { SiAddthis } from "react-icons/si";
 import { APP_STATES } from "../../applicationStates";
-import { serverResponseTranslator, extractIdFromLocation} from "../../services/auxilaryFunctions";
+import {
+  serverResponseTranslator,
+  extractIdFromLocation,
+} from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { joinHome } from "../../services/home";
 import { getHomes } from "../../services/home";
@@ -15,14 +18,13 @@ const JoinHomeButton = () => {
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
 
-
   const onClickHandler = async () => {
     const homeId = promptForHomeId();
     if (!homeId) {
       return;
     }
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = joinHome(homeId, sessionCode).then(()=>{
+    const response = joinHome(homeId, sessionCode).then(() => {
       const response = getHomes(sessionCode);
       const messages = {
         success: "Joined new home",
@@ -34,7 +36,7 @@ const JoinHomeButton = () => {
           homeContext.setHomes(result.body);
         })
         .catch((error) => console.log(error));
-    })
+    });
     const messages = {
       success: "Joined new home",
       duplicated: "You belong to this home",
@@ -49,11 +51,12 @@ const JoinHomeButton = () => {
 
   return (
     <div className="col text-center ">
-      <button className="bottom_navbar_buttons"
+      <button
+        className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >
-         Join Home
+        Join Home
       </button>
     </div>
   );

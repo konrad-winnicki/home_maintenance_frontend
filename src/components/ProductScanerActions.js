@@ -1,4 +1,4 @@
-import  { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../contexts/appContext.js";
 import { APP_STATES } from "../applicationStates.js";
 import { HomeContext } from "../contexts/homeContext.js";
@@ -79,7 +79,7 @@ export const ProductScanerActions = (props) => {
         })
         .catch((error) => {
           if (error === "ItemNotExists") {
-             addBarcodeToDB();
+            addBarcodeToDB();
           }
         })
         .catch((error) => console.log(error))
@@ -91,5 +91,4 @@ export const ProductScanerActions = (props) => {
         });
     }
   }, [props.barcode]);
-
 };

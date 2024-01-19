@@ -11,7 +11,7 @@ function DeleteAccountButton() {
   const appContext = useContext(AppContext);
 
   const sessionCode = localStorage.getItem("session_code");
-  const authorizationContext = useContext(AuthorizationContext)
+  const authorizationContext = useContext(AuthorizationContext);
   const navigate = useNavigate();
 
   const deleteUserFromDB = () => {
@@ -30,8 +30,8 @@ function DeleteAccountButton() {
     };
     serverResponseTranslator(messages, response)
       .then(() => {
-        localStorage.clear()
-                    authorizationContext.setLoggedIn(false)
+        localStorage.clear();
+        authorizationContext.setLoggedIn(false);
         navigate("/accountDeleted");
       })
       .catch((error) => console.log(error))

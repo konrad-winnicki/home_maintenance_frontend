@@ -1,15 +1,15 @@
 import { createContext, useRef, useState } from "react";
 
 export const SwipeRightContext = createContext({
-  stateHandler: () => {},
+  actionFunctionSetter: () => {},
   isMoving: false,
 });
 
 export default function SwipeRightProvider({ children }) {
   const [actionFunction, setActionFunction] = useState(() => {});
   const [isMoving, setMoving] = useState(false);
-  const stateHandler = (a) => {
-    setActionFunction(() => a);
+  const actionFunctionSetter = (actionFunction) => {
+    setActionFunction(() => actionFunction);
   };
 
   const startPositionX = useRef(null);
@@ -81,7 +81,6 @@ export default function SwipeRightProvider({ children }) {
       className="movable-div"
       style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
       onMouseDown={(event) => {
-
         handleMouseStart(event);
       }}
       onTouchStart={(touchEvent) => {
@@ -99,7 +98,7 @@ export default function SwipeRightProvider({ children }) {
       <SwipeRightContext.Provider
         value={{
           isMoving,
-          stateHandler,
+          actionFunctionSetter: actionFunctionSetter,
         }}
       >
         {children}

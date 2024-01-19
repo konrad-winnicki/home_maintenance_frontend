@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { addFinishedProductsToShoppingList } from "../../services/cart";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { serverResponseTranslator, serverResponseResolver, notificator } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
@@ -15,16 +15,22 @@ const AddFinishedProductsToCart = () => {
   const addFinishedProductToShoppings = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
-    const response = addFinishedProductsToShoppingList(homeId, session_code);
-    const messages = {
-      success: "Product added to cart",
-      unknown: "Unknown error",
-    };
-    serverResponseTranslator(messages, response)
-      .catch((error) => console.log(error))
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+    addFinishedProductsToShoppingList(homeId, session_code).then((response)=>{
+      const notificatorMessages = {
+        success: "Product added to cart",
+        unknown: "Unknown error",
+      };
+      serverResponseResolver(response).then((result) => {
+        notificator(result.statusCode, notificatorMessages);
       });
+    })
+    .catch((error) => console.log(error))
+    .finally(() => {
+      appContext.setAppState(APP_STATES.DEFAULT);
+    });
+
+    
+     
   };
 
   return (
@@ -36,7 +42,7 @@ const AddFinishedProductsToCart = () => {
           addFinishedProductToShoppings();
         }}
       >
-        <TbTransferIn/> missing
+        <TbTransferIn /> missing
       </button>
     </div>
   );

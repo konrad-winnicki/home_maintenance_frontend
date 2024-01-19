@@ -22,7 +22,8 @@ const AddItemsFromShopings = () => {
     serverResponseTranslator(messages, result)
       .catch((error) => {
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
         appContext.setAppState(APP_STATES.DEFAULT);
       });
   };

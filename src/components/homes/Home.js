@@ -66,7 +66,7 @@ export default function Home({ home }) {
   };
 
   useEffect(() => {
-    swipeRightContext.stateHandler(leaveHome);
+    swipeRightContext.actionFunctionSetter(leaveHome);
   }, []);
 
   return (

@@ -1,9 +1,15 @@
 import React, { useContext } from "react";
 import { SiAddthis } from "react-icons/si";
-import { ask_product_name } from "../../services/auxilaryFunctions";
+import {
+  actionTaker,
+  ask_product_name,
+  notificator,
+  serverResponseResolver,
+} from "../../services/auxilaryFunctions";
 import { addProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import {
+  notifications,
   serverResponseTranslator,
   extractIdFromLocation,
 } from "../../services/auxilaryFunctions";
@@ -26,41 +32,28 @@ const AddProductButton = (props) => {
       return;
     }
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = addProduct(product_data, homeId, session_code);
-    /*
-   .then((response) => {
-        const messages = {
-          unlogged: "Not logged",
+
+    addProduct(product_data, homeId, session_code)
+    .then((response) => {
+        const notificatorMessages = {
           success: "Product addded",
           duplicated: "Product already exists",
           unknown: "Unknown error",
         };
-        console.log('gggggggggggggggggggggg')
-        statusCodeTranslator(response, messages).then(()=>{
-          this.props.state_changer({ app_state: 'refreshing'});
-    
-        })
-        //this.props.state_changer({ app_state: 'refreshing'});
-      // this.props.server_response_service(this.props.state_changer, response)
-
-      })
-      */
-    const messages = {
-      success: "Product addded",
-      duplicated: "Product already exists",
-      unknown: "Unknown error",
-    };
-    serverResponseTranslator(messages, response)
-      .then((result) => {
-        const id = extractIdFromLocation(result.location);
-        props.addProductToState({
-          product_id: id,
-          name: product_data.name,
-          quantity: product_data.quantity,
+       serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            const id = extractIdFromLocation(result.location);
+            props.addProductToState({
+              product_id: id,
+              name: product_data.name,
+              quantity: product_data.quantity,
+            });
+          });
+          notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => console.log(error))
-      .finally(() => {
+      .finally((c) => {
         appContext.setAppState(APP_STATES.DEFAULT);
       });
   };

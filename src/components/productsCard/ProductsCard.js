@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { getProducts } from "../../services/store";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { serverResponseTranslator, serverResponseResolver, actionTaker, notificator } from "../../services/auxilaryFunctions";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
@@ -61,25 +61,27 @@ class ProductsCard extends React.PureComponent {
     this.getProducts();
   }
 
-  componentDidUpdate() {
-    console.log("product updated", this.state);
-  }
+
 
   getProducts() {
     const homeId = this.props.homeContext.home.id;
-    const response = getProducts(homeId, this.session_code);
-    const messages = {
-      unknown: "Unknown error",
-    };
-    serverResponseTranslator(messages, response)
-      .then((result) => {
-        this.stateChanger({
-          productList: result.body,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    getProducts(homeId, this.session_code)
+    .then((response) => {
+      const notificatorMessages = {
+        unknown: "Unknown error",
+      };
+     serverResponseResolver(response).then((result) => {
+        actionTaker(result.statusCode, () => {
+          this.stateChanger({
+            productList: result.body,
+          })
+        })
+        notificator(result.statusCode, notificatorMessages);
       });
+    })
+    .catch((error) => console.log(error))
+    
+
   }
 
   render() {

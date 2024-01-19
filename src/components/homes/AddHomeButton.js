@@ -25,7 +25,7 @@ const AddHomeButton = () => {
     serverResponseTranslator(messages, response)
       .then((result) => {
         const id = extractIdFromLocation(result.location);
-        console.log('adding home with id', id)
+        console.log("adding home with id", id);
         homeContext.addHomeToState({ id, name });
       })
       .catch((error) => console.log(error))
@@ -36,11 +36,12 @@ const AddHomeButton = () => {
 
   return (
     <div className="col text-center">
-      <button className="bottom_navbar_buttons"
+      <button
+        className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT}
         onClick={onClickHandler}
       >
-       Add Home
+        Add Home
       </button>
     </div>
   );

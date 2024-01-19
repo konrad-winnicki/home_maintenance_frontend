@@ -4,7 +4,7 @@ import { updateProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import { actionTaker, notificator, serverResponseResolver } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
 
@@ -23,25 +23,27 @@ const IncreaseButton = () => {
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = updateProduct(product_data, homeId, session_code);
-    const messages = {
-      unknown: "Unknown error",
-    };
-    serverResponseTranslator(messages, response)
-      .then(() => {
-        const newValues = {
-          product_id: product_data.id,
-          name: product_data.updatedValues.name,
-          quantity: product_data.updatedValues.quantity,
-        };
-        productContext.modifyProductInState(newValues);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+    updateProduct(product_data, homeId, session_code)
+    .then((response) => {
+      const notificatorMessages = {
+        unknown: "Unknown error",
+      };
+     serverResponseResolver(response).then((result) => {
+        actionTaker(result.statusCode, () => {
+          const newValues = {
+            product_id: product_data.id,
+            name: product_data.updatedValues.name,
+            quantity: product_data.updatedValues.quantity,
+          };
+          productContext.modifyProductInState(newValues);
+        })
+        notificator(result.statusCode, notificatorMessages);
       });
+    })
+    .catch((error) => console.log(error))
+    .finally(() => {
+      appContext.setAppState(APP_STATES.DEFAULT);
+    });
   };
 
   return (

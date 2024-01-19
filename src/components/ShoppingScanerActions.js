@@ -1,9 +1,9 @@
-import  { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../contexts/appContext.js";
 import { APP_STATES } from "../applicationStates.js";
 import { HomeContext } from "../contexts/homeContext.js";
 import "../components/commonComponents/BottomNavbarButtons.css";
-import { addBarcode, addShoppingItemByBarcode} from "../services/scaner.js";
+import { addBarcode, addShoppingItemByBarcode } from "../services/scaner.js";
 import {
   serverResponseTranslator,
   ask_product_name,
@@ -26,6 +26,7 @@ export const ShoppingScanerActions = (props) => {
     const messages = {
       unknown: "Unknown error",
     };
+
     return serverResponseTranslator(messages, response);
   }
 
@@ -41,7 +42,7 @@ export const ShoppingScanerActions = (props) => {
     }
 
     const response = addBarcode(barcode_data, homeId, session_code);
-    console.log(response)
+    console.log(response);
     const messages = {
       success:
         "Barcode added.\n\nYou can use scaner to add and modificate products.",
@@ -51,10 +52,8 @@ export const ShoppingScanerActions = (props) => {
     return serverResponseTranslator(messages, response);
   }
 
-  
-
-  useEffect( () => {
-    console.log('ACTION')
+  useEffect(() => {
+    console.log("ACTION");
     if (props.barcode) {
       modifyShoppingListByBarcode()
         .catch((error) => {
@@ -71,7 +70,6 @@ export const ShoppingScanerActions = (props) => {
         });
     }
     //appContext.setAppState(APP_STATES.DEFAULT);
-  },[props.barcode] );
-  return null
-
+  }, [props.barcode]);
+  return null;
 };

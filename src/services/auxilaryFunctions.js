@@ -72,24 +72,19 @@ async function getResponseBody(response) {
 export async function serverResponseTranslator(messages, response_from_server) {
   return response_from_server.then((response) => {
     return getResponseBody(response).then((body) => {
-      const location = response.headers.get("Location")
+      const location = response.headers.get("Location");
       const status_code = response.status;
       if (status_code > 199 && status_code < 300) {
         notifications(messages.success, "success");
-        return Promise.resolve({location, body});
+        return Promise.resolve({ location, body });
       } else if (status_code === 409) {
         notifications(messages.duplicated, "warning");
         return Promise.reject("duplication");
       } else if (status_code === 400 && body.QuantityViolation) {
         return Promise.reject("QuantityViolation");
-        
       } else if (status_code === 404) {
         return Promise.reject("ItemNotExists");
-        
-      }
-      
-      
-      else if (status_code === 401) {
+      } else if (status_code === 401) {
         window.location.href = oauthRedirectUri;
       } else {
         notifications(messages.unknown, "error");
@@ -99,42 +94,59 @@ export async function serverResponseTranslator(messages, response_from_server) {
   });
 }
 
+export async function serverResponseResolver(response) {
+  return getResponseBody(response).then((body) => {
+    const location = response.headers.get("Location");
+    const statusCode = response.status;
+    return { location, body, statusCode };
+  });
+}
 
-
-
-export async function notoficator (response, message) {
-  const statusCode = response.status;
+export function notificator(statusCode, messages) {
   if (statusCode === 401) {
-    notifications(message.unlogged, "warning");
+    console.log("Unlogged");
   } else if (statusCode > 199 && statusCode < 300) {
-    console.log("weszlo");
-    notifications(message.succces, "success");
+    notifications(messages.success, "success");
   } else if (statusCode === 409) {
-    notifications(message.duplicated, "warning");
+    console.log(messages.duplicated);
+    notifications(messages.duplicated, "warning");
   } else if (statusCode === 404) {
-    notifications(message.unknown, "error");
-  } else {
-    notifications(message.unknown, "error");
+    console.log("Not exists");
+  } else if (statusCode === 400) {
+    console.log("Bad request");
+  }
+  
+  else {
+    notifications(messages.unknown, "error");
   }
 }
+
+export function actionTaker(statusCode, action) {
+  if (statusCode === 401) {
+    window.location.href = oauthRedirectUri;
+  } else if (statusCode > 199 && statusCode < 300) {
+    action();
+    return;
+  }
+}
+
+
 
 export async function statusCodeTranslator(response, message) {
   const statusCode = response.status;
   if (statusCode === 401) {
     notifications(message.unlogged, "warning");
   } else if (statusCode > 199 && statusCode < 300) {
-    console.log("weszlo");
     notifications(message.succces, "success");
   } else if (statusCode === 409) {
     notifications(message.duplicated, "warning");
   } else if (statusCode === 404) {
-    notifications(message.unknown, "error");
-  } else {
+    notifications(message.unknown, "error")
+  } 
+  else {
     notifications(message.unknown, "error");
   }
 }
-
-
 
 export function extractIdFromLocation(location) {
   const regex = /\/([\w-]*)$/g;

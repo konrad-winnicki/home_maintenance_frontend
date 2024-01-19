@@ -17,6 +17,5 @@ export async function exchangeOauthCodeForToken(queryStringWithCode) {
     .then((json) => json.token)
     .catch((e) => {
       console.log("Error exchanging oauth code: " + e);
-      return Promise.reject(e);
     });
 }

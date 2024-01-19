@@ -11,8 +11,7 @@ export default function HomesCard() {
   const homeContext = useContext(HomeContext);
 
   useEffect(() => {
-
-    console.log('use effect homecard', homeContext.homes)
+    console.log("use effect homecard", homeContext.homes);
     const response = getHomes(sessionCode);
     const messages = {
       unknown: "Unknown error",
@@ -30,12 +29,11 @@ export default function HomesCard() {
       etc. */}
       <div className="header mt-10">Current home: {homeContext.home?.name}</div>
       {/* TODO: here is the place for the current "page" */}
-     
+
       <HomeList homes={homeContext.homes} />
       <BottomNavBar>
-      <AddHomeButton />
-      <JoinHomeButton />
-
+        <AddHomeButton />
+        <JoinHomeButton />
       </BottomNavBar>
     </React.Fragment>
   );

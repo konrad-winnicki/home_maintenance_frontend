@@ -8,7 +8,12 @@ import "../ResourceComponent.css";
 import { ResourceContext } from "../../contexts/resourceContext";
 
 import { HomeContext } from "../../contexts/homeContext";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseTranslator,
+  serverResponseResolver,
+  actionTaker,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { SwipeRightContext } from "../../contexts/SwipeRight";
@@ -33,15 +38,18 @@ function ProductComponent() {
     }
     const productId = productContext.resource.product_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = deleteProduct(productId, homeId, sessionCode);
-
-    const messages = {
-      success: "Product deleted",
-      unknown: "Unknown error",
-    };
-    serverResponseTranslator(messages, response)
-      .then(() => {
-        productContext.deleteResourceFromState(productId);
+    deleteProduct(productId, homeId, sessionCode)
+      .then((response) => {
+        const notificatorMessages = {
+          success: "Product deleted",
+          unknown: "Unknown error",
+        };
+        serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            productContext.deleteResourceFromState(productId);
+          });
+          notificator(result.statusCode, notificatorMessages);
+        });
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -50,7 +58,7 @@ function ProductComponent() {
   };
 
   useEffect(() => {
-    swipeRightContext.stateHandler(deleteProductFromStore);
+    swipeRightContext.actionFunctionSetter(deleteProductFromStore);
     console.log("buttons", showButtons);
   }, [showButtons]);
 

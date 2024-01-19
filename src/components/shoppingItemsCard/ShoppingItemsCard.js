@@ -19,8 +19,6 @@ export function ShoppingItemsCard() {
   const session_code = localStorage.getItem("session_code");
   const showScanner = true;
 
-  
-
   const createSocket = (session_code, homeId) => {
     const URL = backendUrl;
     const socket = io(URL, {
@@ -36,7 +34,7 @@ export function ShoppingItemsCard() {
   };
 
   const ProductListChanger = useCallback(() => {
-    console.log('fetch list')
+    console.log("fetch list");
     const homeId = homeContext.home.id;
     const response = getShoppingItems(homeId, session_code);
     const messages = {
@@ -44,7 +42,9 @@ export function ShoppingItemsCard() {
     };
     serverResponseTranslator(messages, response)
       .then((result) => {
-        setShoppingItems(()=>{return [...result.body]});
+        setShoppingItems(() => {
+          return [...result.body];
+        });
       })
       .catch((error) => {
         console.log(error);

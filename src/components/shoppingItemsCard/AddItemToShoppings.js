@@ -52,13 +52,15 @@ const AddItemToShoppings = () => {
   };
 
   return (
-    <div className="" 
-    style={{  borderTop: "4px solid  #f6bd60",alignContent: 'space-between',
-    display: 'flex'}}
+    <div
+      className=""
+      style={{
+        borderTop: "4px solid  #f6bd60",
+        alignContent: "space-between",
+        display: "flex",
+      }}
     >
-      <div className=" px-4 my-3"
-
-     >
+      <div className=" px-4 my-3">
         <input
           value={shoppingItem.name}
           disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
