@@ -27,7 +27,6 @@ export default function HomesCard() {
     <React.Fragment>
       {/* TODO: create a reusable frame component with common navigation, toast
       etc. */}
-      <div className="header mt-10">Current home: {homeContext.home?.name}</div>
       {/* TODO: here is the place for the current "page" */}
 
       <HomeList homes={homeContext.homes} />

@@ -28,7 +28,7 @@ export default function Home({ home }) {
       .writeText(home.id)
       .then(() => {
         alert(
-          "Home id copied to clipboard. You can share it to invite other family members."
+          "Home id copied to clipboard. You can share it to invite other members."
         );
       })
       .catch((err) => {
@@ -72,10 +72,8 @@ export default function Home({ home }) {
   return (
     <div>
       <div className="product__properties">
-        <div className="product__name">{home.name}</div>
-        <button className="resource_button" onClick={setHomeHandler}>
-          <IoSettingsSharp />
-        </button>
+        <div className="product__name" onClick={setHomeHandler}>{home.name}</div>
+       
         <button
           className="resource_button"
           onClick={() => {

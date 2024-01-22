@@ -17,8 +17,6 @@ function ResourceDescription(props) {
   const followMouseRef = useRef(false);
 
   const showButtons = () => {
-    console.log("fffff", doubleClick.current);
-
     clickedRef.current = true;
     timeoutRef.current = setTimeout(() => {
       if (doubleClick.current || followMouseRef.current) {
@@ -27,11 +25,15 @@ function ResourceDescription(props) {
         return;
       }
       !props.showButtons
-        ? props.setShowButtons(true)
+        ? props.setShowButtons(!props.showButtons)
         : props.setShowButtons(false);
-     // clickedRef.current =false
-     // followMouseRef.current = false
     }, 350);
+  };
+
+  const doubleClickHandler = (edidNameOrQunatitySetter) => {
+    appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+    doubleClick.current = true;
+    edidNameOrQunatitySetter(true);
   };
 
   const handleMouseMove = () => {
@@ -41,8 +43,6 @@ function ResourceDescription(props) {
   };
 
   useEffect(() => {
-    console.log("use effect",doubleClick.current, editName);
-
     if (appContext.appState === APP_STATES.DEFAULT) {
       setEditName(false);
       setEditQuantity(false);
@@ -59,7 +59,7 @@ function ResourceDescription(props) {
     return () => {
       clearTimeout(timeoutRef.current);
     };
-  }, [ appContext.appState, editName, editQuantity]);
+  }, [appContext.appState, editName, editQuantity]);
 
   return (
     <>
@@ -68,17 +68,13 @@ function ResourceDescription(props) {
           className="product__name"
           onMouseDown={isDisabled ? null : showButtons}
           onTouchStart={isDisabled ? null : showButtons}
-          
           onDoubleClick={
             isDisabled
               ? null
               : () => {
-                  appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-                  doubleClick.current = true;
-                  setEditName(true);
+                  doubleClickHandler(setEditName);
                 }
           }
-          
           onMouseMove={handleMouseMove}
           onTouchMove={handleMouseMove}
         >
@@ -112,14 +108,13 @@ function ResourceDescription(props) {
             isDisabled
               ? null
               : () => {
-                  appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-                  doubleClick.current = true;
-                  setEditQuantity(true);
+                doubleClickHandler(setEditQuantity);
+
+                  ;
                 }
           }
           onMouseMove={handleMouseMove}
           onTouchMove={handleMouseMove}
-          
         >
           {resourceContext.resource.quantity}
         </div>

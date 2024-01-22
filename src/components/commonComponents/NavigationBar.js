@@ -3,7 +3,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IoSettingsSharp } from "react-icons/io5";
-
 import { IoHome } from "react-icons/io5";
 import { ImListNumbered } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,7 @@ import { AuthorizationContext } from "../../contexts/authorizationContext";
 const NavigationBar = () => {
   const homeContext = useContext(HomeContext);
   const appContext = useContext(AppContext);
-const authorizationContext = useContext(AuthorizationContext)
+  const authorizationContext = useContext(AuthorizationContext);
   const home = homeContext.home;
   const navigate = useNavigate();
 
@@ -29,17 +28,13 @@ const authorizationContext = useContext(AuthorizationContext)
   return (
     <React.Fragment>
       <nav className="navbar sticky-top" style={{ backgroundColor: "#f6bd60" }}>
-        <div className="col-md-1 mx-3 my-2"
-        style={{alignItems: 'center'}}>
+        <div className="col-md-1 mx-3 my-2" style={{ alignItems: "center" }}>
           <DropdownButton
-                  style={{alignItems: 'center'}}
-
+            style={{ alignItems: "center" }}
             disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
             id="dropdown-basic-button"
-            title={ <IoSettingsSharp />}
+            title={<IoSettingsSharp />}
           >
-           
-
             <div className="col text-left" style={{ marginLeft: "15px" }}>
               Account
             </div>
@@ -53,12 +48,14 @@ const authorizationContext = useContext(AuthorizationContext)
             <Dropdown.Divider />
             <Dropdown.Item>
               {" "}
-              <div className="col text-left" style={{ marginLeft: "15px" }}
-                  onClick={()=> {
-                    localStorage.clear()
-                    authorizationContext.setLoggedIn(false)}}
-                              >
-
+              <div
+                className="col text-left"
+                style={{ marginLeft: "15px" }}
+                onClick={() => {
+                  localStorage.clear();
+                  authorizationContext.setLoggedIn(false);
+                }}
+              >
                 LogOut
               </div>
             </Dropdown.Item>
@@ -68,14 +65,13 @@ const authorizationContext = useContext(AuthorizationContext)
           <button
             className="navbar_buttons"
             disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
-
             onClick={() => {
               navigate("/homes");
             }}
           >
             <IoHome />
           </button>
-          </div>
+        </div>
         <div className="col-md-1 mx-1 my-1 text-end">
           <button
             className="navbar_buttons"

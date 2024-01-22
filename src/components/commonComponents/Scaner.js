@@ -29,9 +29,8 @@ class Scaner extends React.Component {
   }
 
 
-handleOnclick(){
+handleOnClick(){
   if (this.state.isScanning){
-    console.log("block scanning");
     stopScanning();
     this.setIsScanning(false)
     this.props.appContext.setAppState(APP_STATES.DEFAULT)
@@ -46,6 +45,8 @@ handleOnclick(){
   performScanerActions() {
     const barcode = this.state.code;
     this.props.addOrModificateItem(barcode, this.homeId);
+    this.props.appContext.setAppState(APP_STATES.DEFAULT);
+
   }
 
   componentDidUpdate() {
@@ -53,12 +54,9 @@ handleOnclick(){
     if (this.state.code) {
       this.set_code(null);
       this.setIsScanning(false);
-      //stopScanning();
       this.performScanerActions();
-      this.props.appContext.setAppState(APP_STATES.DEFAULT);
     } else if (this.state.isScanning) {
       scanBarcode(this.set_code);
-      console.log("start scanning");
     } 
   }
 
@@ -76,8 +74,8 @@ handleOnclick(){
               : false
           }
           onClick={() => {
-            this.handleOnclick()
-            this.set_code("565656");
+            this.handleOnClick()
+           // this.set_code("565656");
           }}
         >
           {button_name} <BsUpcScan />
