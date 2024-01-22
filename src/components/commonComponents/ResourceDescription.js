@@ -4,7 +4,6 @@ import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import ChangeResource from "./ChangeResource";
-import { SwipeRightContext } from "../../contexts/SwipeRight";
 
 function ResourceDescription(props) {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -17,8 +16,9 @@ function ResourceDescription(props) {
   const doubleClick = useRef(false);
   const followMouseRef = useRef(false);
 
-
   const showButtons = () => {
+    console.log("fffff", doubleClick.current);
+
     clickedRef.current = true;
     timeoutRef.current = setTimeout(() => {
       if (doubleClick.current || followMouseRef.current) {
@@ -29,21 +29,20 @@ function ResourceDescription(props) {
       !props.showButtons
         ? props.setShowButtons(true)
         : props.setShowButtons(false);
+     // clickedRef.current =false
+     // followMouseRef.current = false
     }, 350);
-
   };
 
-  const handleMouseMove = () => { 
+  const handleMouseMove = () => {
     if (clickedRef.current) {
       followMouseRef.current = true;
     }
- 
   };
 
- 
-
   useEffect(() => {
-    console.log('use effect')
+    console.log("use effect",doubleClick.current, editName);
+
     if (appContext.appState === APP_STATES.DEFAULT) {
       setEditName(false);
       setEditQuantity(false);
@@ -53,14 +52,14 @@ function ResourceDescription(props) {
       clickedRef.current = false;
       clearTimeout(timeoutRef.current);
     }
-    if (appContext.appState !== APP_STATES.DEFAULT) {
+    if (appContext.appState !== APP_STATES.DEFAULT && !editName) {
       setIsDisabled(true);
     }
 
     return () => {
       clearTimeout(timeoutRef.current);
     };
-  }, [appContext, clickedRef, editName]);
+  }, [ appContext.appState, editName, editQuantity]);
 
   return (
     <>
@@ -68,10 +67,9 @@ function ResourceDescription(props) {
         <div
           className="product__name"
           onMouseDown={isDisabled ? null : showButtons}
-          onTouchStart={
-            isDisabled ? null : showButtons}
+          onTouchStart={isDisabled ? null : showButtons}
           
-            onDoubleClick={
+          onDoubleClick={
             isDisabled
               ? null
               : () => {
@@ -80,10 +78,9 @@ function ResourceDescription(props) {
                   setEditName(true);
                 }
           }
+          
           onMouseMove={handleMouseMove}
-          onTouchMove={
-            handleMouseMove}
-          onBlur={()=>{console.log('dupa')}}
+          onTouchMove={handleMouseMove}
         >
           {resourceContext.resource.name}
         </div>
@@ -110,10 +107,8 @@ function ResourceDescription(props) {
         <div
           className="product__quantity centered-text"
           onMouseDown={isDisabled ? null : showButtons}
-          onTouchStart={
-            isDisabled ? null : showButtons}
-          
-            onDoubleClick={
+          onTouchStart={isDisabled ? null : showButtons}
+          onDoubleClick={
             isDisabled
               ? null
               : () => {
@@ -123,9 +118,8 @@ function ResourceDescription(props) {
                 }
           }
           onMouseMove={handleMouseMove}
-          onTouchMove={
-            handleMouseMove}
-          onBlur={()=>{console.log('dupa')}}
+          onTouchMove={handleMouseMove}
+          
         >
           {resourceContext.resource.quantity}
         </div>

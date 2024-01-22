@@ -124,7 +124,11 @@ export function notificator(statusCode, messages) {
 export function actionTaker(statusCode, action) {
   if (statusCode === 401) {
     window.location.href = oauthRedirectUri;
-  } else if (statusCode > 199 && statusCode < 300) {
+  } 
+  else if (statusCode === 404){
+    return Promise.reject(404)
+  }
+  else if (statusCode > 199 && statusCode < 300) {
     action();
     return;
   }

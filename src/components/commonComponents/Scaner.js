@@ -1,26 +1,18 @@
 import React, { useContext } from "react";
 import { BsUpcScan } from "react-icons/bs";
-import { AppContext } from "../contexts/appContext.js";
-import { APP_STATES } from "../applicationStates.js";
-import "../components/commonComponents/BottomNavbarButtons.css";
-import { scanBarcode, stopScanning } from "../services/scanerSettings.js";
-// export const url = "https://localhost:5000/products/";
-
-export const url = "https://backend.home-maintenance.click/";
+import { AppContext } from "../../contexts/appContext.js";
+import { APP_STATES } from "../../applicationStates.js";
+import "./BottomNavbarButtons.css";
+import { scanBarcode, stopScanning } from "../../services/scanerSettings.js";
+import { HomeContext } from "../../contexts/homeContext.js";
 
 class Scaner extends React.Component {
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.code !== nextState.code || this.state.isScanning !==nextState.isScanning
-  }
-
-  
   constructor(props) {
     super(props);
     this.state = { code: null, isScanning: false };
     this.set_code = this.set_code.bind(this);
     this.setIsScanning = this.setIsScanning.bind(this);
-    this.ScanerActions = this.props.ScanerActions;
+    this.homeId = this.props.homeContext.home.id;
   }
 
   set_code(code) {
@@ -37,23 +29,37 @@ class Scaner extends React.Component {
   }
 
 
+handleOnclick(){
+  if (this.state.isScanning){
+    console.log("block scanning");
+    stopScanning();
+    this.setIsScanning(false)
+    this.props.appContext.setAppState(APP_STATES.DEFAULT)
+  }else{
+    this.setIsScanning(true)
+    this.props.appContext.setAppState(APP_STATES.SCANNING);
+
+  }
+
+}
+
+  performScanerActions() {
+    const barcode = this.state.code;
+    this.props.addOrModificateItem(barcode, this.homeId);
+  }
+
   componentDidUpdate() {
-    console.log("SCANER", this.props);
+    console.log("SCANER", this.state);
     if (this.state.code) {
+      this.set_code(null);
       this.setIsScanning(false);
-      stopScanning();
+      //stopScanning();
+      this.performScanerActions();
+      this.props.appContext.setAppState(APP_STATES.DEFAULT);
     } else if (this.state.isScanning) {
-      this.props.appContext.setAppState(APP_STATES.SCANNING);
       scanBarcode(this.set_code);
       console.log("start scanning");
     } 
-    
-    else if (!this.state.isScanning) {
-      console.log("block scanning");
-      stopScanning();
-      this.props.appContext.setAppState(APP_STATES.DEFAULT);
-    }
-
   }
 
   render() {
@@ -70,22 +76,12 @@ class Scaner extends React.Component {
               : false
           }
           onClick={() => {
-            this.state.isScanning
-              ? this.setIsScanning(false)
-              : this.setIsScanning(true);
-             // this.set_code('565656')
-            this.props.appContext.setAppState(APP_STATES.SCANNING);
+            this.handleOnclick()
+            this.set_code("565656");
           }}
         >
           {button_name} <BsUpcScan />
         </button>
-        <this.ScanerActions
-          modifyProductInState={this.props.modifyProductInState}
-          addProductToState={this.props.addProductToState}
-          set_code={this.set_code}
-          setIsScanning={this.setIsScanning}
-          barcode={this.state.code}
-        ></this.ScanerActions>{" "}
       </div>
     );
   }
@@ -93,12 +89,16 @@ class Scaner extends React.Component {
 
 export function WrappedScaner(props) {
   const appContext = useContext(AppContext);
+  const homeContext = useContext(HomeContext);
+
   return (
     <Scaner
       modifyProductInState={props.modifyProductInState}
       addProductToState={props.addProductToState}
       appContext={appContext}
-      ScanerActions={props.ScanerActions}
+      homeContext={homeContext}
+      scanerActions={props.scanerActions}
+      addOrModificateItem={props.addOrModificateItem}
     ></Scaner>
   );
 }

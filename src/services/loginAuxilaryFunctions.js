@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
+
 function getCodeFromQueryParam(queryString) {
   const urlParams = new URLSearchParams(queryString);
   const code = urlParams.get("code");
@@ -26,18 +27,22 @@ function autoLogOutTiming(currentToken, authorizationContext) {
   const decodedToken = jwtDecode(currentToken);
   const timeToLogout = calculateTimeToFinishToken(decodedToken);
   setTimeout(() => {
-    removeTokenFromLocalStorage('session_code')
+    removeTokenFromLocalStorage("session_code");
     authorizationContext.setLoggedIn(false);
   }, timeToLogout);
 }
 
-
-function setTokenInLocalStorage (token) {
-  localStorage.setItem("session_code", token)
+function setTokenInLocalStorage(token) {
+  localStorage.setItem("session_code", token);
 }
 
-function removeTokenFromLocalStorage (token) {
+function removeTokenFromLocalStorage(token) {
   localStorage.removeItem("session_code")
 }
 
-export { autoLogOutTiming, getCodeFromQueryParam, setTokenInLocalStorage, removeTokenFromLocalStorage};
+export {
+  autoLogOutTiming,
+  getCodeFromQueryParam,
+  setTokenInLocalStorage,
+  removeTokenFromLocalStorage,
+};

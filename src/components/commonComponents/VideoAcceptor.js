@@ -1,12 +1,12 @@
 import React from "react";
 
-import styles from "../my-style.module.css"
+import "./VideoAcceptor.css";
 
 export class VideoAcceptor extends React.Component {
     render() {
       return (
         <div>
-          <div className={styles.video2} id={"videoStream"}></div>
+          <div className={'video2'} id={"videoStream"}></div>
         </div>
       );
     }

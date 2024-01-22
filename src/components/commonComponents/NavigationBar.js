@@ -13,9 +13,7 @@ import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import AddHomeButton from "../homes/AddHomeButton";
-import JoinHomeButton from "../homes/JoinHomeButton";
-import DeleteAccountButton from "../users/deleteAccount";
+import DeleteAccountButton from "../users/DeleteAccountButton";
 import { AuthorizationContext } from "../../contexts/authorizationContext";
 const NavigationBar = () => {
   const homeContext = useContext(HomeContext);

@@ -1,17 +1,21 @@
 import React, { useContext } from "react";
 import { getProducts } from "../../services/store";
-import { serverResponseTranslator, serverResponseResolver, actionTaker, notificator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseResolver,
+  actionTaker,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import AddProductButton from "./AddProductButton";
 import AddFinishedProductsToCart from "./AddFinishedProductToCart.js";
 import ProductList from "./ProductList.js";
-import { WrappedScaner } from "../Scaner.js";
+import { WrappedScaner } from "../commonComponents/Scaner.js";
 import "../CardHeader.css";
 import { AppContext } from "../../contexts/appContext";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
 import { APP_STATES } from "../../applicationStates";
-import { ProductScanerActions } from "../ProductScanerActions";
-import { VideoAcceptor } from "../VideoAcceptor";
+import { VideoAcceptor } from "../commonComponents/VideoAcceptor";
+import { adOrModificateProduct } from "../barcodeActions/adOrModificateProductWithBarcode";
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -24,7 +28,6 @@ class ProductsCard extends React.PureComponent {
     this.state = {
       productList: [],
     };
-    this.showScaner = true;
   }
 
   stateChanger(new_state) {
@@ -61,27 +64,23 @@ class ProductsCard extends React.PureComponent {
     this.getProducts();
   }
 
-
-
   getProducts() {
     const homeId = this.props.homeContext.home.id;
     getProducts(homeId, this.session_code)
-    .then((response) => {
-      const notificatorMessages = {
-        unknown: "Unknown error",
-      };
-     serverResponseResolver(response).then((result) => {
-        actionTaker(result.statusCode, () => {
-          this.stateChanger({
-            productList: result.body,
-          })
-        })
-        notificator(result.statusCode, notificatorMessages);
-      });
-    })
-    .catch((error) => console.log(error))
-    
-
+      .then((response) => {
+        const notificatorMessages = {
+          unknown: "Unknown error",
+        };
+        serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            this.stateChanger({
+              productList: result.body,
+            });
+          });
+          notificator(result.statusCode, notificatorMessages);
+        });
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -105,15 +104,13 @@ class ProductsCard extends React.PureComponent {
             addProductToState={this.addProductToState}
           ></AddProductButton>
           <AddFinishedProductsToCart></AddFinishedProductsToCart>
-          {this.showScaner ? (
-            <WrappedScaner
-              addProductToState={this.addProductToState}
-              modifyProductInState={this.modifyProductInState}
-              ScanerActions={ProductScanerActions}
-            ></WrappedScaner>
-          ) : (
-            ""
-          )}
+
+          <WrappedScaner
+            addOrModificateItem={adOrModificateProduct(
+              this.addProductToState,
+              this.modifyProductInState
+            )}
+          ></WrappedScaner>
         </BottomNavBar>
       </React.Fragment>
     );

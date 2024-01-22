@@ -1,10 +1,9 @@
-import React, { StrictMode, useContext } from "react";
+import React, { StrictMode} from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import {
   AuthContextProvider,
-  AuthorizationContext,
 } from "./contexts/authorizationContext";
 import { Protected } from "./components/ProtectedRoute";
 import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
@@ -13,7 +12,7 @@ import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
 import { AppContextProvider } from "./contexts/appContext";
 import { LoginComponent } from "./components/LoginComponent";
-import { DeletedAccountCard } from "./components/DeleteAccountCard";
+import { DeletedAccountCard } from "./components/users/DeleteAccountCard";
 export const AppRoutes = () => {
   return (
     <div

@@ -9,15 +9,15 @@ import { BottomNavBar } from "../commonComponents/BottomNavBar";
 import io from "socket.io-client";
 import { backendUrl } from "../../config";
 import AddItemToShoppings from "./AddItemToShoppings";
-import { WrappedScaner } from "../Scaner.js";
-import { ShoppingScanerActions } from "../ShoppingScanerActions.js";
-import { VideoAcceptor } from "../VideoAcceptor.js";
+import { WrappedScaner } from "../commonComponents/Scaner.js";
+import { VideoAcceptor } from "../commonComponents/VideoAcceptor.js";
+import { addOrModificateShoppingItem } from "../barcodeActions/addOrModificateShoppingWithBarcode.js";
+
 export function ShoppingItemsCard() {
   const [shoppingItems, setShoppingItems] = useState([]);
 
   const homeContext = useContext(HomeContext);
   const session_code = localStorage.getItem("session_code");
-  const showScanner = true;
 
   const createSocket = (session_code, homeId) => {
     const URL = backendUrl;
@@ -52,11 +52,6 @@ export function ShoppingItemsCard() {
   }, [homeContext.home.id, session_code]);
 
   useEffect(() => {
-    // if (initialized.current) {
-    //   return;
-    // }
-    // initialized.current = true;
-
     const socket = createSocket(session_code, homeContext.home.id);
     socket.on("updateShoppingItems", ProductListChanger);
     ProductListChanger();
@@ -85,13 +80,9 @@ export function ShoppingItemsCard() {
           <AddItemsFromShoppings></AddItemsFromShoppings>
         </div>
         <div className="col text-center">
-          {showScanner ? (
-            <WrappedScaner
-              ScanerActions={ShoppingScanerActions}
-            ></WrappedScaner>
-          ) : (
-            ""
-          )}
+          <WrappedScaner
+            addOrModificateItem={addOrModificateShoppingItem}
+          ></WrappedScaner>
         </div>
       </BottomNavBar>
     </React.Fragment>

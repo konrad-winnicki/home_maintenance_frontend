@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../logo.png"
+import logo from "../../logo.png"
 
 export function DeletedAccountCard() {
   const navigate = useNavigate();

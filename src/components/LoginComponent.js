@@ -5,12 +5,12 @@ import {
   autoLogOutTiming,
   getCodeFromQueryParam,
   setTokenInLocalStorage,
-} from "../loginAuxilaryFunctions";
+} from "../services/loginAuxilaryFunctions";
 import GoogleButton from "react-google-button";
 import { oauthClientId, oauthRedirectUri } from "../config";
 import { exchangeOauthCodeForToken } from "../services/login";
-import { App } from "@capacitor/app"
-import logo from "../logo.png"
+import { App } from "@capacitor/app";
+import logo from "../logo.png";
 export function LoginComponent() {
   const authorizationContext = useContext(AuthorizationContext);
   const navigate = useNavigate();
@@ -34,9 +34,9 @@ export function LoginComponent() {
     window.location.href = uri;
   }
 
-  function procceedWhenToken(token){
+  function procceedWhenToken(token) {
     console.log("Token exchanged: " + token);
-    setTokenInLocalStorage(token)
+    setTokenInLocalStorage(token);
     authorizationContext.setLoggedIn(true);
     autoLogOutTiming(token, authorizationContext);
     navigate("/homes");
@@ -44,35 +44,48 @@ export function LoginComponent() {
 
   useEffect(() => {
     // TODO: where to place them?
-    App.addListener("appUrlOpen", (data) => { 
+    App.addListener("appUrlOpen", (data) => {
       console.log("App opened with URL details:", data.url);
       const extractedCode = data.url.split("?")[1];
       console.log("Extracted code:", data.url);
-      navigate("/login?" + extractedCode)
-     });
+      navigate("/login?" + extractedCode);
+    });
 
     const oauthCode = getCodeFromQueryParam(window.location.search);
     console.log("Oauth code from query param: " + oauthCode);
     if (oauthCode !== undefined && oauthCode !== null) {
-      exchangeOauthCodeForToken(oauthCode).then((token) => {
-        procceedWhenToken(token)
-        
-      }, [authorizationContext]);
+      exchangeOauthCodeForToken(oauthCode)
+        .then(
+          (token) => {
+            console.log("Attempting to set to token to: " + token);
+
+            procceedWhenToken(token);
+          },
+          [authorizationContext]
+        )
+        .catch((e) => console.log(e));
     }
   });
 
   return (
     !authorizationContext.isLoggedIn && (
-     
       <div className="container vh-100 vw-100">
-         <div className="row justify-content-center">
-        <img src={logo} alt="Logo" 
-         style={{ width: '50%', height: '25%', objectFit: 'cover', marginTop:'35%', marginBottom: '10%'}}
-        /> 
         <div className="row justify-content-center">
-          <GoogleButton onClick={redirectToGoogleLogin}></GoogleButton>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{
+              width: "50%",
+              height: "25%",
+              objectFit: "cover",
+              marginTop: "35%",
+              marginBottom: "10%",
+            }}
+          />
+          <div className="row justify-content-center">
+            <GoogleButton onClick={redirectToGoogleLogin}></GoogleButton>
+          </div>
         </div>
-      </div>
       </div>
     )
   );

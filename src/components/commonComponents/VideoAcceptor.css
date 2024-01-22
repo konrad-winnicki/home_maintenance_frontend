@@ -1,0 +1,13 @@
+
+.video2 video,
+canvas {
+  width: 70%;
+  height:70%;
+ position: absolute;
+
+  top:10%;
+  bottom: 20%;
+  left: 20%;
+  right: 20%;
+  z-index:99;
+}
