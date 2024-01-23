@@ -66,12 +66,13 @@ class ProductsCard extends React.PureComponent {
 
   getProducts() {
     const homeId = this.props.homeContext.home.id;
+    const notificatorMessages = {
+      unknown: "Unknown error",
+    };
+
     getProducts(homeId, this.session_code)
       .then((response) => {
-        const notificatorMessages = {
-          unknown: "Unknown error",
-        };
-        serverResponseResolver(response).then((result) => {
+        return serverResponseResolver(response).then((result) => {
           actionTaker(result.statusCode, () => {
             this.stateChanger({
               productList: result.body,
@@ -80,7 +81,13 @@ class ProductsCard extends React.PureComponent {
           notificator(result.statusCode, notificatorMessages);
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
+      });
   }
 
   render() {

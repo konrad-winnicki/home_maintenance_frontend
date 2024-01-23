@@ -5,7 +5,11 @@ import "../ResourceComponent.css";
 import "../ResourceButtons.css";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { jwtDecode } from "jwt-decode";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+    serverResponseResolver,
+  actionTaker,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import { deleteUserFromHome } from "../../services/home";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
@@ -35,10 +39,10 @@ export default function Home({ home }) {
   };
 
   const leaveHome = () => {
-    console.log(home.id, homeContext.home?.id)
-    if (home.id === homeContext.home?.id){
-      alert('First enter other home from list and then leave home permanently')
-      return null
+    console.log(home.id, homeContext.home?.id);
+    if (home.id === homeContext.home?.id) {
+      alert("First enter other home from list and then leave home permanently");
+      return null;
     }
     const confirmation = window.confirm(`Do you want to leave ${home.name}?`);
     if (!confirmation) {
@@ -48,36 +52,43 @@ export default function Home({ home }) {
     const userId = decodedToken.user_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
-    const response = deleteUserFromHome(home.id, userId, sessionCode);
-
-    const messages = {
+    const notificatorMessages = {
       success: "You left home",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response)
-      .then(() => {
-        console.log(
-          "Removed in API, changing context state removing ",
-          home.id
-        );
-        homeContext.deleteHomeFromState(home.id);
+
+    deleteUserFromHome(home.id, userId, sessionCode)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            homeContext.deleteHomeFromState(home.id);
+          });
+          notificator(result.statusCode, notificatorMessages);
+        });
       })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
+
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   useEffect(() => {
-
     swipeRightContext.actionFunctionSetter(leaveHome);
   }, [homeContext.home]);
 
-  const homeStyle = home.id === homeContext.home?.id? 'picked_item' : 'default_item'
+  const homeStyle =
+    home.id === homeContext.home?.id ? "picked_item" : "default_item";
   return (
     <div>
       <div className={homeStyle}>
-        <div className="product__name" onClick={setHomeHandler}>{home.name}</div>
+        <div className="product__name" onClick={setHomeHandler}>
+          {home.name}
+        </div>
         <button
           className="resource_button"
           onClick={() => {

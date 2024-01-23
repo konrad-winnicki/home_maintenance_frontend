@@ -1,9 +1,12 @@
-import { useState, useEffect, useRef, useContext, useCallback } from "react";
+import { useRef, useContext } from "react";
 import { updateShoppingItem } from "../../services/cart";
 import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseResolver,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import { HomeContext } from "../../contexts/homeContext";
 import "../ResourceButtons.css";
 
@@ -31,17 +34,26 @@ export default function CheckBox() {
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = updateShoppingItem(shoppingItem, homeId, session_code);
-    const messages = {
+
+    const notificatorMessages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response)
-      .catch((error) => {
-        console.log(error);
+
+    updateShoppingItem(shoppingItem, homeId, session_code)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          notificator(result.statusCode, notificatorMessages);
+        });
       })
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
+
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   return (

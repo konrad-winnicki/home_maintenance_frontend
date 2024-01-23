@@ -3,7 +3,11 @@ import AddItemsFromShoppings from "./AddItemsFromShoppings.js";
 import { getShoppingItems } from "../../services/cart";
 import "../CardHeader.css";
 import ShoppingItemsList from "./ShoppingItemsList";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseResolver,
+  notificator,
+  actionTaker,
+} from "../../services/auxilaryFunctions";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
 import io from "socket.io-client";
@@ -36,18 +40,28 @@ export function ShoppingItemsCard() {
   const ProductListChanger = useCallback(() => {
     console.log("fetch list");
     const homeId = homeContext.home.id;
-    const response = getShoppingItems(homeId, session_code);
-    const messages = {
+
+    const notificatorMessages = {
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response)
-      .then((result) => {
-        setShoppingItems(() => {
-          return [...result.body];
+
+    getShoppingItems(homeId, session_code)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            setShoppingItems(() => {
+              return [...result.body];
+            });
+          });
+          notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        console.log(error);
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
   }, [homeContext.home.id, session_code]);
 

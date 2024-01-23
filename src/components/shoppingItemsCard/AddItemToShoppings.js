@@ -3,7 +3,10 @@ import { MdAddBox } from "react-icons/md";
 import { addShoppingItem } from "../../services/cart";
 import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseResolver,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import { HomeContext } from "../../contexts/homeContext";
 import "../ResourceButtons.css";
 
@@ -30,25 +33,30 @@ const AddItemToShoppings = () => {
     };
 
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = addShoppingItem(product_data, homeId, session_code);
-    const messages = {
+
+    const notificatorMessages = {
       success: "Shopping item addded",
       duplicated: "Shopping item already exists",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response)
+
+    addShoppingItem(product_data, homeId, session_code)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          notificator(result.statusCode, notificatorMessages);
+        });
+      })
       .catch((error) => {
-        console.log(error);
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       })
       .finally(() => {
         setShoppingItem({ name: "", quantity: "" });
         appContext.setAppState(APP_STATES.DEFAULT);
       });
-
-    //.catch(()=>{
-    // appContext.setAppState(APP_STATES.DEFAULT);
-    // setShoppingItem({ name: "", quantity: "" })
-    //})
   };
 
   return (

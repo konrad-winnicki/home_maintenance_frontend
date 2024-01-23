@@ -17,13 +17,13 @@ class Scaner extends React.Component {
 
   set_code(code) {
     console.log("called", code);
-    this.setState((previous) => {
+    this.setState((_previous) => {
       return { code: code };
     });
   }
 
   setIsScanning(param) {
-    this.setState((previous) => {
+    this.setState((_previous) => {
       return { isScanning: param };
     });
   }
@@ -50,7 +50,6 @@ handleOnClick(){
   }
 
   componentDidUpdate() {
-    console.log("SCANER", this.state);
     if (this.state.code) {
       this.set_code(null);
       this.setIsScanning(false);

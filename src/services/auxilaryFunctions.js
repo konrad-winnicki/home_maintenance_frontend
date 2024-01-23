@@ -98,7 +98,11 @@ export async function serverResponseResolver(response) {
   return getResponseBody(response).then((body) => {
     const location = response.headers.get("Location");
     const statusCode = response.status;
-    return { location, body, statusCode };
+    if (statusCode > 199 && statusCode < 300){
+     return Promise.resolve({ location, body, statusCode }
+        )
+    }
+    return Promise.reject({statusCode})
   });
 }
 

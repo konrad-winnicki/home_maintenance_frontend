@@ -75,16 +75,17 @@ export function ChangeResource(props) {
   const sendData = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     let updatedResource = resourceWithUpdatedProperty(props.resourceName);
+    
+    const notificatorMessages = {
+      success: `${props.resourceName} changed`,
+      duplicated: "Product already exists",
+      unknown: "Unknown error",
+    };
     if (updatedResource) {
       props
         .updateMethod(updatedResource, homeId, session_code)
         .then((response) => {
-          const notificatorMessages = {
-            success: `${props.resourceName} changed`,
-            duplicated: "Product already exists",
-            unknown: "Unknown error",
-          };
-          serverResponseResolver(response).then((result) => {
+          return serverResponseResolver(response).then((result) => {
             actionTaker(result.statusCode, () => {
               resourceContext.modifyProductInState({
                 ...updatedResource.updatedValues,
@@ -94,7 +95,13 @@ export function ChangeResource(props) {
             notificator(result.statusCode, notificatorMessages);
           });
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          if (error.statusCode) {
+            notificator(error.statusCode, notificatorMessages);
+          } else {
+            console.log(error);
+          }
+        })
     }
 
     appContext.setAppState(APP_STATES.DEFAULT);

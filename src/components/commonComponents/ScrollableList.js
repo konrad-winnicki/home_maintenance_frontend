@@ -1,7 +1,6 @@
 export const ScrollableList = ({ children }) => {
   return (
     <div
-
       className="flex-grow-1"
       style={{
         overflow: "auto",

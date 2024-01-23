@@ -9,7 +9,6 @@ import { ResourceContext } from "../../contexts/resourceContext";
 
 import { HomeContext } from "../../contexts/homeContext";
 import {
-  serverResponseTranslator,
   serverResponseResolver,
   actionTaker,
   notificator,
@@ -38,23 +37,30 @@ function ProductComponent() {
     }
     const productId = productContext.resource.product_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+
+    const notificatorMessages = {
+      success: "Product deleted",
+      unknown: "Unknown error",
+    };
+
     deleteProduct(productId, homeId, sessionCode)
       .then((response) => {
-        const notificatorMessages = {
-          success: "Product deleted",
-          unknown: "Unknown error",
-        };
-        serverResponseResolver(response).then((result) => {
+        return serverResponseResolver(response).then((result) => {
           actionTaker(result.statusCode, () => {
             productContext.deleteResourceFromState(productId);
           });
           notificator(result.statusCode, notificatorMessages);
         });
       })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
+
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   useEffect(() => {

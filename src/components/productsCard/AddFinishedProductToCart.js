@@ -1,6 +1,9 @@
 import React, { useContext } from "react";
 import { addFinishedProductsToShoppingList } from "../../services/cart";
-import { serverResponseTranslator, serverResponseResolver, notificator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseResolver,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
@@ -14,23 +17,26 @@ const AddFinishedProductsToCart = () => {
   const homeId = homeContext.home.id;
   const addFinishedProductToShoppings = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+    const notificatorMessages = {
+      success: "Product added to cart",
+      unknown: "Unknown error",
+    };
+    addFinishedProductsToShoppingList(homeId, session_code)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          notificator(result.statusCode, notificatorMessages);
+        });
+      })
 
-    addFinishedProductsToShoppingList(homeId, session_code).then((response)=>{
-      const notificatorMessages = {
-        success: "Product added to cart",
-        unknown: "Unknown error",
-      };
-      serverResponseResolver(response).then((result) => {
-        notificator(result.statusCode, notificatorMessages);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
-    })
-    .catch((error) => console.log(error))
-    .finally(() => {
-      appContext.setAppState(APP_STATES.DEFAULT);
-    });
 
-    
-     
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   return (

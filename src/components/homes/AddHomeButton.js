@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { SiAddthis } from "react-icons/si";
 import { APP_STATES } from "../../applicationStates";
 import {
   extractIdFromLocation,
-  serverResponseTranslator,
+  serverResponseResolver,
+  actionTaker,
+  notificator,
 } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { addHome } from "../../services/home";
@@ -21,17 +22,31 @@ const AddHomeButton = () => {
       return;
     }
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = addHome({ name }, sessionCode);
-    serverResponseTranslator(messages, response)
-      .then((result) => {
-        const id = extractIdFromLocation(result.location);
-        console.log("adding home with id", id);
-        homeContext.addHomeToState({ id, name });
+
+    const notificatorMessages = {
+      success: `${name} has been added`,
+      duplicated: `Home ${name} already exists`,
+      unknown: "Unknown error",
+    };
+
+    addHome({ name }, sessionCode)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            const id = extractIdFromLocation(result.location);
+            homeContext.addHomeToState({ id, name });
+          });
+          notificator(result.statusCode, notificatorMessages);
+        });
       })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   return (
@@ -47,11 +62,6 @@ const AddHomeButton = () => {
   );
 };
 
-const messages = {
-  success: "Home added",
-  duplicated: "Home already exists",
-  unknown: "Unknown error",
-};
 
 function ask_home_name() {
   const name = prompt("Home name");

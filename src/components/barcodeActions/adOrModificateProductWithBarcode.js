@@ -1,26 +1,36 @@
-import { notificator } from "../../services/auxilaryFunctions";
+import { notificator, serverResponseResolver } from "../../services/auxilaryFunctions";
 import {
-  addOrModifyProductWithBarcode,
   addBarcodeToDB,
 } from "./barcodeActionsAuxFunctions";
+
+import { modifyProductListWithBarcode } from "../../services/scaner";
 export const adOrModificateProduct = (
   addProductToState,
   modifyProductInState
 ) => {
-  return async (barcode, homeId) =>
-    addOrModifyProductWithBarcode(barcode, homeId)
-      .then((result) => {
-        const body = result.body;
+
+  const notificatorMessages = {
+    unknown: "Unknown error",
+  };
+  return async (barcode, homeId) =>{
+    const session_code = localStorage.getItem("session_code");
+    modifyProductListWithBarcode(
+      { barcode: barcode },
+      homeId,
+      session_code
+    )
+    .then((response) => {
+      return serverResponseResolver(response).then((result) => {
+        const body = result.body
         const newValues = {
           product_id: body.productId,
           name: body.name,
           quantity: body.quantity,
-        };
-        if (result.statusCode === 404) {
-          return Promise.reject("BarcodeNotExists");
-        } else if (body.response === "updated") {
+        }
+        
+        if (body.response === "updated") {
           const notificatorMessages = {
-            success: `${body.name} has been increased`,
+           success: `${body.name} has been increased`,
           };
           modifyProductInState(newValues);
           notificator(result.statusCode, notificatorMessages);
@@ -31,11 +41,20 @@ export const adOrModificateProduct = (
           addProductToState(newValues);
           notificator(result.statusCode, notificatorMessages);
         }
-        return Promise.resolve("StateModified");
       })
-      .catch((error) => {
-        if (error === "BarcodeNotExists") {
-          return addBarcodeToDB(barcode, homeId);
+
+    })
+    .catch((error) => {
+      console.log('ffff', error)
+      if (error.statusCode) {
+        if(error.statusCode === 404){
+          return addBarcodeToDB(barcode, homeId)
         }
-      });
-};
+        notificator(error.statusCode, notificatorMessages);
+      } else {
+        console.log(error);
+      }
+    });
+
+  }
+  }

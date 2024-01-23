@@ -1,7 +1,10 @@
 import React, { useContext } from "react";
 import { deleteUser } from "../../services/user";
 import "../ResourceComponent.css";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseResolver,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { useNavigate } from "react-router-dom";
@@ -22,21 +25,27 @@ function DeleteAccountButton() {
       return null;
     }
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = deleteUser(sessionCode);
 
-    const messages = {
+    const notificatorMessages = {
       success: "Your account has been deleted",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response)
-      .then(() => {
-        localStorage.clear();
-        authorizationContext.setLoggedIn(false);
-        navigate("/accountDeleted");
+
+    deleteUser(sessionCode)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          localStorage.clear();
+          authorizationContext.setLoggedIn(false);
+          navigate("/accountDeleted");
+          notificator(result.statusCode, notificatorMessages);
+        });
       })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
   };
 

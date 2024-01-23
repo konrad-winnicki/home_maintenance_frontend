@@ -9,8 +9,6 @@ import {
 import { addProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import {
-  notifications,
-  serverResponseTranslator,
   extractIdFromLocation,
 } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
@@ -32,15 +30,16 @@ const AddProductButton = (props) => {
       return;
     }
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+    
+    const notificatorMessages = {
+      success: "Product addded",
+      duplicated: "Product already exists",
+      unknown: "Unknown error",
+    };
 
     addProduct(product_data, homeId, session_code)
-    .then((response) => {
-        const notificatorMessages = {
-          success: "Product addded",
-          duplicated: "Product already exists",
-          unknown: "Unknown error",
-        };
-       serverResponseResolver(response).then((result) => {
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
           actionTaker(result.statusCode, () => {
             const id = extractIdFromLocation(result.location);
             props.addProductToState({
@@ -52,10 +51,15 @@ const AddProductButton = (props) => {
           notificator(result.statusCode, notificatorMessages);
         });
       })
-      .catch((error) => console.log(error))
-      .finally((c) => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
+
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   return (

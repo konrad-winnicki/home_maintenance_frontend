@@ -4,7 +4,11 @@ import { updateProduct } from "../../services/store";
 import { APP_STATES } from "../../applicationStates";
 import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
-import { actionTaker, notificator, serverResponseResolver } from "../../services/auxilaryFunctions";
+import {
+  actionTaker,
+  notificator,
+  serverResponseResolver,
+} from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
 
@@ -23,27 +27,34 @@ const IncreaseButton = () => {
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
+
+    const notificatorMessages = {
+      unknown: "Unknown error",
+    };
+
     updateProduct(product_data, homeId, session_code)
-    .then((response) => {
-      const notificatorMessages = {
-        unknown: "Unknown error",
-      };
-     serverResponseResolver(response).then((result) => {
-        actionTaker(result.statusCode, () => {
-          const newValues = {
-            product_id: product_data.id,
-            name: product_data.updatedValues.name,
-            quantity: product_data.updatedValues.quantity,
-          };
-          productContext.modifyProductInState(newValues);
-        })
-        notificator(result.statusCode, notificatorMessages);
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            const newValues = {
+              product_id: product_data.id,
+              name: product_data.updatedValues.name,
+              quantity: product_data.updatedValues.quantity,
+            };
+            productContext.modifyProductInState(newValues);
+          });
+          notificator(result.statusCode, notificatorMessages);
+        });
+      })
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
-    })
-    .catch((error) => console.log(error))
-    .finally(() => {
-      appContext.setAppState(APP_STATES.DEFAULT);
-    });
+
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   return (

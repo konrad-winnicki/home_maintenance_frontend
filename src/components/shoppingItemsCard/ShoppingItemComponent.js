@@ -8,7 +8,11 @@ import "../ResourceComponent.css";
 import { ResourceContext } from "../../contexts/resourceContext";
 
 import { HomeContext } from "../../contexts/homeContext";
-import { serverResponseTranslator } from "../../services/auxilaryFunctions";
+import {
+  serverResponseResolver,
+  actionTaker,
+  notificator,
+} from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { SwipeRightContext } from "../../contexts/SwipeRight.js";
@@ -34,20 +38,30 @@ function ShoppingItemComponent() {
     }
     const productId = shoppingItemContext.resource.product_id;
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
-    const response = deleteShoppingItem(productId, homeId, sessionCode);
 
-    const messages = {
+    const notificatorMessages = {
       success: "Product deleted",
       unknown: "Unknown error",
     };
-    serverResponseTranslator(messages, response)
-      .then(() => {
-        shoppingItemContext.deleteResourceFromState(productId);
+
+    deleteShoppingItem(productId, homeId, sessionCode)
+      .then((response) => {
+        return serverResponseResolver(response).then((result) => {
+          actionTaker(result.statusCode, () => {
+            shoppingItemContext.deleteResourceFromState(productId);
+          });
+          notificator(result.statusCode, notificatorMessages);
+        });
       })
-      .catch((error) => console.log(error))
-      .finally(() => {
-        appContext.setAppState(APP_STATES.DEFAULT);
+      .catch((error) => {
+        if (error.statusCode) {
+          notificator(error.statusCode, notificatorMessages);
+        } else {
+          console.log(error);
+        }
       });
+
+    appContext.setAppState(APP_STATES.DEFAULT);
   };
 
   useEffect(() => {
