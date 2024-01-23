@@ -63,7 +63,7 @@ function ProductComponent() {
   }, [showButtons]);
 
   return (
-    <div className="product__properties">
+    <div className="default_item">
       <ResourceDescription
         setShowButtons={setShowButtons}
         showButtons={showButtons}

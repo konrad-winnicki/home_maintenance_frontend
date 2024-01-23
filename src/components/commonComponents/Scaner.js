@@ -75,7 +75,7 @@ handleOnClick(){
           }
           onClick={() => {
             this.handleOnClick()
-           // this.set_code("565656");
+            this.set_code("5");
           }}
         >
           {button_name} <BsUpcScan />

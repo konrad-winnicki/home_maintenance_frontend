@@ -55,7 +55,7 @@ function ShoppingItemComponent() {
   }, []);
 
   return (
-    <div className="product__properties">
+    <div className="default_item">
       <ResourceDescription
         setShowButtons={setShowButtons}
         updateMethod={updateShoppingItem}

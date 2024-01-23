@@ -4,7 +4,6 @@ import "./Home.css";
 import "../ResourceComponent.css";
 import "../ResourceButtons.css";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
-import { IoSettingsSharp } from "react-icons/io5";
 import { jwtDecode } from "jwt-decode";
 import { serverResponseTranslator } from "../../services/auxilaryFunctions";
 import { deleteUserFromHome } from "../../services/home";
@@ -19,7 +18,6 @@ export default function Home({ home }) {
   const swipeRightContext = useContext(SwipeRightContext);
 
   function setHomeHandler() {
-    console.log("sethome");
     homeContext.setHome(home);
   }
 
@@ -37,6 +35,11 @@ export default function Home({ home }) {
   };
 
   const leaveHome = () => {
+    console.log(home.id, homeContext.home?.id)
+    if (home.id === homeContext.home?.id){
+      alert('First enter other home from list and then leave home permanently')
+      return null
+    }
     const confirmation = window.confirm(`Do you want to leave ${home.name}?`);
     if (!confirmation) {
       return null;
@@ -66,14 +69,15 @@ export default function Home({ home }) {
   };
 
   useEffect(() => {
-    swipeRightContext.actionFunctionSetter(leaveHome);
-  }, []);
 
+    swipeRightContext.actionFunctionSetter(leaveHome);
+  }, [homeContext.home]);
+
+  const homeStyle = home.id === homeContext.home?.id? 'picked_item' : 'default_item'
   return (
     <div>
-      <div className="product__properties">
+      <div className={homeStyle}>
         <div className="product__name" onClick={setHomeHandler}>{home.name}</div>
-       
         <button
           className="resource_button"
           onClick={() => {
