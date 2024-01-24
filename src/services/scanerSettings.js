@@ -32,9 +32,6 @@ export function scanBarcode(function_changing_local_status) {
 
       Quagga.onDetected((data) => {
         if (data && data.codeResult.decodedCodes) {
-          console.log("a", data);
-          console.log("b", data.codeResult.decodedCodes);
-          console.log("c", data.barcodes);
           let code = data.codeResult.code;
           Quagga.offDetected();
           Quagga.stop();

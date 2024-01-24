@@ -15,7 +15,6 @@ class Scaner extends React.Component {
     super(props);
     this.state = {
       code: null,
-      name: null,
       codeMatch: false,
       isScanning: false,
     };
@@ -26,17 +25,11 @@ class Scaner extends React.Component {
   }
 
   set_code(code) {
-    this.setState((_previous) => {
+    this.setState(() => {
       return { code: code, isScanning: false };
     });
   }
-
-  set_name(name) {
-    this.setState((_previous) => {
-      return { name: name };
-    });
-  }
-
+//TODO pass function not call
   checkIfBarcodesMatch() {
     return (code) => {
       const notificatorMessages = {
@@ -64,7 +57,6 @@ class Scaner extends React.Component {
     this.setState((_previous) => {
       return {
         code: null,
-        name: null,
         codeMatch: false,
         isScanning: false,
       };
@@ -81,8 +73,9 @@ class Scaner extends React.Component {
       this.props.appContext.setAppState(APP_STATES.SCANNING);
     }
   }
+  //TODO: isScaning and app_state duplication
 
-  pretendModificateItemUsingBarcode() {
+  attemptToModifyItemUsingBarcode() {
     const barcode = this.state.code;
     return this.props
       .addOrModificateItem(barcode, this.homeId)
@@ -91,26 +84,27 @@ class Scaner extends React.Component {
         this.props.appContext.setAppState(APP_STATES.DEFAULT);
       })
       .catch((error) => {
-        console.log(error)
-        alert ('To add barcode to database:\n\n1. Scan barcode again\n\n2. Indicate name')
+        console.log(error);
+        alert(
+          "To add barcode to database:\n\n1. Scan barcode again\n\n2. Indicate name"
+        );
         this.setIsScanning(true);
-          scanBarcode(this.checkIfBarcodesMatch())
+        scanBarcode(this.checkIfBarcodesMatch());
       });
   }
-
 
   componentDidUpdate() {
     if (this.state.codeMatch) {
       let product_name = askNameForBarcode();
-        if (!product_name) {
-          this.resetState();
-          this.props.appContext.setAppState(APP_STATES.DEFAULT)}
-          else{
-            addBarcodeToDB(this.state.code, product_name, this.homeId);
-            this.resetState();
-          }
+      if (!product_name) {
+        this.props.appContext.setAppState(APP_STATES.DEFAULT);
+      } else {
+        addBarcodeToDB(this.state.code, product_name, this.homeId);
+      }
+      this.resetState();
+
     } else if (this.state.code && !this.state.isScanning) {
-      this.pretendModificateItemUsingBarcode();
+      this.attemptToModifyItemUsingBarcode();
     } else if (this.state.isScanning && !this.state.code) {
       scanBarcode(this.set_code);
     }
