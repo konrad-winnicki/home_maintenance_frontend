@@ -2,7 +2,9 @@ import { modifyShoppingListWithBarcode } from "../../services/scaner";
 import {
   serverResponseResolver,
   notificator,
+  errorHandler,
 } from "../../services/auxilaryFunctions";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 export const addOrModificateShoppingItem = (barcode, homeId) => {
   const session_code = localStorage.getItem("session_code");
@@ -10,32 +12,46 @@ export const addOrModificateShoppingItem = (barcode, homeId) => {
     unknown: "Unknown error",
   };
 
-  return modifyShoppingListWithBarcode({ barcode: barcode }, homeId, session_code)
+  return modifyShoppingListWithBarcode(
+    { barcode: barcode },
+    homeId,
+    session_code
+  )
     .then((response) => {
       return serverResponseResolver(response).then((result) => {
         const body = result.body;
-        if (body.response === "updated") {
-          const notificatorMessages = {
-            success: `${body.name} has been checked out`,
-          };
-          notificator(result.statusCode, notificatorMessages);
-        } else if (body.response === "added") {
-          const notificatorMessages = {
-            success: `${body.name} has been added`,
-          };
-          notificator(result.statusCode, notificatorMessages);
-        }
+        const statusCode = result.statusCode;
+        const actions = {
+          200: () => {
+            actionIfBarcodeExists(statusCode, body);
+          },
+          401: () => {
+            logOut();
+          },
+        };
+        errorHandler(result.statusCode, actions);
       });
     })
     .catch((error) => {
-      const statusCode = error.statusCode? error.statusCode : 500
-      if (error.statusCode === 404) {
-          return Promise.reject(404)
+      if (error.message === "404") {
+        return Promise.reject(404);
       } else {
         console.log(error);
       }
-      notificator(statusCode, notificatorMessages);
+      notificator(500, notificatorMessages);
     });
+};
 
- 
+const actionIfBarcodeExists = (statusCode, body) => {
+  if (body.response === "updated") {
+    const notificatorMessages = {
+      success: `${body.name} has been checked out`,
+    };
+    notificator(statusCode, notificatorMessages);
+  } else if (body.response === "added") {
+    const notificatorMessages = {
+      success: `${body.name} has been added`,
+    };
+    notificator(statusCode, notificatorMessages);
+  }
 };

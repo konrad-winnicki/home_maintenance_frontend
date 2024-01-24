@@ -3,12 +3,13 @@ import "./ResourceDescription.css";
 import {
   serverResponseResolver,
   notificator,
-  actionTaker,
+  errorHandler,
 } from "../../services/auxilaryFunctions";
 import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { HomeContext } from "../../contexts/homeContext";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 export function ChangeResource(props) {
   const resourceContext = useContext(ResourceContext);
@@ -75,7 +76,7 @@ export function ChangeResource(props) {
   const sendData = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     let updatedResource = resourceWithUpdatedProperty(props.resourceName);
-    
+
     const notificatorMessages = {
       success: `${props.resourceName} changed`,
       duplicated: "Product already exists",
@@ -86,26 +87,28 @@ export function ChangeResource(props) {
         .updateMethod(updatedResource, homeId, session_code)
         .then((response) => {
           return serverResponseResolver(response).then((result) => {
-            actionTaker(result.statusCode, () => {
-              resourceContext.modifyProductInState({
-                ...updatedResource.updatedValues,
-                product_id: updatedResource.id,
-              });
-            });
+            const actions = {
+              200: () => {
+                resourceContext.modifyProductInState({
+                  ...updatedResource.updatedValues,
+                  product_id: updatedResource.id,
+                });
+              },
+              401: () => {
+                logOut();
+              },
+            };
+            errorHandler(result.statusCode, actions);
             notificator(result.statusCode, notificatorMessages);
           });
         })
         .catch((error) => {
-          if (error.statusCode) {
-            notificator(error.statusCode, notificatorMessages);
-          } else {
-            console.log(error);
-          }
-        })
+          console.log(error)
+          notificator(500, notificatorMessages);
+        });
     }
 
     appContext.setAppState(APP_STATES.DEFAULT);
-
   };
 
   return (

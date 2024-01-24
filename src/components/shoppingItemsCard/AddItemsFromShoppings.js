@@ -3,7 +3,7 @@ import { APP_STATES } from "../../applicationStates";
 import { AppContext } from "../../contexts/appContext";
 import {
   serverResponseResolver,
-    notificator,
+  notificator,
 } from "../../services/auxilaryFunctions";
 import { addShoppingItemsToStore } from "../../services/store";
 import { HomeContext } from "../../contexts/homeContext";
@@ -28,11 +28,8 @@ const AddItemsFromShopings = () => {
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
 
     appContext.setAppState(APP_STATES.DEFAULT);

@@ -6,13 +6,15 @@ import JoinHomeButton from "./JoinHomeButton";
 import { getHomes } from "../../services/home";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
 import {
-  actionTaker,
+  errorHandler,
   notificator,
   serverResponseResolver,
 } from "../../services/auxilaryFunctions";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 export default function HomesCard() {
   const sessionCode = localStorage.getItem("session_code");
   const homeContext = useContext(HomeContext);
+
   const notificatorMessages = {
     unknown: "Unknown error",
   };
@@ -21,18 +23,21 @@ export default function HomesCard() {
     getHomes(sessionCode)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
-          actionTaker(result.statusCode, () => {
-            homeContext.setHomes(result.body);
-          });
+          const actions = {
+            200: () => {
+              homeContext.setHomes(result.body);
+            },
+            401: () => {
+              logOut();
+            },
+          };
+          errorHandler(result.statusCode, actions);
           notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
   }, []);
 

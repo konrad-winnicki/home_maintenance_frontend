@@ -1,5 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-
+import { oauthRedirectUri } from "../config";
 
 function getCodeFromQueryParam(queryString) {
   const urlParams = new URLSearchParams(queryString);
@@ -23,14 +23,20 @@ function calculateTimeToFinishToken(decodedToken) {
 
   return timeoutInMiliseconds;
 }
-function autoLogOutTiming(currentToken, authorizationContext) {
+function autoLogOutTiming(currentToken) {
   const decodedToken = jwtDecode(currentToken);
   const timeToLogout = calculateTimeToFinishToken(decodedToken);
   setTimeout(() => {
-    removeTokenFromLocalStorage("session_code");
-    authorizationContext.setLoggedIn(false);
+    logOut();
   }, timeToLogout);
 }
+
+function logOut(){
+  removeTokenFromLocalStorage("session_code");
+  window.location.href = oauthRedirectUri;
+
+}
+
 
 function setTokenInLocalStorage(token) {
   localStorage.setItem("session_code", token);
@@ -45,4 +51,5 @@ export {
   getCodeFromQueryParam,
   setTokenInLocalStorage,
   removeTokenFromLocalStorage,
+  logOut
 };

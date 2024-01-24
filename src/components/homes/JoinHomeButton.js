@@ -3,7 +3,7 @@ import { APP_STATES } from "../../applicationStates";
 import {
   notificator,
   serverResponseResolver,
-  actionTaker,
+  errorHandler,
 } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { joinHome } from "../../services/home";
@@ -11,6 +11,7 @@ import { getHomes } from "../../services/home";
 import { HomeContext } from "../../contexts/homeContext";
 
 import "../commonComponents/BottomNavbarButtons.css";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 // TODO: remove duplication
 const JoinHomeButton = () => {
@@ -35,20 +36,23 @@ const JoinHomeButton = () => {
         return serverResponseResolver(response).then(() => {
           return getHomes(sessionCode).then((response) => {
             return serverResponseResolver(response).then((result) => {
-              actionTaker(result.statusCode, () => {
-                homeContext.setHomes(result.body);
-              });
+              const actions = {
+                200: () => {
+                  homeContext.setHomes(result.body);
+                },
+                401: () => {
+                  logOut();
+                },
+              };
+              errorHandler(result.statusCode, actions);
               notificator(result.statusCode, notificatorMessages);
             });
           });
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
 
     appContext.setAppState(APP_STATES.DEFAULT);

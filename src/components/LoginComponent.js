@@ -38,7 +38,7 @@ export function LoginComponent() {
     console.log("Token exchanged: " + token);
     setTokenInLocalStorage(token);
     authorizationContext.setLoggedIn(true);
-    autoLogOutTiming(token, authorizationContext);
+    autoLogOutTiming(token);
     navigate("/homes");
   }
 

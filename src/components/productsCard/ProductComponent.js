@@ -10,12 +10,13 @@ import { ResourceContext } from "../../contexts/resourceContext";
 import { HomeContext } from "../../contexts/homeContext";
 import {
   serverResponseResolver,
-  actionTaker,
+  errorHandler,
   notificator,
 } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { SwipeRightContext } from "../../contexts/SwipeRight";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 function ProductComponent() {
   const [showButtons, setShowButtons] = useState(false);
@@ -23,6 +24,7 @@ function ProductComponent() {
   const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
+
   const homeId = homeContext.home.id;
   const sessionCode = localStorage.getItem("session_code");
 
@@ -46,18 +48,21 @@ function ProductComponent() {
     deleteProduct(productId, homeId, sessionCode)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
-          actionTaker(result.statusCode, () => {
-            productContext.deleteResourceFromState(productId);
-          });
+          const actions = {
+            200: () => {
+              productContext.deleteResourceFromState(productId);
+            },
+            401: () => {
+              logOut();
+            },
+          };
+          errorHandler(result.statusCode, actions);
           notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
 
     appContext.setAppState(APP_STATES.DEFAULT);

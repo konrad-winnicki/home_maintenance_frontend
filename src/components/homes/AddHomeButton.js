@@ -3,13 +3,14 @@ import { APP_STATES } from "../../applicationStates";
 import {
   extractIdFromLocation,
   serverResponseResolver,
-  actionTaker,
+  errorHandler,
   notificator,
 } from "../../services/auxilaryFunctions";
 import { AppContext } from "../../contexts/appContext";
 import { addHome } from "../../services/home";
 import "../commonComponents/BottomNavbarButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 const AddHomeButton = () => {
   const sessionCode = localStorage.getItem("session_code");
@@ -32,19 +33,22 @@ const AddHomeButton = () => {
     addHome({ name }, sessionCode)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
-          actionTaker(result.statusCode, () => {
-            const id = extractIdFromLocation(result.location);
-            homeContext.addHomeToState({ id, name });
-          });
+          const actions = {
+            201: () => {
+              const id = extractIdFromLocation(result.location);
+              homeContext.addHomeToState({ id, name });
+            },
+            401: () => {
+              logOut();
+            },
+          };
+          errorHandler(result.statusCode, actions);
           notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
     appContext.setAppState(APP_STATES.DEFAULT);
   };
@@ -61,7 +65,6 @@ const AddHomeButton = () => {
     </div>
   );
 };
-
 
 function ask_home_name() {
   const name = prompt("Home name");

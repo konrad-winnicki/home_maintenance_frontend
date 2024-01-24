@@ -90,23 +90,25 @@ class Scaner extends React.Component {
         this.resetState();
         this.props.appContext.setAppState(APP_STATES.DEFAULT);
       })
-      .catch(() => {
-        let product_name = askNameForBarcode();
-        if (!product_name) {
-          this.resetState();
-          this.props.appContext.setAppState(APP_STATES.DEFAULT);
-        } else {
-          this.set_name(product_name);
-          this.setIsScanning(true);
-          scanBarcode(this.checkIfBarcodesMatch());
-        }
+      .catch((error) => {
+        console.log(error)
+        alert ('To add barcode to database:\n\n1. Scan barcode again\n\n2. Indicate name')
+        this.setIsScanning(true);
+          scanBarcode(this.checkIfBarcodesMatch())
       });
   }
 
+
   componentDidUpdate() {
     if (this.state.codeMatch) {
-      addBarcodeToDB(this.state.code, this.state.name, this.homeId);
-      this.resetState();
+      let product_name = askNameForBarcode();
+        if (!product_name) {
+          this.resetState();
+          this.props.appContext.setAppState(APP_STATES.DEFAULT)}
+          else{
+            addBarcodeToDB(this.state.code, product_name, this.homeId);
+            this.resetState();
+          }
     } else if (this.state.code && !this.state.isScanning) {
       this.pretendModificateItemUsingBarcode();
     } else if (this.state.isScanning && !this.state.code) {

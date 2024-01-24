@@ -38,7 +38,7 @@ export const AppRoutes = () => {
 const container = document.getElementById("root");
 const productsComponent = createRoot(container);
 productsComponent.render(
-  <StrictMode>
+  //<StrictMode>
     <Router>
       <AuthContextProvider>
         <AppContextProvider>
@@ -48,5 +48,5 @@ productsComponent.render(
         </AppContextProvider>
       </AuthContextProvider>
     </Router>
-  </StrictMode>
+  //</StrictMode>
 );

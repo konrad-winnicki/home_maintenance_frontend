@@ -7,17 +7,19 @@ import { ResourceContext } from "../../contexts/resourceContext";
 import { AppContext } from "../../contexts/appContext";
 import {
   serverResponseResolver,
-  actionTaker,
+  errorHandler,
   notificator,
 } from "../../services/auxilaryFunctions";
 import "../ResourceButtons.css";
 import { HomeContext } from "../../contexts/homeContext";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 const DecreaseButton = () => {
   const session_code = localStorage.getItem("session_code");
   const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
+
   const homeId = homeContext.home.id;
   const onClickHandler = () => {
     const product_data = {
@@ -36,24 +38,27 @@ const DecreaseButton = () => {
     updateProduct(product_data, homeId, session_code)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
-          actionTaker(result.statusCode, () => {
-            const newValues = {
-              product_id: product_data.id,
-              name: product_data.updatedValues.name,
-              quantity: product_data.updatedValues.quantity,
-            };
-            productContext.modifyProductInState(newValues);
-          });
+          const actions = {
+            200: () => {
+              const newValues = {
+                product_id: product_data.id,
+                name: product_data.updatedValues.name,
+                quantity: product_data.updatedValues.quantity,
+              };
+              productContext.modifyProductInState(newValues);
+            },
+            401: () => {
+              logOut();
+            },
+          };
+          errorHandler(result.statusCode, actions);
 
           notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
 
     appContext.setAppState(APP_STATES.DEFAULT);

@@ -13,11 +13,10 @@ import { APP_STATES } from "../../applicationStates";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import DeleteAccountButton from "../users/DeleteAccountButton";
-import { AuthorizationContext } from "../../contexts/authorizationContext";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 const NavigationBar = () => {
   const homeContext = useContext(HomeContext);
   const appContext = useContext(AppContext);
-  const authorizationContext = useContext(AuthorizationContext);
   const home = homeContext.home;
   const navigate = useNavigate();
 
@@ -51,10 +50,7 @@ const NavigationBar = () => {
               <div
                 className="col text-left"
                 style={{ marginLeft: "15px" }}
-                onClick={() => {
-                  localStorage.clear();
-                  authorizationContext.setLoggedIn(false);
-                }}
+                onClick={()=>logOut()}
               >
                 LogOut
               </div>

@@ -47,11 +47,8 @@ const AddItemToShoppings = () => {
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       })
       .finally(() => {
         setShoppingItem({ name: "", quantity: "" });

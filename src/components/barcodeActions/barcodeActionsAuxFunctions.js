@@ -1,5 +1,6 @@
 import { addBarcode } from "../../services/scaner.js";
 import {
+  errorHandler,
   notificator,
 } from "../../services/auxilaryFunctions.js";
 import { serverResponseResolver } from "../../services/auxilaryFunctions.js";
@@ -21,12 +22,12 @@ export async function addBarcodeToDB(barcode, name, homeId) {
   addBarcode(barcode_data, homeId, session_code)
     .then((response) => {
       return serverResponseResolver(response).then((result) => {
-        notificator(result.statusCode, notificatorMessages);
+        const actions = {201: ()=>{notificator(result.statusCode, notificatorMessages)} }
+        errorHandler(result.statusCode, actions)
       });
     })
     .catch((error) => {
-      const statusCode = error.statusCode ? error.statusCode : 500;
       console.log(error);
-      notificator(statusCode, notificatorMessages);
+      notificator(500, notificatorMessages);
     });
 }

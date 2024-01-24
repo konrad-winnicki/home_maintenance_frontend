@@ -6,18 +6,20 @@ import "../ResourceButtons.css";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { jwtDecode } from "jwt-decode";
 import {
-    serverResponseResolver,
-  actionTaker,
+  serverResponseResolver,
+  errorHandler,
   notificator,
 } from "../../services/auxilaryFunctions";
 import { deleteUserFromHome } from "../../services/home";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
 import { SwipeRightContext } from "../../contexts/SwipeRight";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 export default function Home({ home }) {
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
+
   const sessionCode = localStorage.getItem("session_code");
   const swipeRightContext = useContext(SwipeRightContext);
 
@@ -60,18 +62,21 @@ export default function Home({ home }) {
     deleteUserFromHome(home.id, userId, sessionCode)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
-          actionTaker(result.statusCode, () => {
-            homeContext.deleteHomeFromState(home.id);
-          });
+          const actions = {
+            200: () => {
+              homeContext.deleteHomeFromState(home.id);
+            },
+            401: () => {
+              logOut();
+            },
+          };
+          errorHandler(result.statusCode, actions);
           notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
 
     appContext.setAppState(APP_STATES.DEFAULT);

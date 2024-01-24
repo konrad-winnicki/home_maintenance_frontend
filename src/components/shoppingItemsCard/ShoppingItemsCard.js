@@ -6,7 +6,7 @@ import ShoppingItemsList from "./ShoppingItemsList";
 import {
   serverResponseResolver,
   notificator,
-  actionTaker,
+  errorHandler,
 } from "../../services/auxilaryFunctions";
 import { HomeContext } from "../../contexts/homeContext";
 import { BottomNavBar } from "../commonComponents/BottomNavBar";
@@ -16,6 +16,7 @@ import AddItemToShoppings from "./AddItemToShoppings";
 import { WrappedScaner } from "../commonComponents/Scaner.js";
 import { VideoAcceptor } from "../commonComponents/VideoAcceptor.js";
 import { addOrModificateShoppingItem } from "../barcodeActions/addOrModificateShoppingWithBarcode.js";
+import { logOut } from "../../services/loginAuxilaryFunctions.js";
 
 export function ShoppingItemsCard() {
   const [shoppingItems, setShoppingItems] = useState([]);
@@ -48,20 +49,23 @@ export function ShoppingItemsCard() {
     getShoppingItems(homeId, session_code)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
-          actionTaker(result.statusCode, () => {
-            setShoppingItems(() => {
-              return [...result.body];
-            });
-          });
+          const actions = {
+            200: () => {
+              setShoppingItems(() => {
+                return [...result.body];
+              });
+            },
+            401: () => {
+              logOut();
+            },
+          };
+          errorHandler(result.statusCode, actions);
           notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
   }, [homeContext.home.id, session_code]);
 

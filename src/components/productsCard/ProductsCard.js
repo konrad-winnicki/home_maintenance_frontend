@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { getProducts } from "../../services/store";
 import {
   serverResponseResolver,
-  actionTaker,
+  errorHandler,
   notificator,
 } from "../../services/auxilaryFunctions";
 import AddProductButton from "./AddProductButton";
@@ -16,6 +16,7 @@ import { BottomNavBar } from "../commonComponents/BottomNavBar";
 import { APP_STATES } from "../../applicationStates";
 import { VideoAcceptor } from "../commonComponents/VideoAcceptor";
 import { adOrModificateProduct } from "../barcodeActions/adOrModificateProductWithBarcode";
+import { logOut } from "../../services/loginAuxilaryFunctions";
 
 class ProductsCard extends React.PureComponent {
   constructor() {
@@ -41,11 +42,9 @@ class ProductsCard extends React.PureComponent {
   }
 
   deleteResourceFromState(productId) {
-    console.log(this.state.productList);
     const filteredProductList = this.state.productList.filter(
       (product) => product.product_id !== productId
     );
-    console.log(filteredProductList);
     this.stateChanger({ productList: filteredProductList });
   }
 
@@ -73,20 +72,23 @@ class ProductsCard extends React.PureComponent {
     getProducts(homeId, this.session_code)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
-          actionTaker(result.statusCode, () => {
-            this.stateChanger({
-              productList: result.body,
-            });
-          });
+          const actions = {
+            200: () => {
+              this.stateChanger({
+                productList: result.body,
+              });
+            },
+            401: () => {
+              logOut();
+            },
+          };
+          errorHandler(result.statusCode, actions);
           notificator(result.statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
-        if (error.statusCode) {
-          notificator(error.statusCode, notificatorMessages);
-        } else {
-          console.log(error);
-        }
+        console.log(error);
+        notificator(500, notificatorMessages);
       });
   }
 
