@@ -24,6 +24,15 @@ export function ask_product_name() {
   }
 }
 
+
+export function askNameForBarcode() {
+  let product = prompt("1. Indicate name for barcode. \n\n2. Scan barcode again.");
+  if (product === "" || product == null) {
+    return null;
+  } else {
+    return product;
+  }
+}
 export function ask_new_name() {
   let new_name_from_user = prompt("Type NEW name?", "");
   if (new_name_from_user === "" || new_name_from_user == null) {

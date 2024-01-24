@@ -1,24 +1,16 @@
+import { addBarcode } from "../../services/scaner.js";
 import {
-  addBarcode,
-} from "../../services/scaner.js";
-import {
-  ask_product_name,
   notificator,
 } from "../../services/auxilaryFunctions.js";
 import { serverResponseResolver } from "../../services/auxilaryFunctions.js";
 
-
-
-export async function addBarcodeToDB(barcode, homeId) {
+export async function addBarcodeToDB(barcode, name, homeId) {
   const session_code = localStorage.getItem("session_code");
-  let product_name = ask_product_name();
   let barcode_data = {
-    name: product_name,
+    name: name,
     barcode: barcode,
   };
-  if (!product_name) {
-    return;
-  }
+
   const notificatorMessages = {
     success:
       "Barcode added.\n\nYou can use scaner to add and modificate products.",
@@ -29,15 +21,12 @@ export async function addBarcodeToDB(barcode, homeId) {
   addBarcode(barcode_data, homeId, session_code)
     .then((response) => {
       return serverResponseResolver(response).then((result) => {
-        
         notificator(result.statusCode, notificatorMessages);
       });
     })
     .catch((error) => {
-      if (error.statusCode) {
-        notificator(error.statusCode, notificatorMessages);
-      } else {
-        console.log(error);
-      }
+      const statusCode = error.statusCode ? error.statusCode : 500;
+      console.log(error);
+      notificator(statusCode, notificatorMessages);
     });
 }

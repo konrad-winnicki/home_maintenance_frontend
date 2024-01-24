@@ -1,6 +1,3 @@
-import {
-  addBarcodeToDB,
-} from "./barcodeActionsAuxFunctions";
 import { modifyShoppingListWithBarcode } from "../../services/scaner";
 import {
   serverResponseResolver,
@@ -13,11 +10,10 @@ export const addOrModificateShoppingItem = (barcode, homeId) => {
     unknown: "Unknown error",
   };
 
-  modifyShoppingListWithBarcode({ barcode: barcode }, homeId, session_code)
+  return modifyShoppingListWithBarcode({ barcode: barcode }, homeId, session_code)
     .then((response) => {
       return serverResponseResolver(response).then((result) => {
         const body = result.body;
-        console.log('ffffff', result)
         if (body.response === "updated") {
           const notificatorMessages = {
             success: `${body.name} has been checked out`,
@@ -32,15 +28,13 @@ export const addOrModificateShoppingItem = (barcode, homeId) => {
       });
     })
     .catch((error) => {
-      console.log("ffff", error);
-      if (error.statusCode) {
-        if (error.statusCode === 404) {
-          return addBarcodeToDB(barcode, homeId);
-        }
-        notificator(error.statusCode, notificatorMessages);
+      const statusCode = error.statusCode? error.statusCode : 500
+      if (error.statusCode === 404) {
+          return Promise.reject(404)
       } else {
         console.log(error);
       }
+      notificator(statusCode, notificatorMessages);
     });
 
  

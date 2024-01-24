@@ -1,8 +1,4 @@
 import { notificator, serverResponseResolver } from "../../services/auxilaryFunctions";
-import {
-  addBarcodeToDB,
-} from "./barcodeActionsAuxFunctions";
-
 import { modifyProductListWithBarcode } from "../../services/scaner";
 export const adOrModificateProduct = (
   addProductToState,
@@ -14,7 +10,7 @@ export const adOrModificateProduct = (
   };
   return async (barcode, homeId) =>{
     const session_code = localStorage.getItem("session_code");
-    modifyProductListWithBarcode(
+    return modifyProductListWithBarcode(
       { barcode: barcode },
       homeId,
       session_code
@@ -45,15 +41,14 @@ export const adOrModificateProduct = (
 
     })
     .catch((error) => {
-      console.log('ffff', error)
-      if (error.statusCode) {
-        if(error.statusCode === 404){
-          return addBarcodeToDB(barcode, homeId)
-        }
-        notificator(error.statusCode, notificatorMessages);
+      const statusCode = error.statusCode? error.statusCode : 500
+      if (error.statusCode === 404) {
+          return Promise.reject(404)
       } else {
         console.log(error);
       }
+      notificator(statusCode, notificatorMessages);
+
     });
 
   }

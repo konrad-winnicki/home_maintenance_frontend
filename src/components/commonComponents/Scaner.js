@@ -5,21 +5,53 @@ import { APP_STATES } from "../../applicationStates.js";
 import "./BottomNavbarButtons.css";
 import { scanBarcode, stopScanning } from "../../services/scanerSettings.js";
 import { HomeContext } from "../../contexts/homeContext.js";
-
+import {
+  askNameForBarcode,
+  notificator,
+} from "../../services/auxilaryFunctions.js";
+import { addBarcodeToDB } from "../barcodeActions/barcodeActionsAuxFunctions.js";
 class Scaner extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { code: null, isScanning: false };
+    this.state = {
+      code: null,
+      name: null,
+      codeMatch: false,
+      isScanning: false,
+    };
     this.set_code = this.set_code.bind(this);
+    this.set_codeMatch = this.checkIfBarcodesMatch.bind(this);
     this.setIsScanning = this.setIsScanning.bind(this);
     this.homeId = this.props.homeContext.home.id;
   }
 
   set_code(code) {
-    console.log("called", code);
     this.setState((_previous) => {
-      return { code: code };
+      return { code: code, isScanning: false };
     });
+  }
+
+  set_name(name) {
+    this.setState((_previous) => {
+      return { name: name };
+    });
+  }
+
+  checkIfBarcodesMatch() {
+    return (code) => {
+      const notificatorMessages = {
+        unknown: "Barcodes did not match. Try again",
+      };
+      this.setState((previousState) => {
+        if (previousState.code === code) {
+          return { codeMatch: true, isScanning: false };
+        } else {
+          notificator(500, notificatorMessages);
+          this.props.appContext.setAppState(APP_STATES.DEFAULT);
+          return { code: null, isScanning: false };
+        }
+      });
+    };
   }
 
   setIsScanning(param) {
@@ -28,35 +60,58 @@ class Scaner extends React.Component {
     });
   }
 
-
-handleOnClick(){
-  if (this.state.isScanning){
-    stopScanning();
-    this.setIsScanning(false)
-    this.props.appContext.setAppState(APP_STATES.DEFAULT)
-  }else{
-    this.setIsScanning(true)
-    this.props.appContext.setAppState(APP_STATES.SCANNING);
-
+  resetState() {
+    this.setState((_previous) => {
+      return {
+        code: null,
+        name: null,
+        codeMatch: false,
+        isScanning: false,
+      };
+    });
   }
 
-}
+  handleOnClick() {
+    if (this.state.isScanning) {
+      stopScanning();
+      this.resetState();
+      this.props.appContext.setAppState(APP_STATES.DEFAULT);
+    } else {
+      this.setIsScanning(true);
+      this.props.appContext.setAppState(APP_STATES.SCANNING);
+    }
+  }
 
-  performScanerActions() {
+  pretendModificateItemUsingBarcode() {
     const barcode = this.state.code;
-    this.props.addOrModificateItem(barcode, this.homeId);
-    this.props.appContext.setAppState(APP_STATES.DEFAULT);
-
+    return this.props
+      .addOrModificateItem(barcode, this.homeId)
+      .then(() => {
+        this.resetState();
+        this.props.appContext.setAppState(APP_STATES.DEFAULT);
+      })
+      .catch(() => {
+        let product_name = askNameForBarcode();
+        if (!product_name) {
+          this.resetState();
+          this.props.appContext.setAppState(APP_STATES.DEFAULT);
+        } else {
+          this.set_name(product_name);
+          this.setIsScanning(true);
+          scanBarcode(this.checkIfBarcodesMatch());
+        }
+      });
   }
 
   componentDidUpdate() {
-    if (this.state.code) {
-      this.set_code(null);
-      this.setIsScanning(false);
-      this.performScanerActions();
-    } else if (this.state.isScanning) {
+    if (this.state.codeMatch) {
+      addBarcodeToDB(this.state.code, this.state.name, this.homeId);
+      this.resetState();
+    } else if (this.state.code && !this.state.isScanning) {
+      this.pretendModificateItemUsingBarcode();
+    } else if (this.state.isScanning && !this.state.code) {
       scanBarcode(this.set_code);
-    } 
+    }
   }
 
   render() {
@@ -73,8 +128,7 @@ handleOnClick(){
               : false
           }
           onClick={() => {
-            this.handleOnClick()
-            this.set_code("5");
+            this.handleOnClick();
           }}
         >
           {button_name} <BsUpcScan />
