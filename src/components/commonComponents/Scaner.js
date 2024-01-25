@@ -105,11 +105,12 @@ class Scaner extends React.Component {
     } else if (this.state.status === "AFTER_SECOND_SCAN") {
       let product_name = askNameForBarcode();
       if (!product_name) {
-        this.props.appContext.setAppState(APP_STATES.DEFAULT);
       } else {
         addBarcodeToDB(this.state.code, product_name, this.homeId);
       }
       this.resetState();
+      this.props.appContext.setAppState(APP_STATES.DEFAULT);
+
     }
   }
 
