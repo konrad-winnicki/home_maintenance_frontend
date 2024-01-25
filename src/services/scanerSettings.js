@@ -19,13 +19,13 @@ export function scanBarcode(function_changing_local_status) {
       frequency: 5,
       locator: {
         halfSample: true,
-        patchSize: "x-large", // x-small, small, medium, large, x-large
+        patchSize: "large", // x-small, small, medium, large, x-large
     
       },
       decoder: {
         readers: ["ean_reader"],
       },
-      locate: false,
+      locate: true,
     },
     function (err) {
       if (err) {

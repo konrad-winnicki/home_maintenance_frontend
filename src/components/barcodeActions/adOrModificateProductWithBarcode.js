@@ -22,7 +22,7 @@ export const adOrModificateProduct = (
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
           const body = result.body;
-          const statusCode = result.body;
+          const statusCode = result.statusCode;
 
           const actions = {
             200: () => {
@@ -66,13 +66,13 @@ const actionIfBarcodeExists = (
     const notificatorMessages = {
       success: `${body.name} has been increased`,
     };
-    modifyProductInState(newValues);
     notificator(statusCode, notificatorMessages);
+    modifyProductInState(newValues);
   } else if (body.response === "added") {
     const notificatorMessages = {
       success: `${body.name} has been added`,
     };
-    addProductToState(newValues);
     notificator(statusCode, notificatorMessages);
+    addProductToState(newValues);
   }
 };
