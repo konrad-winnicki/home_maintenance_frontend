@@ -1,4 +1,3 @@
-
 import { toast } from "react-toastify";
 export function askQuantity(string = "") {
   let quantity = prompt("Quantity" + string, "");
@@ -85,14 +84,20 @@ export async function serverResponseResolver(response) {
 }
 
 export function notificator(statusCode, messages) {
-  if(statusCode > 199 && statusCode < 300){
-    notifications(messages.success, "success")
-    return
+  if (statusCode > 199 && statusCode < 300) {
+    notifications(messages.success, "success");
+    return;
   }
   switch (statusCode) {
     case 409:
       console.log(messages.duplicated);
       notifications(messages.duplicated, "warning");
+      break;
+    case 400:
+      console.log(messages.badRequest);
+      notifications(messages.badRequest, "warning");
+      break;
+    case null:
       break;
     default:
       notifications(messages.unknown, "error");
@@ -118,8 +123,6 @@ export function errorHandler(statusCode, actions) {
       console.log("Unknown error");
   }
 }
-
-
 
 export function extractIdFromLocation(location) {
   const regex = /\/([\w-]*)$/g;

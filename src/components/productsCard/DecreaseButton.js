@@ -32,12 +32,16 @@ const DecreaseButton = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     const notificatorMessages = {
+      badRequest: "Quantity can not be below 0",
       unknown: "Unknown error",
     };
 
     updateProduct(product_data, homeId, session_code)
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
+          const body = result.body;
+          let statusCode = result.statusCode;
+
           const actions = {
             200: () => {
               const newValues = {
@@ -52,8 +56,10 @@ const DecreaseButton = () => {
             },
           };
           errorHandler(result.statusCode, actions);
-
-          notificator(result.statusCode, notificatorMessages);
+          if (statusCode === 400 && !result.body.QuantityViolation) {
+            statusCode = null
+          }
+          notificator(statusCode, notificatorMessages);
         });
       })
       .catch((error) => {
