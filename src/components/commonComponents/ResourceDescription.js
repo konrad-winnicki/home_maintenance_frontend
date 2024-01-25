@@ -110,6 +110,7 @@ function ResourceDescription(props) {
               : () => {
                 doubleClickHandler(setEditQuantity);
 
+                  ;
                 }
           }
           onMouseMove={handleMouseMove}

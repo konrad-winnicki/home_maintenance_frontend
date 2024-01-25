@@ -1,13 +1,28 @@
 
-.video2 video,
-canvas {
-  width: 70%;
-  height:70%;
- position: absolute;
 
-  top:10%;
-  bottom: 20%;
-  left: 20%;
+
+.video_container video {
+  width: 65%;
+  height: 30%;
+  align-items: center;
+  align-self: center;
+  bottom: 40%;
   right: 20%;
-  z-index:99;
+  top: 35%;
+  left: 20%;
+  border: 4px solid  #f6bd60;
+  position: absolute;
+
+  border-radius: 5%;
+  object-fit: cover;
+  z-index: 99;
+}
+
+canvas {
+  width: 10%;
+  height: 10%;
+  position: absolute;
+  border-radius: 5%;
+  object-fit: cover;
+  z-index: 99; /* Set a higher z-index value */
 }

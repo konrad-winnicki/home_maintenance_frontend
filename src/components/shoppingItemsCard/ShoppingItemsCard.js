@@ -17,10 +17,11 @@ import { WrappedScaner } from "../commonComponents/Scaner.js";
 import { VideoAcceptor } from "../commonComponents/VideoAcceptor.js";
 import { addOrModificateShoppingItem } from "../barcodeActions/addOrModificateShoppingWithBarcode.js";
 import { logOut } from "../../services/loginAuxilaryFunctions.js";
-
+import { AppContext } from "../../contexts/appContext.js";
+import { APP_STATES } from "../../applicationStates.js";
 export function ShoppingItemsCard() {
   const [shoppingItems, setShoppingItems] = useState([]);
-
+  const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const session_code = localStorage.getItem("session_code");
 
@@ -85,12 +86,15 @@ export function ShoppingItemsCard() {
     };
   }, [ProductListChanger, homeContext.home.id, session_code]);
 
+  const blur =
+    appContext.appState === APP_STATES.SCANNING ? "Blur(3px)" : "Blur(0px)";
+
   return (
     <React.Fragment>
-      <div className="row position-realtive">
-        <VideoAcceptor />
+      <VideoAcceptor />
+      <div className="header" style={{ filter: `${blur}` }}>
+        Shopping list in {homeContext.home?.name}:
       </div>
-      <div className="header">Shopping list in {homeContext.home?.name}:</div>
       <ShoppingItemsList shoppingItems={shoppingItems}></ShoppingItemsList>
       <AddItemToShoppings></AddItemToShoppings>
       <BottomNavBar>

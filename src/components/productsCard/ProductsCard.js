@@ -92,14 +92,18 @@ class ProductsCard extends React.PureComponent {
       });
   }
 
+
   render() {
+    const blur = this.props.appContext.appState === APP_STATES.SCANNING? "Blur(3px)": "Blur(0px)"
+
     return (
       <React.Fragment>
-        <div className="row position-realtive">
-          <VideoAcceptor />
-        </div>
+        <VideoAcceptor />
 
-        <div className="header">
+        <div className="header"
+        style={{filter: `${blur}` }}
+
+        >
           Products in {this.props.homeContext.home?.name}:
         </div>
         <ProductList

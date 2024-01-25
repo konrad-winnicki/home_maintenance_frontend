@@ -15,21 +15,25 @@ class Scaner extends React.Component {
     super(props);
     this.state = {
       code: null,
-      codeMatch: false,
-      isScanning: false,
+      status: "BEFORE_FIRST_SCAN",
     };
     this.set_code = this.set_code.bind(this);
     this.set_codeMatch = this.checkIfBarcodesMatch.bind(this);
-    this.setIsScanning = this.setIsScanning.bind(this);
     this.homeId = this.props.homeContext.home.id;
+  }
+
+  isScanning() {
+    return (
+      this.state.status === "FIRST_SCAN" || this.state.status === "SECOND_SCAN"
+    );
   }
 
   set_code(code) {
     this.setState(() => {
-      return { code: code, isScanning: false };
+      return { code: code, status: "AFTER_FIRST_SCAN" };
     });
   }
-//TODO pass function not call
+  //TODO pass function not call
   checkIfBarcodesMatch() {
     return (code) => {
       const notificatorMessages = {
@@ -37,39 +41,36 @@ class Scaner extends React.Component {
       };
       this.setState((previousState) => {
         if (previousState.code === code) {
-          return { codeMatch: true, isScanning: false };
+          return { status: "AFTER_SECOND_SCAN" };
         } else {
           notificator(500, notificatorMessages);
           this.props.appContext.setAppState(APP_STATES.DEFAULT);
-          return { code: null, isScanning: false };
+          return { code: null, status: "BEFORE_FIRST_SCAN" };
         }
       });
     };
-  }
-
-  setIsScanning(param) {
-    this.setState((_previous) => {
-      return { isScanning: param };
-    });
   }
 
   resetState() {
     this.setState((_previous) => {
       return {
         code: null,
-        codeMatch: false,
-        isScanning: false,
+        status: "BEFORE_FIRST_SCAN",
       };
     });
   }
 
   handleOnClick() {
-    if (this.state.isScanning) {
+    if (this.isScanning()) {
       stopScanning();
       this.resetState();
       this.props.appContext.setAppState(APP_STATES.DEFAULT);
     } else {
-      this.setIsScanning(true);
+      this.setState(() => {
+        return {
+          status: "FIRST_SCAN",
+        };
+      });
       this.props.appContext.setAppState(APP_STATES.SCANNING);
     }
   }
@@ -88,13 +89,20 @@ class Scaner extends React.Component {
         alert(
           "To add barcode to database:\n\n1. Scan barcode again\n\n2. Indicate name"
         );
-        this.setIsScanning(true);
-        scanBarcode(this.checkIfBarcodesMatch());
+        this.setState(() => {
+          return { status: "SECOND_SCAN" };
+        });
       });
   }
 
   componentDidUpdate() {
-    if (this.state.codeMatch) {
+    if (this.state.status === "FIRST_SCAN") {
+      scanBarcode(this.set_code);
+    } else if (this.state.status === "AFTER_FIRST_SCAN") {
+      this.attemptToModifyItemUsingBarcode();
+    } else if (this.state.status === "SECOND_SCAN") {
+      scanBarcode(this.checkIfBarcodesMatch());
+    } else if (this.state.status === "AFTER_SECOND_SCAN") {
       let product_name = askNameForBarcode();
       if (!product_name) {
         this.props.appContext.setAppState(APP_STATES.DEFAULT);
@@ -102,16 +110,11 @@ class Scaner extends React.Component {
         addBarcodeToDB(this.state.code, product_name, this.homeId);
       }
       this.resetState();
-
-    } else if (this.state.code && !this.state.isScanning) {
-      this.attemptToModifyItemUsingBarcode();
-    } else if (this.state.isScanning && !this.state.code) {
-      scanBarcode(this.set_code);
     }
   }
 
   render() {
-    const button_name = this.state.isScanning ? "Stop" : "Scan";
+    const button_name = this.isScanning() ? "Stop" : "Scan";
     return (
       <div className="col text-center ">
         <button

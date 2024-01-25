@@ -1,0 +1,25 @@
+eader {
+  width: 100%;
+  align-items: center;
+  align-content: space-around;
+  justify-content: space-between;
+  font-size: 20px;
+  color: #040404;
+  background-color:#fafaf9;
+  border-top: 3px solid  #f6bd60;
+  border-bottom: 4px solid  #f6bd60;
+
+  position: sticky;
+  top: 0;
+  display: flex;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding-left: 10px;
+  padding-bottom: 2%;
+  padding-top: 2%;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+
+}
+
+

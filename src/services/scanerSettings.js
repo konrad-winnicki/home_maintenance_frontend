@@ -10,20 +10,22 @@ export function scanBarcode(function_changing_local_status) {
         constraints: {
           width: 700,
           height: 700,
-          // width: 300,
+         // width: 300,
           //height: 300,
         },
+      
         target: document.querySelector("#videoStream"),
       },
       frequency: 5,
       locator: {
         halfSample: true,
-        patchSize: "large", // x-small, small, medium, large, x-large
+        patchSize: "x-large", // x-small, small, medium, large, x-large
+    
       },
       decoder: {
         readers: ["ean_reader"],
       },
-      locate: true,
+      locate: false,
     },
     function (err) {
       if (err) {

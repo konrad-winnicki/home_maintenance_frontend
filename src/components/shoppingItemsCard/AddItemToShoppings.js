@@ -55,6 +55,8 @@ const AddItemToShoppings = () => {
         appContext.setAppState(APP_STATES.DEFAULT);
       });
   };
+  const blur =
+  appContext.appState === APP_STATES.SCANNING ? "Blur(3px)" : "Blur(0px)";
 
   return (
     <div
@@ -63,6 +65,7 @@ const AddItemToShoppings = () => {
         borderTop: "4px solid  #f6bd60",
         alignContent: "space-between",
         display: "flex",
+        filter: appContext.appState === APP_STATES.SCANNING ? "Blur(3px)" : "Blur(0px)"
       }}
     >
       <div className=" px-4 my-3">
