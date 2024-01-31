@@ -7,6 +7,7 @@
     align-items: center;
     color: #454444;
     padding: 3%;
+    z-index: 0;
      }
     
   .product__name {
@@ -18,4 +19,5 @@
     font-weight: bold;
     display: inline-flex;
     width: 80%;
+    z-index: 0;
       }

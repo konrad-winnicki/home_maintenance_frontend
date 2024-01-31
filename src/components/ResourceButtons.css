@@ -9,6 +9,8 @@
   border-radius: 7px;
   font-weight: bold;
   padding: 6px;
+  z-index: 0;
+
 }
 
 .resource_button:disabled {
@@ -28,8 +30,23 @@ input[type="checkbox"] {
   border-radius: 7px;
   font-weight: bold;
   padding: 6px;
+  z-index: 1;
 }
 
-
+#resource_button  {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 7px;
+  background-color: #fbfaf8;
+  border: 3px solid;
+  color: #454444;
+  border-radius: 7px;
+  font-weight: bold;
+  padding: 6px;
+  width: 40px;
+  height: 32px;
+  z-index: 0;
+}
 
 

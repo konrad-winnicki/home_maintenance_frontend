@@ -39,6 +39,7 @@ function ShoppingItemComponent() {
       return null;
     }
     const productId = shoppingItemContext.resource.product_id;
+
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     const notificatorMessages = {
@@ -50,9 +51,7 @@ function ShoppingItemComponent() {
       .then((response) => {
         return serverResponseResolver(response).then((result) => {
           const actions = {
-            200: () => {
-              shoppingItemContext.deleteResourceFromState(productId);
-            },
+            200: ()=>{console.log('shoping item deleted')},
             401: () => {
               logOut();
             },
@@ -70,7 +69,7 @@ function ShoppingItemComponent() {
   };
 
   useEffect(() => {
-    swipeRightContext.actionFunctionSetter(deleteFromShoppings);
+    swipeRightContext.actionFunctionSetter(deleteFromShoppings, 'left');
   }, []);
 
   return (

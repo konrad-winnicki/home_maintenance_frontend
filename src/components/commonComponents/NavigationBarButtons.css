@@ -13,8 +13,8 @@
 
 } 
 
-.btn {
-  background-color: #faf9f7 !important;
+#navbar_buttons {
+  background-color: #faf9f7 ;
   border: 3px solid!important;
   color: #454444 !important;
   border-radius: 7px !important;
@@ -25,9 +25,9 @@
   padding-right: 10px !important;
   height: 50px !important;
   width: 50px !important;
-
-
 } 
+
+
 
 
 .navbar_buttons:active {

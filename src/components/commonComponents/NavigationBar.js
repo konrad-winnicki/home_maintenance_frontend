@@ -23,15 +23,20 @@ const NavigationBar = () => {
   useEffect(() => {
     console.log("nav", appContext.appState);
   });
+  const brightness =
+    appContext.appState === APP_STATES.SHOW_PROMPT ? "brightness(0.8)" : "";
 
   return (
     <React.Fragment>
-      <nav className="navbar sticky-top" style={{ backgroundColor: "#f6bd60" }}>
+      <nav
+        className="navbar sticky-top"
+        style={{ filter: `${brightness}`, backgroundColor: "#f6bd60" }}
+      >
         <div className="col-md-1 mx-3 my-2" style={{ alignItems: "center" }}>
           <DropdownButton
             style={{ alignItems: "center" }}
             disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
-            id="dropdown-basic-button"
+            id="navbar_buttons"
             title={<IoSettingsSharp />}
           >
             <div className="col text-left" style={{ marginLeft: "15px" }}>
@@ -50,7 +55,7 @@ const NavigationBar = () => {
               <div
                 className="col text-left"
                 style={{ marginLeft: "15px" }}
-                onClick={()=>logOut()}
+                onClick={() => logOut()}
               >
                 LogOut
               </div>

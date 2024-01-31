@@ -29,6 +29,7 @@ const AddItemToShoppings = () => {
   const addShopping = () => {
     let product_data = {
       name: shoppingItem.name,
+      category: 'other',
       quantity: parseInt(shoppingItem.quantity),
     };
 

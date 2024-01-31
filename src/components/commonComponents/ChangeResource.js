@@ -20,14 +20,17 @@ export function ChangeResource(props) {
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
   const homeId = homeContext.home.id;
-
+  const category = resourceContext.resource.category;
   const handleChange = (e) => {
     e.preventDefault();
     setInputValue(e.target.value);
   };
 
   function extractResourceIdFromProperties() {
-    const { product_id: resource_id, ...properties } = resourceContext.resource;
+    const {
+      product_id: resource_id,
+      ...properties
+    } = resourceContext.resource;
     return { id: resource_id, properties };
   }
 
@@ -76,7 +79,7 @@ export function ChangeResource(props) {
   const sendData = () => {
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
     let updatedResource = resourceWithUpdatedProperty(props.resourceName);
-
+    console.log("resource, ", resourceContext.resource);
     const notificatorMessages = {
       success: `${props.resourceName} changed`,
       duplicated: "Product already exists",
@@ -89,10 +92,14 @@ export function ChangeResource(props) {
           return serverResponseResolver(response).then((result) => {
             const actions = {
               200: () => {
-                resourceContext.modifyProductInState({
-                  ...updatedResource.updatedValues,
-                  product_id: updatedResource.id,
-                });
+                resourceContext.modifyProductInState(
+                  {
+                    ...updatedResource.updatedValues,
+                    product_id: updatedResource.id,
+                    category: category,
+                  },
+                  category
+                );
               },
               401: () => {
                 logOut();
@@ -103,7 +110,7 @@ export function ChangeResource(props) {
           });
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           notificator(500, notificatorMessages);
         });
     }

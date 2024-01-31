@@ -23,7 +23,7 @@ export default function CheckBox() {
   };
 
   const updateItem = (isBoughtState) => {
-    const { product_id, ...resource_without_product_id } =
+    const { product_id, category, ...resource_without_product_id } =
       shoppingItemContext.resource;
 
     const shoppingItem = {
@@ -56,7 +56,7 @@ export default function CheckBox() {
   return (
     <input
       ref={inputRef}
-      style={{ width: "25px", height: "25px", paddingRight: "10px" }}
+      style={{ width: "25px", height: "25px", paddingRight: "10px", marginRight:'5%' }}
       disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
       type="checkbox"
       checked={shoppingItemContext.resource.is_bought}

@@ -5,7 +5,10 @@ export const ScrollableList = ({ children }) => {
   const appContext = useContext(AppContext);
 
 const blur = appContext.appState === APP_STATES.SCANNING? "Blur(3px)": "Blur(0px)"
-  useEffect(()=>{
+const brightness = appContext.appState === APP_STATES.SHOW_PROMPT? "brightness(0.8)": ""
+
+
+useEffect(()=>{
     console.log(appContext)
   },[appContext])
   return (
@@ -16,7 +19,8 @@ const blur = appContext.appState === APP_STATES.SCANNING? "Blur(3px)": "Blur(0px
         paddingTop: "3%",
         paddingBottom: "3%",
         marginBottom: "0%",
-        filter: `${blur}`
+        filter: `${brightness} ${blur}`,
+        zIndex:1
       }}
     >
       {children}

@@ -96,21 +96,32 @@ class Scaner extends React.Component {
   }
 
   componentDidUpdate() {
+    console.log(this.state, this.props.appContext);
+
     if (this.state.status === "FIRST_SCAN") {
       scanBarcode(this.set_code);
     } else if (this.state.status === "AFTER_FIRST_SCAN") {
       this.attemptToModifyItemUsingBarcode();
     } else if (this.state.status === "SECOND_SCAN") {
       scanBarcode(this.checkIfBarcodesMatch());
+      //this.checkIfBarcodesMatch()
+      ///this.setState(() => {
+     // return { status: "AFTER_SECOND_SCAN" };
+      // })
     } else if (this.state.status === "AFTER_SECOND_SCAN") {
-      let product_name = askNameForBarcode();
-      if (!product_name) {
-      } else {
-        addBarcodeToDB(this.state.code, product_name, this.homeId);
-      }
-      this.resetState();
+      this.props.appContext.setShowPrompt("BARCODE");
+      this.setState(() => {
+        return { status: "BEFORE_FIRST_SCAN" };
+      });
+    } else if (
+      this.props.appContext.appState === APP_STATES.DATA_READY &&
+      this.props.appContext.showPrompt === "BARCODE"
+    ) {
+      const barcodeName = this.props.appContext.promptData.name;
+      const barcodeCategory = this.props.appContext.promptData.category;
+      addBarcodeToDB(this.state.code, barcodeName, barcodeCategory, this.homeId);
       this.props.appContext.setAppState(APP_STATES.DEFAULT);
-
+      this.resetState();
     }
   }
 
@@ -129,6 +140,7 @@ class Scaner extends React.Component {
           }
           onClick={() => {
             this.handleOnClick();
+           // this.set_code("22");
           }}
         >
           {button_name} <BsUpcScan />

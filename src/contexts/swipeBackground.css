@@ -1,0 +1,35 @@
+
+.background_sheet {
+    display: flex;
+    position: absolute;
+    width:inherit;
+    height: inherit;
+    min-height: 10%;
+    color: #fafaf9;
+    font-weight: bold;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 5px;
+    z-index: 0;
+    align-items: center;
+    padding-inline: 4%;
+    flex-grow: 1
+}
+
+.container_item {
+    /*position:relative;*/
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    height: auto;
+    min-height: 10%;
+    margin: 1.5%;
+    margin-left: 2%;
+    margin-right: 1%;
+    border-radius: 5px;
+    z-index: 1;
+    overflow:visible;
+    background-color: black;
+    justify-content: center;
+    
+  }

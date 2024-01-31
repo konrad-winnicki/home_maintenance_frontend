@@ -17,7 +17,7 @@ export default function HomeList(props) {
       )}
       <ScrollableList>
         {props.homes.map((h) => (
-          <SwipeRightProvider key={h.id}>
+          <SwipeRightProvider key={h.id} directionRestriction={'left'}>
             <Home home={h} />
           </SwipeRightProvider>
         ))}

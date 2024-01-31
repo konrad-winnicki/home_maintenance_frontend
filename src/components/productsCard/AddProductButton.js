@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SiAddthis } from "react-icons/si";
 import {
   errorHandler,
-  ask_product_name,
   notificator,
   serverResponseResolver,
 } from "../../services/auxilaryFunctions";
@@ -18,17 +17,14 @@ const AddProductButton = (props) => {
   const session_code = localStorage.getItem("session_code");
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
-
   const homeId = homeContext.home.id;
   const onClickHandler = async () => {
-    let product_name = ask_product_name();
     let product_data = {
-      name: product_name,
+      name: appContext.promptData.name,
+      category: props.category,
       quantity: 1,
     };
-    if (!product_name) {
-      return;
-    }
+
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
 
     const notificatorMessages = {
@@ -47,7 +43,8 @@ const AddProductButton = (props) => {
                 product_id: id,
                 name: product_data.name,
                 quantity: product_data.quantity,
-              });
+                category: props.category
+              },props.category);
             },
             401: () => {
               logOut();
@@ -65,12 +62,20 @@ const AddProductButton = (props) => {
     appContext.setAppState(APP_STATES.DEFAULT);
   };
 
+  useEffect(() => {
+    if (appContext.appState === APP_STATES.DATA_READY && appContext.showPrompt === "PRODUCT" ) {
+      onClickHandler();
+    }
+  }, [appContext]);
+
   return (
     <div className="col text-center ">
       <button
         className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
-        onClick={() => onClickHandler()}
+        onClick={() => {
+          appContext.setShowPrompt('PRODUCT');
+        }}
       >
         <SiAddthis /> product
       </button>

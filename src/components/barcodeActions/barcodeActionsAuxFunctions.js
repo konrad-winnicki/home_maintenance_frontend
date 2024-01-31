@@ -5,9 +5,10 @@ import {
 } from "../../services/auxilaryFunctions.js";
 import { serverResponseResolver } from "../../services/auxilaryFunctions.js";
 
-export async function addBarcodeToDB(barcode, name, homeId) {
+export async function addBarcodeToDB(barcode, name, category, homeId) {
   const session_code = localStorage.getItem("session_code");
   let barcode_data = {
+    category: category,
     name: name,
     barcode: barcode,
   };

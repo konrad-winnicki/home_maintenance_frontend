@@ -1,4 +1,4 @@
-import React, { StrictMode} from "react";
+import React, { StrictMode, useContext} from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -10,14 +10,15 @@ import { WrappedProductsCard } from "./components/productsCard/ProductsCard";
 import { ShoppingItemsCard } from "./components/shoppingItemsCard/ShoppingItemsCard";
 import HomesCard from "./components/homes/HomesCard";
 import { HomeContextProvider } from "./contexts/homeContext";
-import { AppContextProvider } from "./contexts/appContext";
+import {  AppContextProvider } from "./contexts/appContext";
 import { LoginComponent } from "./components/LoginComponent";
 import { DeletedAccountCard } from "./components/users/DeleteAccountCard";
 export const AppRoutes = () => {
+
   return (
     <div
       className="container vh-100 vw-100 px-0 d-flex flex-column"
-      style={{ backgroundColor: "#fafaf9" }}
+      style={{ backgroundColor: "#fafaf9", transform: 'none'}}
     >
       
       <Routes>

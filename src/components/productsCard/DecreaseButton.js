@@ -21,12 +21,15 @@ const DecreaseButton = () => {
   const homeContext = useContext(HomeContext);
 
   const homeId = homeContext.home.id;
+  const category =  productContext.resource.category
+
   const onClickHandler = () => {
     const product_data = {
       id: productContext.resource.product_id,
       updatedValues: {
         quantity: productContext.resource.quantity - 1,
         name: productContext.resource.name,
+        category: category
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
@@ -47,9 +50,10 @@ const DecreaseButton = () => {
               const newValues = {
                 product_id: product_data.id,
                 name: product_data.updatedValues.name,
+                category: category,
                 quantity: product_data.updatedValues.quantity,
               };
-              productContext.modifyProductInState(newValues);
+              productContext.modifyProductInState(newValues, category);
             },
             401: () => {
               logOut();

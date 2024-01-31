@@ -2,12 +2,14 @@ import React from "react";
 import IncreaseButton from "./IncreaseButton.js";
 import DecreaseButton from "./DecreaseButton.js";
 import "../ResourceButtons.css";
+import ChangeCategory from "./ChangeCategory.js";
 
 export default function ProductButtons() {
   return (
     <React.Fragment>
-        <DecreaseButton></DecreaseButton>
-        <IncreaseButton></IncreaseButton>
+      <ChangeCategory></ChangeCategory>
+      <DecreaseButton></DecreaseButton>
+      <IncreaseButton></IncreaseButton>
     </React.Fragment>
   );
 }

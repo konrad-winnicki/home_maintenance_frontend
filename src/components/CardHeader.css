@@ -9,7 +9,7 @@
   border-top: 3px solid  #f6bd60;
   border-bottom: 4px solid  #f6bd60;
 
-  position: sticky;
+  /*position: sticky;*/
   top: 0;
   display: flex;
   margin-bottom: 0px;
@@ -34,7 +34,7 @@
   border-top: 3px solid  #f6bd60;
   border-bottom: 4px solid  #f6bd60;
 font-weight: bold;
-  position: sticky;
+  /*position: sticky;*/
   top: 0;
   margin-bottom: 0px;
   margin-top: 0px;
@@ -54,7 +54,7 @@ font-weight: bold;
   background-color:#fafaf9;
   border-bottom: 4px solid  #f6bd60;
 
-  position: sticky;
+  /*position: sticky;*/
   top: 0;
   margin-bottom: 20px;
   margin-top: 0px;

@@ -8,10 +8,12 @@ const ShoppingItemsList = (props) => {
   return (
     <ScrollableList>
       {props.shoppingItems.map((shoppingItem) => (
-        <SwipeRightProvider key={shoppingItem.product_id}>
+        <SwipeRightProvider key={shoppingItem.product_id} directionRestriction={'left'}>
           <ResourceContext.Provider
             value={{
               resource: shoppingItem,
+              modifyProductInState: props.modifyProductInState,
+
             }}
           >
             <ShoppingItemComponent></ShoppingItemComponent>

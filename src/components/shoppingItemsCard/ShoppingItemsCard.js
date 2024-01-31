@@ -88,14 +88,24 @@ export function ShoppingItemsCard() {
 
   const blur =
     appContext.appState === APP_STATES.SCANNING ? "Blur(3px)" : "Blur(0px)";
+  const brightness =
+    appContext.appState === APP_STATES.SHOW_PROMPT ? "brightness(0.8)" : "";
 
   return (
     <React.Fragment>
       <VideoAcceptor />
-      <div className="header" style={{ filter: `${blur}` }}>
+      <div
+        className="header"
+        style={{ filter: `${brightness} ${blur}`, transform: "none" }}
+      >
         Shopping list in {homeContext.home?.name}:
       </div>
-      <ShoppingItemsList shoppingItems={shoppingItems}></ShoppingItemsList>
+      <ShoppingItemsList
+        shoppingItems={shoppingItems}
+        modifyProductInState={() => {
+          console.log("Mock midify function");
+        }}
+      ></ShoppingItemsList>
       <AddItemToShoppings></AddItemToShoppings>
       <BottomNavBar>
         <div className="col text-center ">

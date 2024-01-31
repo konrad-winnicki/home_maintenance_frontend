@@ -5,6 +5,9 @@ import {
 } from "../../services/auxilaryFunctions";
 import { logOut } from "../../services/loginAuxilaryFunctions";
 import { modifyProductListWithBarcode } from "../../services/scaner";
+
+
+
 export const adOrModificateProduct = (
   addProductToState,
   modifyProductInState
@@ -60,6 +63,7 @@ const actionIfBarcodeExists = (
   const newValues = {
     product_id: body.productId,
     name: body.name,
+    category: body.category,
     quantity: body.quantity,
   };
   if (body.response === "updated") {
@@ -67,12 +71,12 @@ const actionIfBarcodeExists = (
       success: `${body.name} has been increased`,
     };
     notificator(statusCode, notificatorMessages);
-    modifyProductInState(newValues);
+    modifyProductInState(newValues, body.category);
   } else if (body.response === "added") {
     const notificatorMessages = {
       success: `${body.name} has been added`,
     };
     notificator(statusCode, notificatorMessages);
-    addProductToState(newValues);
+    addProductToState(newValues, body.category);
   }
 };

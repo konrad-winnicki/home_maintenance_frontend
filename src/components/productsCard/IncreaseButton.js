@@ -20,12 +20,15 @@ const IncreaseButton = () => {
   const homeContext = useContext(HomeContext);
 
   const homeId = homeContext.home.id;
+const category =  productContext.resource.category
+
   const onClickHandler = () => {
     const product_data = {
       id: productContext.resource.product_id,
       updatedValues: {
         quantity: productContext.resource.quantity + 1,
         name: productContext.resource.name,
+        category: category
       },
     };
     appContext.setAppState(APP_STATES.AWAITING_API_RESPONSE);
@@ -36,15 +39,18 @@ const IncreaseButton = () => {
 
     updateProduct(product_data, homeId, session_code)
       .then((response) => {
+        console.log('DDDD', product_data)
         return serverResponseResolver(response).then((result) => {
           const actions = {
             200: () => {
               const newValues = {
                 product_id: product_data.id,
+                category: category,
                 name: product_data.updatedValues.name,
                 quantity: product_data.updatedValues.quantity,
               };
-              productContext.modifyProductInState(newValues);
+              console.log('NNNN', newValues)
+              productContext.modifyProductInState(newValues,category);
             },
             401: () => {
               logOut();

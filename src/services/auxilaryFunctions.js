@@ -105,6 +105,7 @@ export function notificator(statusCode, messages) {
 }
 
 export function errorHandler(statusCode, actions) {
+  console.log(statusCode, actions)
   if (statusCode > 199 && statusCode < 300) {
     actions[statusCode]();
     return;

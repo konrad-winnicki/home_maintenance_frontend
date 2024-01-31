@@ -83,7 +83,7 @@ export default function Home({ home }) {
   };
 
   useEffect(() => {
-    swipeRightContext.actionFunctionSetter(leaveHome);
+    swipeRightContext.actionFunctionSetter(leaveHome, 'left');
   }, [homeContext.home]);
 
   const homeStyle =
