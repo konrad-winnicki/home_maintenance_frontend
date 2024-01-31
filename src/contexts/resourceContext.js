@@ -4,6 +4,6 @@ export const ResourceContext = createContext({
   resource: {},
   modifyProductInState: () => {},
   deleteResourceFromState: () => {},
-  addResourceToState: ()=>{}
+  addResourceToState: ()=>{},
 
 });

@@ -24,9 +24,12 @@ function ResourceDescription(props) {
         followMouseRef.current = false;
         return;
       }
+      
+      props.setClicked(resourceContext.resource.product_id)
+
       !props.showButtons
-        ? props.setShowButtons(!props.showButtons)
-        : props.setShowButtons(false);
+        ? props.setShowButtons(true)
+        : props.setShowButtons(null);
     }, 350);
   };
 

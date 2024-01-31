@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { updateProduct, deleteProduct} from "../../services/store";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { updateProduct, deleteProduct } from "../../services/store";
 import { addShoppingItem } from "../../services/cart";
 import ResourceDescription from "../commonComponents/ResourceDescription.js";
 import ProductButtons from "./ProductButtons";
@@ -18,18 +18,17 @@ import { APP_STATES } from "../../applicationStates";
 import { SwipeRightContext } from "../../contexts/SwipeRight";
 import { logOut } from "../../services/loginAuxilaryFunctions";
 
-function ProductComponent() {
+function ProductComponent(props) {
   const [showButtons, setShowButtons] = useState(false);
-
   const productContext = useContext(ResourceContext);
   const appContext = useContext(AppContext);
   const homeContext = useContext(HomeContext);
-
-  const homeId = homeContext.home.id;
-  const sessionCode = localStorage.getItem("session_code");
-
   const swipeRightContext = useContext(SwipeRightContext);
 
+  const sessionCode = localStorage.getItem("session_code");
+  const homeId = homeContext.home.id;
+
+ 
   const deleteProductFromStore = () => {
     const confirmation = window.confirm(
       `Do you want to delete ${productContext.resource.name}?`
@@ -69,8 +68,6 @@ function ProductComponent() {
     appContext.setAppState(APP_STATES.DEFAULT);
   };
 
-
-
   const addShoppingItemToList = () => {
     let product_data = {
       name: productContext.resource.name,
@@ -91,7 +88,8 @@ function ProductComponent() {
         return serverResponseResolver(response).then((result) => {
           const actions = {
             201: () => {
-              console.log('Shopping item added')},
+              console.log("Shopping item added");
+            },
             401: () => {
               logOut();
             },
@@ -109,15 +107,21 @@ function ProductComponent() {
   };
 
   useEffect(() => {
-    swipeRightContext.actionFunctionSetter(deleteProductFromStore, 'left');
-    swipeRightContext.actionFunctionSetter(addShoppingItemToList, 'right');
+    swipeRightContext.actionFunctionSetter(deleteProductFromStore, "left");
+    swipeRightContext.actionFunctionSetter(addShoppingItemToList, "right");
+  }, []);
 
-    console.log("buttons", showButtons);
-  }, [showButtons]);
+  useEffect(() => {
+    if(props.productButtonClicked!==null && productContext.resource.product_id !== props.productButtonClicked){
+      setShowButtons(false)
+    }
+   
+  }, [props.productButtonClicked, showButtons]);
 
   return (
-    <div className="default_item" style={{zIndex:1}}>
+    <div className="default_item" style={{ zIndex: 1 }}>
       <ResourceDescription
+        setClicked={props.setClicked}
         setShowButtons={setShowButtons}
         showButtons={showButtons}
         updateMethod={updateProduct}

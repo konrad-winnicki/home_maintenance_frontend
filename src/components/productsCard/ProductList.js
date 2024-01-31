@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductComponent from "./ProductComponent";
 import { ResourceContext } from "../../contexts/resourceContext";
 import { ScrollableList } from "../commonComponents/ScrollableList";
@@ -6,6 +6,13 @@ import SwipeRightProvider from "../../contexts/SwipeRight";
 import "../ResourceComponent.css";
 
 const ProductList = (props) => {
+  const [productButtonClicked, setClicked]= useState(null)  
+  useEffect(()=>{
+    console.log('render list', productButtonClicked)
+    setClicked(false)
+  },[
+ 
+  ])
   return (
     <>
     <ScrollableList>
@@ -18,10 +25,10 @@ const ProductList = (props) => {
                 resource: product,
                 modifyProductInState: props.modifyProductInState,
                 deleteResourceFromState: props.deleteResourceFromState,
-                addResourceToState: props.addResourceToState
+                addResourceToState: props.addResourceToState,
               }}
             >
-              <ProductComponent></ProductComponent>
+              <ProductComponent productButtonClicked={productButtonClicked} setClicked={setClicked}></ProductComponent>
             </ResourceContext.Provider>
           </SwipeRightProvider>
         

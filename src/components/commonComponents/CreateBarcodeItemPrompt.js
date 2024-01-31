@@ -81,7 +81,7 @@ export const CreateBarcodeItem = (props) => {
           type="text"
           id="name"
           name="name"
-          autoFocus="true"
+          autoFocus={true}
           onChange={handleInputChange}
         />
 
