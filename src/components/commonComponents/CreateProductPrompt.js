@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./createItemPrompt.css";
 import { AppContext } from "../../contexts/appContext";
 import { APP_STATES } from "../../applicationStates";
-import { BsChevronCompactLeft } from "react-icons/bs";
+
 export const CreateProductPrompt = () => {
   const appContext = useContext(AppContext);
   const [formData, setFormData] = useState({

@@ -74,6 +74,7 @@ const AddProductButton = (props) => {
         className="bottom_navbar_buttons"
         disabled={appContext.appState !== APP_STATES.DEFAULT ? true : false}
         onClick={() => {
+          appContext.setAppState(APP_STATES.SHOW_PROMPT)
           appContext.setShowPrompt('PRODUCT');
         }}
       >

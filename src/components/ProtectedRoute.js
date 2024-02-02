@@ -19,7 +19,6 @@ export const Protected = () => {
 
   const whichPrompt = () => {
     if (appContext.showPrompt === "PRODUCT") {
-      console.log("gggggg");
       return showProductPrompt;
     }
     if (appContext.showPrompt === "BARCODE") {

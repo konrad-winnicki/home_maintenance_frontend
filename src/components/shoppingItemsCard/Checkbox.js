@@ -23,7 +23,7 @@ export default function CheckBox() {
   };
 
   const updateItem = (isBoughtState) => {
-    const { product_id, category, ...resource_without_product_id } =
+    const { product_id, ...resource_without_product_id } =
       shoppingItemContext.resource;
 
     const shoppingItem = {

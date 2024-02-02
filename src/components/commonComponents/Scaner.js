@@ -104,11 +104,9 @@ class Scaner extends React.Component {
       this.attemptToModifyItemUsingBarcode();
     } else if (this.state.status === "SECOND_SCAN") {
       scanBarcode(this.checkIfBarcodesMatch());
-      //this.checkIfBarcodesMatch()
-      ///this.setState(() => {
-     // return { status: "AFTER_SECOND_SCAN" };
-      // })
+     
     } else if (this.state.status === "AFTER_SECOND_SCAN") {
+      this.props.appContext.setAppState(APP_STATES.SHOW_PROMPT)
       this.props.appContext.setShowPrompt("BARCODE");
       this.setState(() => {
         return { status: "BEFORE_FIRST_SCAN" };
